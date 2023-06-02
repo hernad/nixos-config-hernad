@@ -1,10 +1,10 @@
 keys:
-   - &admin_hernad 453454CDE1C7FE12A2995CAC85669FDDE2456A79
+   - &admin_hernad age1y26hj2vaf8tk2sv3hpl4fg6c8s6g9ccnhuu09vchh4hu3ytkvews3jpq0v
 
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
-    - pgp:
+    - age:
       - *admin_hernad
       #age:
       #- *admin_bob
