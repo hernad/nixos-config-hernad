@@ -1,5 +1,5 @@
 {
-  description = "Your new nix config";
+  description = "hernad's NixOS configuration";
 
   inputs = {
     # Nixpkgs
@@ -12,6 +12,8 @@
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    sops-nix.url = "github:mic92/sops-nix";
 
     # TODO: Add any other flake you might need
     # hardware.url = "github:nixos/nixos-hardware";
