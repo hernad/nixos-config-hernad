@@ -14,6 +14,8 @@
     #./steam-hardware.nix
     #./systemd-initrd.nix
     #./tailscale.nix
+    ./hardware-configuration.nix
+
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };

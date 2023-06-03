@@ -4,9 +4,9 @@
     #inputs.hardware.nixosModules.common-gpu-amd
     #inputs.hardware.nixosModules.common-pc-ssd
 
-    #./hardware-configuration.nix
+    ./hardware-configuration.nix
 
-    ../hped800g3
+    ../.
 
   ];
 
