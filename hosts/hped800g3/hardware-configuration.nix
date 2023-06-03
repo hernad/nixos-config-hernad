@@ -18,12 +18,19 @@
     };
   };
 
-  #fileSystems = {
-  #  "/boot" = {
-  #    device = "/dev/disk/by-label/ESP";
-  #    fsType = "vfat";
-  #  };
-  #};
+  fileSystems = {
+    "/boot" = {
+      device = "/dev/disk/by-label/boot";
+      fsType = "vfat";
+    };
+
+    "/" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+    };
+
+  };
+
 
   #swapDevices = [{
   #  device = "/swap/swapfile";
