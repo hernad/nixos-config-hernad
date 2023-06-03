@@ -38,4 +38,9 @@ in
   #services.geoclue2.enable = true;
   #security.pam.services = { swaylock = { }; };
 
+  # Persist entire home
+  environment.persistence = {
+    "/persist".directories = [ "/home/hernad" ];
+  };
+
 }
