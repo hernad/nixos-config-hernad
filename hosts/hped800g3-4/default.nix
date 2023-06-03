@@ -16,8 +16,8 @@
         "192.168.168.10" 
         "192.168.169.10" 
     ];
-    dhcpd.enable = false;
-    #useDHCP = true;
+    #dhcpd.enable = false;
+    useDHCP = true;
     interfaces.eno1 = {
       useDHCP = false;
       wakeOnLan.enable = true;
