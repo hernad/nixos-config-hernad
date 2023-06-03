@@ -23,10 +23,10 @@ in
       GatewayPorts = "clientspecified";
     };
 
-    hostKeys = [{
-      path = "${lib.optionalString hasOptinPersistence "/persist"}/etc/ssh/ssh_host_ed25519_key";
-      type = "ed25519";
-    }];
+    #hostKeys = [{
+    #  path = "${lib.optionalString hasOptinPersistence "/persist"}/etc/ssh/ssh_host_ed25519_key";
+    #  type = "ed25519";
+    #}];
   };
 
   programs.ssh = {
