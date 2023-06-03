@@ -4,10 +4,10 @@ let
 in
 {
 
-
   environment.systemPackages = with pkgs; [ 
     htop
     vim
+    fio
   ];
 
   #environment.persistence = {
