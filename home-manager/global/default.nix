@@ -4,13 +4,13 @@ let
   #inherit (inputs.nix-colors.lib-contrib { inherit pkgs; }) colorschemeFromPicture nixWallpaperFromScheme;
 in
 {
-  #imports = [
-  #  inputs.impermanence.nixosModules.home-manager.impermanence
+  imports = [
+    inputs.impermanence.nixosModules.home-manager.impermanence
   #  inputs.nix-colors.homeManagerModule
   #  ../features/cli
   #  ../features/nvim
   #  ../features/helix
-  #] ++ (builtins.attrValues outputs.homeManagerModules);
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;

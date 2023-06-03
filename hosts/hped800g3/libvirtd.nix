@@ -10,8 +10,12 @@
 
    # https://gist.github.com/techhazard/1be07805081a4d7a51c527e452b87b26
 
-   boot.kernelParams = [ "intel_iommu=on" ]
-   boot.kernelModules = [ "kvm-intel", "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
+   #boot.kernelParams = [ "intel_iommu=on" ];
+
+   boot.kernelModules = [ 
+    "kvm-intel"
+    "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" 
+   ];
    virtualisation.libvirtd.enable = true;
    
    virtualisation.libvirtd.qemuVerbatimConfig = ''

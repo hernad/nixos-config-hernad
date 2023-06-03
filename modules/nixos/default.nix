@@ -3,5 +3,5 @@
 
 {
   # List your module files here
-  pciPassthrough = import ./pciPassthrough.nix
+  pciPassthrough = import ./pciPassthrough.nix;
 }
