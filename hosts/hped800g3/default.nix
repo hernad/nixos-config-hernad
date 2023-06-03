@@ -15,6 +15,7 @@
     #./steam-hardware.nix
     #./systemd-initrd.nix
     #./tailscale.nix
+    ./libvirtd.nix
     ./hardware-configuration.nix
 
   ] ++ (builtins.attrValues outputs.nixosModules);

@@ -52,3 +52,7 @@ sops password file
 
 
 
+
+Push flake on remote host
+
+   nixos-rebuild  --flake .#hped800g3-4 --target-host root@192.168.168.109 --build-host root@192.168.168.109 --use-remote-sudo switch --show-trace
