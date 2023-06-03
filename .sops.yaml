@@ -1,5 +1,5 @@
 keys:
-   - &admin_hernad age13adxvst7kert59pad6uate0u9rdur7mchq8d7x57n2k334gccqaqetr6e3
+   - &admin_hernad age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
 
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
