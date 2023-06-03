@@ -1,10 +1,16 @@
 keys:
-   - &admin_hernad age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+  # Users
+  - &users:
+    - &hernad age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+  # Hosts
+  #- &hosts:
+  #  - &hped800g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+
 
 creation_rules:
   - path_regex: secrets/[^/]+\.yaml$
     key_groups:
     - age:
-      - *admin_hernad
+      - *hernad
       #age:
       #- *admin_bob

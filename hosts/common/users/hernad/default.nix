@@ -3,6 +3,22 @@ let ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.
 in
 {
   users.mutableUsers = false;
+  
+  #sops-nix has to run after NixOS creates users (in order to specify what users own a secret.) 
+  # This means that it's not possible to set users.users.<name>.passwordFile to any secrets managed by sops-nix.
+  # To work around this issue, it's possible to set neededForUsers = true in a secret. 
+  #This will cause the secret to be decrypted to /run/secrets-for-users instead of 
+  #/run/secrets before NixOS creates users. 
+  #As users are not created yet, it's not possible to set an owner for these secrets.
+
+  sops.secrets.hernad-password = {
+    sopsFile = ../../../../secrets/user-secrets.yaml;
+    neededForUsers = true;
+    #mode = "0440";
+    #owner = config.users.users.hernad.name;
+    #group = config.users.users.hernad.group;
+  };
+
   users.users.hernad = {
     isNormalUser = true;
     shell = pkgs.fish;
@@ -28,10 +44,8 @@ in
     packages = [ pkgs.home-manager ];
   };
 
-  sops.secrets.hernad-password = {
-    sopsFile = ../../../../secrets/user-secrets.yaml;
-    neededForUsers = true;
-  };
+
+
 
   home-manager.users.hernad = import ../../../../home-manager/hernad/${config.networking.hostName}.nix;
 
