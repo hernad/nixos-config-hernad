@@ -27,12 +27,14 @@ in
     packages = [ pkgs.home-manager ];
   };
 
-  #sops.secrets.misterio-password = {
-  #  sopsFile = ../../secrets.yaml;
-  #  neededForUsers = true;
-  #};
+  sops.secrets.hernad-password = {
+    sopsFile = ../../secrets/user-secrets.yaml;
+    neededForUsers = true;
+  };
 
   home-manager.users.hernad = import ../../../../home-manager/hernad/${config.networking.hostName}.nix;
 
   #services.geoclue2.enable = true;
   #security.pam.services = { swaylock = { }; };
+
+}
