@@ -17,7 +17,7 @@
   environment.enableAllTerminfo = true;
 
   hardware.enableRedistributableFirmware = true;
-  networking.domain = "m7.rs";
+  #networking.domain = "m7.rs";
 
   # Increase open file limit for sudoers
   security.pam.loginLimits = [

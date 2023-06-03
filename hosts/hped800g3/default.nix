@@ -1,6 +1,6 @@
 { inputs, outputs, ... }: {
   imports = [
-    inputs.home-manager.nixosModules.home-manager
+    #inputs.home-manager.nixosModules.home-manager
     #./acme.nix
     #./auto-upgrade.nix
     ./system-packages.nix
@@ -18,35 +18,37 @@
     ./libvirtd.nix
     ./hardware-configuration.nix
 
-  ] ++ (builtins.attrValues outputs.nixosModules);
+  ]; 
+  
+  #++ (builtins.attrValues outputs.nixosModules);
 
-  home-manager.extraSpecialArgs = { inherit inputs outputs; };
+  #home-manager.extraSpecialArgs = { inherit inputs outputs; };
 
-  nixpkgs = {
-    overlays = builtins.attrValues outputs.overlays;
-    config = {
-      allowUnfree = true;
-    };
-  };
+  #nixpkgs = {
+  #  overlays = builtins.attrValues outputs.overlays;
+  #  config = {
+  #    allowUnfree = true;
+  #  };
+  #};
 
-  environment.enableAllTerminfo = true;
+  #environment.enableAllTerminfo = true;
 
-  hardware.enableRedistributableFirmware = true;
-  networking.domain = "m7.rs";
+  #hardware.enableRedistributableFirmware = true;
+  #networking.domain = "m7.rs";
 
   # Increase open file limit for sudoers
-  security.pam.loginLimits = [
-    {
-      domain = "@wheel";
-      item = "nofile";
-      type = "soft";
-      value = "524288";
-    }
-    {
-      domain = "@wheel";
-      item = "nofile";
-      type = "hard";
-      value = "1048576";
-    }
-  ];
+  #security.pam.loginLimits = [
+  #  {
+  #    domain = "@wheel";
+  #    item = "nofile";
+  #    type = "soft";
+  #    value = "524288";
+  #  }
+  #  {
+  #    domain = "@wheel";
+  #    item = "nofile";
+  #    type = "hard";
+  #    value = "1048576";
+  #  }
+  #];
 }

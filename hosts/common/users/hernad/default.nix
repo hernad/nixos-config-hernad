@@ -23,12 +23,13 @@ in
     ];
 
     #openssh.authorizedKeys.keys = [ (builtins.readFile ../../../../home/misterio/ssh.pub) ];
-    #passwordFile = config.sops.secrets.misterio-password.path;
+    
+    passwordFile = config.sops.secrets.hernad-password.path;
     packages = [ pkgs.home-manager ];
   };
 
   sops.secrets.hernad-password = {
-    sopsFile = ../../secrets/user-secrets.yaml;
+    sopsFile = ../../../../secrets/user-secrets.yaml;
     neededForUsers = true;
   };
 
