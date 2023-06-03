@@ -11,14 +11,15 @@
   networking = {
     hostName = "hped800g3-4";
     defaultGateway = "192.168.168.251";
+
     nameservers = [ 
         "192.168.168.10" 
         "192.168.169.10" 
     ];
-    useDHCP = true;
+    dhcpd.enable = false;
+    #useDHCP = true;
     interfaces.eno1 = {
       useDHCP = false;
-      dhcpd.enable = false;
       wakeOnLan.enable = true;
 
       ipv4 = {
