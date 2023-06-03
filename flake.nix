@@ -75,7 +75,6 @@
       nixosConfigurations = {
         hped800g3-4 = mkNixosSystem [
             ./hosts/hped800g3-4
-            ./home-manager/hernad/config.nix
         ];
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
