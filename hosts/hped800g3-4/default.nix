@@ -10,9 +10,14 @@
 
   networking = {
     hostName = "hped800g3-4";
-    #useDHCP = true;
+    defaultGateway = "192.168.168.251";
+    nameservers = [ 
+        "192.168.168.10" 
+        "192.168.169.10" 
+    ];
+    useDHCP = true;
     interfaces.eno1 = {
-      #useDHCP = true;
+      useDHCP = false;
       dhcpd.enable = false;
       wakeOnLan.enable = true;
 
@@ -23,8 +28,8 @@
         }];
       };
 
-      defaultGateway = "192.168.168.251";
-      nameservers = [ "192.168.168.10" "192.168.169.10" ];
+      
+      
       #ipv6 = {
       #  addresses = [{
       #    address = "2804:14d:8084:a484::2";
