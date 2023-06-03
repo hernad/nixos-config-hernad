@@ -18,9 +18,18 @@
     ];
     #dhcpd.enable = false;
     useDHCP = true;
-    interfaces.eno1 = {
+
+    bridges = {
+       "br0" = {
+          interfaces = [ "eno1" ];
+       };
+    };
+
+    interfaces.br0 = {
       useDHCP = false;
       wakeOnLan.enable = true;
+
+      # network-addresses-eno1.service
 
       ipv4 = {
         addresses = [{
@@ -29,14 +38,6 @@
         }];
       };
 
-      
-      
-      #ipv6 = {
-      #  addresses = [{
-      #    address = "2804:14d:8084:a484::2";
-      #    prefixLength = 64;
-      #  }];
-      #};
     };
   };
 
