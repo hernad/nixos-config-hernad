@@ -72,9 +72,8 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
-        hped800g3-4 = mkNixosSystem [ 
-            ./hosts/hped800g3 
-            ./hosts/hped800g3/4 
+        hped800g3-4 = mkNixosSystem [
+            ./hosts/hped800g3-4 
         ];
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
@@ -102,6 +101,6 @@
       homeConfigurations = {
         "hernad@hped800g3-4" = mkHomeConfiguration [ ./home-managerh/hernad/hped800g3-4.nix ] nixpkgs.legacyPackages."x86_64-linux";
       };
-      
+
     };
 }
