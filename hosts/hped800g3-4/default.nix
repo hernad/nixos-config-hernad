@@ -5,6 +5,7 @@
     #inputs.hardware.nixosModules.common-pc-ssd
 
     ../hped800g3
+    ../common/global
     ../common/users/hernad
 
   ];
