@@ -63,6 +63,7 @@
       # Reusable nixos modules you might want to export
       # These are usually stuff you would upstream into nixpkgs
       nixosModules = import ./modules/nixos;
+      homeManagerModules = import ./modules/home-manager;
       
       
       # Reusable home-manager modules you might want to export
@@ -74,7 +75,7 @@
       nixosConfigurations = {
         hped800g3-4 = mkNixosSystem [
             ./hosts/hped800g3-4
-             
+            ./home-manager/hernad/config.nix
         ];
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
@@ -100,7 +101,7 @@
       #};
 
       homeConfigurations = {
-        "hernad@hped800g3-4" = mkHomeConfiguration [ ./home-managerh/hernad/hped800g3-4.nix ] nixpkgs.legacyPackages."x86_64-linux";
+        "hernad@hped800g3-4" = mkHomeConfiguration [ ./home-manager/hernad/hped800g3-4.nix ] nixpkgs.legacyPackages."x86_64-linux";
       };
 
     };

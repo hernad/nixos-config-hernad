@@ -1,7 +1,7 @@
 { inputs, outputs, ... }:
 {
   imports = [
-    ./global
+    ../global
     #./features/desktop/hyprland
     #./features/rgb
     #./features/productivity

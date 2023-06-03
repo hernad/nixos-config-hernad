@@ -42,7 +42,7 @@ in
     sessionPath = [ "$HOME/.local/bin" ];
 
     persistence = {
-      "/persist/home/${config.home.username}" = {
+      "/persist/home/hernad" = {
         directories = [
           "Documents"
           "Downloads"
