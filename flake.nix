@@ -15,6 +15,8 @@
 
     sops-nix.url = "github:mic92/sops-nix";
 
+    impermanence.url = "github:nix-community/impermanence";
+
     # TODO: Add any other flake you might need
     # hardware.url = "github:nixos/nixos-hardware";
 
@@ -30,6 +32,17 @@
         "aarch64-linux"
         "x86_64-linux"
       ];
+
+      mkNixosSystem = modules: nixpkgs.lib.nixosSystem {
+        inherit modules;
+        specialArgs = { inherit inputs outputs; };
+      };
+
+      mkHomeConfiguration = modules: pkgs: home-manager.lib.homeManagerConfiguration {
+        inherit modules pkgs;
+        extraSpecialArgs = { inherit inputs outputs; };
+      };
+
     in
     rec {
       # Your custom packages
@@ -50,35 +63,45 @@
       # Reusable nixos modules you might want to export
       # These are usually stuff you would upstream into nixpkgs
       nixosModules = import ./modules/nixos;
+      
+      
       # Reusable home-manager modules you might want to export
       # These are usually stuff you would upstream into home-manager
-      homeManagerModules = import ./modules/home-manager;
+      #homeManagerModules = import ./modules/home-manager;
 
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
-        # FIXME replace with your hostname
-        your-hostname = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            # > Our main nixos configuration file <
-            ./nixos/configuration.nix
-          ];
-        };
+        hped800g3-4 = mkNixosSystem [ 
+            ./hosts/hped800g3 
+            ./hosts/hped800g3/4 
+        ];
+        #your-hostname = nixpkgs.lib.nixosSystem {
+        #  specialArgs = { inherit inputs outputs; };
+        #  modules = [
+        #    # > Our main nixos configuration file <
+        #    ./nixos/configuration.nix
+        #  ];
+        #};
       };
 
       # Standalone home-manager configuration entrypoint
       # Available through 'home-manager --flake .#your-username@your-hostname'
+      #homeConfigurations = {
+      #  # FIXME replace with your username@hostname
+      #  "your-username@your-hostname" = home-manager.lib.homeManagerConfiguration {
+      #    pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+      #    extraSpecialArgs = { inherit inputs outputs; };
+      #    modules = [
+      #      # > Our main home-manager configuration file <
+      #      ./home-manager/home.nix
+      #    ];
+      #  };
+      #};
+
       homeConfigurations = {
-        # FIXME replace with your username@hostname
-        "your-username@your-hostname" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            # > Our main home-manager configuration file <
-            ./home-manager/home.nix
-          ];
-        };
+        "hernad@hped800g3-4" = mkHomeConfiguration [ ./home-managerh/hernad/hped800g3-4.nix ] nixpkgs.legacyPackages."x86_64-linux";
       };
+      
     };
 }
