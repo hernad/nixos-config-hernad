@@ -73,7 +73,8 @@
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
         hped800g3-4 = mkNixosSystem [
-            ./hosts/hped800g3-4 
+            ./hosts/hped800g3-4
+             
         ];
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
