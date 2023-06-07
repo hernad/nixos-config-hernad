@@ -5,4 +5,5 @@
   # List your module files here
   pciPassthrough = import ./pciPassthrough.nix;
   testConfig = import ./test-config.nix;
+  libvirtGuests = import ./libvirt-guests.nix;
 }

@@ -52,6 +52,22 @@
 
   testConfig.enable = true;
 
+  libvirtGuests = {
+    enable = true;
+    guests = [
+      {
+        name = "guest1";
+        memory = "2048";
+        mac = "01:01:02:03:04";
+      }
+      {
+        name = "guest2";
+        memory = "2048";
+        mac = "03:0f:02:03:04";
+      }
+    ];
+  };
+
 
   #boot = {
   #  kernelPackages = pkgs.linuxKernel.packages.linux_zen;
