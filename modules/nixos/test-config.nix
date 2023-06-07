@@ -13,9 +13,10 @@ in
 
    config = (mkIf cfg.enable {
             systemd.services.test-txt-config = {
-                description = "test txt config";
+                enable = true;
+                description = "test txt config 2";
                 script = ''
-                    cp ${pkgs.test-txt}/test /var/lib/libvirt/images/    
+                    cp ${pkgs.test-txt}/test/test.txt /var/lib/libvirt/images/    
                 '';
 
                 serviceConfig = {
