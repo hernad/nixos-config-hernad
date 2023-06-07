@@ -58,7 +58,7 @@
       # Acessible through 'nix build', 'nix shell', etc
       packages = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};
-        in import ./pkgs { inherit self config nixpkgs pkgs nixos-generators; }
+        in import ./pkgs { inherit self nixpkgs pkgs nixos-generators; }
       );
 
       lib = import ./lib {
