@@ -12,8 +12,11 @@
 # https://github.com/telent/nixos-configs
 
 # https://ww.telent.net/2023/6/2/turning_the_nftables
+with lib;
+
 let
   cfg = config.libvirtGuests;
+
 
 in {
 
@@ -22,21 +25,26 @@ in {
      libvirtGuests = {
       enable = mkEnableOption "libvirtGuests enable";
       guests = mkOption {
-        type = types.listOf types.attrs;
+        type = types.attrs;
         default = [];
       };
-      hostNic = mkOption {
-        description = "host nic virtual machine";
-        type = types.str;
-      };
-
-     }
+     };
 
    };
 
 
+    #nameValuePair "some" 6
+    #   => { name = "some"; value = 6; }
+
+    #Example:
+    #   mapAttrs (name: value: name + "-" + value)
+    #      { x = "foo"; y = "bar"; }
+    #   => { x = "x-foo"; y = "y-bar"; }
+
+
+
     config = (mkIf cfg.enable {
-        systemd.services = lib.mapAttrs' (name: guest: lib.nameValuePair "libvirtd-guest-${name}" {
+        systemd.services = mapAttrs' (name: value: nameValuePair "libvirtd-guest-${name}" {
         after = [ "libvirtd.service" ];
         requires = [ "libvirtd.service" ];
         wantedBy = [ "multi-user.target" ];
@@ -44,29 +52,84 @@ in {
             Type = "oneshot";
             RemainAfterExit = "yes";
         };
+
+        #Type: optionalString :: bool -> string -> string
+
         script =
             let
+            xml_cdrom = ''
+                    <disk type="file" device="cdrom">
+                            <driver name="qemu" type="raw"/>
+                            <source file="/var/lib/libvirt/images/nixos.iso"/>
+                            <target dev="sda" bus="sata"/>
+                            <readonly/>
+                            <boot order="1"/>
+                            <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+                    </disk>
+            '';
+
             xml = pkgs.writeText "libvirt-guest-${name}.xml"
                 ''
                 <domain type="kvm">
                     <name>${name}</name>
                     <uuid>UUID</uuid>
+                    <metadata>
+                        <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
+                        <libosinfo:os id="${value.osInfo}"/>
+                        </libosinfo:libosinfo>
+                    </metadata>
+                    <memoryBacking>
+                        <source type='memfd'/>
+                        <access mode='shared'/>
+                    </memoryBacking>
+                    <vcpu placement='static'>${value.vcpu}</vcpu>
+
                     <os>
-                    <type>hvm</type>
+                    <type arch='x86_64' machine='pc-q35-7.2'>hvm</type>
                     </os>
-                    <memory unit="GiB">${guest.memory}</memory>
+                    <memory unit="KiB">${value.memory}</memory>
+                    <currentMemory unit="KiB">${value.currentMemory}</currentMemory>
+                    <on_poweroff>destroy</on_poweroff>
+                    <on_reboot>restart</on_reboot>
+                    <on_crash>destroy</on_crash>
+
+
                     <devices>
-                    <disk type="volume">
-                        <source volume="guest-${name}"/>
-                        <target dev="vda" bus="virtio"/>
+
+                    <disk type='file' device='disk'>
+                        <driver name='qemu' type='qcow2' discard='unmap'/>
+                        <source file='/var/lib/libvirt/images/${name}.qcow2'/>
+                        <target dev='vda' bus='virtio'/>
+                        <boot order='2'/>
+                        <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
                     </disk>
-                    <graphics type="spice" autoport="yes"/>
+
+                    ${optionalString value.CDROM xml_cdrom}"  
+
+                    <graphics type='spice' autoport='yes'>
+                         <listen type='address'/>
+                         <image compression='off'/>
+                    </graphics>
+
+
                     <input type="keyboard" bus="usb"/>
-                    <interface type="direct">
-                        <source dev="${hostNic}" mode="bridge"/>
-                        <mac address="${guest.mac}"/>
+
+                    <interface type="bridge">
+                        <source bridge="${value.hostNic}"/>
+                        <mac address="${value.mac}"/>
                         <model type="virtio"/>
+                        <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
                     </interface>
+
+                    <rng model='virtio'>
+                        <backend model='random'>/dev/urandom</backend>
+                        <address type='pci' domain='0x0000' bus='0x07' slot='0x00' function='0x0'/>
+                    </rng>
+
+                    <memballoon model="virtio">
+                        <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
+                    </memballoon>
+
                     </devices>
                     <features>
                     <acpi/>
@@ -75,7 +138,20 @@ in {
                 '';
             in
             ''
+                FILE="$(ls ${pkgs.installer-iso}/iso/nixos-*-x86_64-linux.iso)"
+                iso="$(${pkgs.coreutils}/bin/basename $FILE)"
+                if [ ! -f /var/lib/libvirt/images/nixos.iso ]; then
+                   cp $FILE /var/lib/libvirt/images/nixos.iso
+                fi 
+
                 uuid="$(${pkgs.libvirt}/bin/virsh domuuid '${name}' || true)"
+                if [ -z "$uuid" ]; then
+                   uuid="$(${pkgs.util-linux}/bin/uuidgen)"
+                fi 
+                FILE=/var/lib/libvirt/images/${name}.qcow2
+                if [ ! -f $FILE ] ; then
+                  ${pkgs.qemu}/bin/qemu-img create -f qcow2 $FILE ${value.diskSize}G
+                fi
                 ${pkgs.libvirt}/bin/virsh define <(sed "s/UUID/$uuid/" '${xml}')
                 ${pkgs.libvirt}/bin/virsh start '${name}'
             '';
@@ -93,7 +169,7 @@ in {
                 fi
             done
             '';
-        }) guests;
+        }) cfg.guests;
     });
 
 }

@@ -54,18 +54,28 @@
 
   libvirtGuests = {
     enable = true;
-    guests = [
-      {
-        name = "guest1";
-        memory = "2048";
-        mac = "01:01:02:03:04";
-      }
-      {
-        name = "guest2";
-        memory = "2048";
-        mac = "03:0f:02:03:04";
-      }
-    ];
+    guests = {
+      guest1 = {
+        osInfo = "http://nixos.org/nixos/22.11";
+        currentMemory = "4194304"; #4GB
+        memory = "8388608";
+        mac = "52:54:00:14:1f:20";
+        hostNic = "br0";
+        diskSize = "40";
+        vcpu = "2";
+        CDROM = true;
+      };
+      guest2 = {
+        osInfo = "http://nixos.org/nixos/22.11";
+        currentMemory= "2097152"; #2GB
+        memory = "8388608";  #8GB
+        mac = "52:54:00:14:7e:10";
+        hostNic = "br0";
+        diskSize = "30";
+        vcpu = "2";
+        CDROM = true;
+      };
+    };
   };
 
 

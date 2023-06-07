@@ -10,6 +10,12 @@ with lib; {
     "${modulesPath}/installer/cd-dvd/channel.nix"
   ];
 
+  environment.systemPackages = with pkgs; [ 
+    htop
+    vim
+    fio
+  ];
+
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users = {
     mutableUsers = false;

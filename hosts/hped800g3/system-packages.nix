@@ -8,6 +8,7 @@ in
     htop
     vim
     fio
+    installer-iso  # build iso, result =>  /nix/store 
   ];
 
   #environment.persistence = {

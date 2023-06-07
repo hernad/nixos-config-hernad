@@ -30,10 +30,10 @@ in iso-images // {
   #* as a easy way to build multiple derivations at once.
 
 
-  internal-libvirt-images = pkgs.linkFarm "internal-libvirt-images" [{
-    name = "centos-8.qcow2";
-    path = iso-images.centos-8-cloud-qcow2;
-  }];
+  #internal-libvirt-images = pkgs.linkFarm "internal-libvirt-images" [{
+  #  name = "centos-8.qcow2";
+  #  path = iso-images.centos-8-cloud-qcow2;
+  #}];
 
   #win10hotplug = pkgs.callPackage ./win10hotplug { };
 
