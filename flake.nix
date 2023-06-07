@@ -73,12 +73,13 @@
         in import ./shell.nix { inherit pkgs; }
       );
 
+      homeManagerModules = import ./modules/home-manager;
+      
       # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs; };
+      overlays = import ./overlays { inherit inputs self nixos-generators nixpkgs; };
       # Reusable nixos modules you might want to export
       # These are usually stuff you would upstream into nixpkgs
       nixosModules = import ./modules/nixos;
-      homeManagerModules = import ./modules/home-manager;
       
       
       # Reusable home-manager modules you might want to export

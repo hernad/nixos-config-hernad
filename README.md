@@ -99,3 +99,8 @@ nixos-rebuild  ...
       sops-install-secrets: Imported /persist/etc/ssh/ssh_host_ed25519_key as age key with fingerprint age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
       ....
 
+
+
+build installer iso
+
+   nix build .#installer-iso

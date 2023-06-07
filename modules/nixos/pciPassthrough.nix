@@ -109,7 +109,7 @@ in
       #  ]
       #'';
 
-      virtualisation.libvirtd.qemu.ovmf.enable = true;q
+      virtualisation.libvirtd.qemu.ovmf.enable = true;
     }
   );
 }
