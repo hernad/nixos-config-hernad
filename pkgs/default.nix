@@ -9,7 +9,7 @@
 { self, nixos-generators, nixpkgs, pkgs }:
 let
   #flakeTime = self.sourceInfo.lastModified;
-  iso-images = import ./images/iso-images { inherit pkgs; };
+  iso-images = import ./images/iso-images.nix { inherit pkgs; };
 in iso-images // {
   #authelia-bin = pkgs.callPackage ./authelia-bin.nix { };
 
@@ -17,7 +17,7 @@ in iso-images // {
   #scan-ci-host-keys = pkgs.callPackage ./scan-ci-host-keys { inherit self; };
 
   #ci-import-and-tag-docker = pkgs.callPackage ./ci-import-and-tag-docker { };
-  installer-iso = pkgs.callPackage ./images/installer-iso { inherit self; };
+  installer-iso = pkgs.callPackage ./images/installer-iso { inherit self lib; };
 
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 
