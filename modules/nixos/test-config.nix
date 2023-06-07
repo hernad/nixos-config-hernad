@@ -15,7 +15,7 @@ in
             systemd.services.test-txt-config = {
                 description = "test txt config";
                 script = ''
-                    cp ${pkgs.test-txt}/test/test.txt /var/lib/libvirtd/images/    
+                    cp ${pkgs.test-txt}/test /var/lib/libvirt/images/    
                 '';
 
                 serviceConfig = {
