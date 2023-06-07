@@ -43,11 +43,12 @@
     };
   };
 
-  #pciPassthrough = {
-  #  enable = true;
-  #  pciIDs = "10de:13c2,10de:0fbb,1095:3114";
-  #  libvirtUsers = [ "hernad" ];
-  #};
+  pciPassthrough = {
+    enable = true;
+    cpuType = "intel";
+    pciIDs = "1cc1:5766";
+    libvirtUsers = [ "hernad" ];
+  };
 
 
   #boot = {

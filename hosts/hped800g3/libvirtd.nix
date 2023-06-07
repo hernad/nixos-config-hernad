@@ -3,7 +3,7 @@
 {
 
   environment.systemPackages = with pkgs; [
-    virtmanager
+    #virtmanager
     qemu
     OVMF
   ];
@@ -18,9 +18,9 @@
    ];
    virtualisation.libvirtd.enable = true;
    
-   virtualisation.libvirtd.qemuVerbatimConfig = ''
-    nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
-   '';
+   #virtualisation.libvirtd.qemuVerbatimConfig = ''
+   # nvram = [ "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd" ]
+   #'';
 
    # https://github.com/WhittlesJr/nixos-shared/blob/master/pciPassthrough.nix
 

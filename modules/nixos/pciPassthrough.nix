@@ -76,30 +76,40 @@ in
     { boot.kernelParams = [ "${cfg.cpuType}_iommu=on" ];
 
       # These modules are required for PCI passthrough, and must come before early modesetting stuff
-      boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
+      boot.kernelModules = [ "kvm-intel" "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
 
       boot.extraModprobeConfig ="options vfio-pci ids=${cfg.pciIDs}";
 
-      environment.systemPackages = with pkgs; [
-        virtmanager
-        qemu
-        OVMF
-      ];
+      #environment.systemPackages = with pkgs; [
+      #  #virtmanager
+      #  qemu
+      #  #OVMF
+      #];
 
-      environment.etc = (getUSBDeviceFileConfig cfg.usbDevices);
-      services.udev.extraRules = (getUSBUdevRules cfg.usbDevices);
+      #environment.etc = (getUSBDeviceFileConfig cfg.usbDevices);
+      #services.udev.extraRules = (getUSBUdevRules cfg.usbDevices);
 
-      virtualisation.libvirtd.enable = true;
-      virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
+      #virtualisation.libvirtd.enable = true;
+      #virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
 
       users.groups.libvirtd.members = [ "root" ] ++ cfg.libvirtUsers;
 
-      virtualisation.libvirtd.qemuVerbatimConfig = ''
-        nvram = [
-        "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
-        ]
-        user = "${cfg.audioUser}"
-      '';
+      # qemuVerbatimConfig uzrokuje ovaj error
+      #Jun 07 11:24:20 hped800g3-4 .libvirtd-wrapp[19505]: invalid argument: Failed to parse user ''
+      #Jun 07 11:24:20 hped800g3-4 .libvirtd-wrapp[19505]: Initialization of QEMU state driver failed: invalid argument: Failed to parse user ''
+      #Jun 07 11:24:20 hped800g3-4 .libvirtd-wrapp[19505]: Driver state initialization failed
+
+
+      #Contents written to the qemu configuration file, qemu.conf. Make sure to include a proper namespace configuration when supplying custom configuration.
+      #  user = "${cfg.audioUser}"
+
+      #virtualisation.libvirtd.qemu.VerbatimConfig = ''
+      #  nvram = [
+      #  "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
+      #  ]
+      #'';
+
+      virtualisation.libvirtd.qemu.ovmf.enable = true;
     }
   );
 }
