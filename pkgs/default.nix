@@ -19,7 +19,7 @@ in iso-images // {
   #ci-import-and-tag-docker = pkgs.callPackage ./ci-import-and-tag-docker { };
   installer-iso = pkgs.callPackage ./images/installer-iso { inherit self; };
 
-  test-txt = import ./test-txt.nix {};
+  test-txt = import ./test-txt.nix { inherit config pkgs; };
 
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 

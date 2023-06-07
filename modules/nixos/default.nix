@@ -4,4 +4,5 @@
 {
   # List your module files here
   pciPassthrough = import ./pciPassthrough.nix;
+  testConfig = import ./test-config.nix;
 }

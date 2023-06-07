@@ -1,5 +1,7 @@
+{ pkgs }:
+
 let
-  pkgs = import <nixpkgs> {};
+    dirName = "libvirt";
 in
 pkgs.stdenv.mkDerivation {
   name = "test.txt";
@@ -8,5 +10,11 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/test
     ln -s $src $out/test/text.txt
+    
   '';
+
+  
+
 }
+
+

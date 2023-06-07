@@ -104,3 +104,8 @@ nixos-rebuild  ...
 build installer iso
 
    nix build .#installer-iso
+   nix build .#test-txt
+
+   ls -l result/test/text.txt
+   lrwxrwxrwx 1 root root 52 Jan  1  1970 result/test/text.txt -> /nix/store/9gzn9al449pygm5w2iarvajanmgfargk-test.txt
+
