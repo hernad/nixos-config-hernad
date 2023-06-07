@@ -2,9 +2,16 @@
 
 with lib;
 let
+   cfg = config.testConfig; 
 in
 {
-    config = {
+
+   options.testConfig = {
+      enable = mkEnableOption "test config";
+
+   };
+
+   config = (mkIf cfg.enable {
             systemd.services.test-txt-config = {
                 description = "test txt config";
                 script = ''
@@ -19,5 +26,5 @@ in
                     #StateDirectory = subDirs [ "dnsmasq" ];
                 };
             };
-    };
+    });
 }

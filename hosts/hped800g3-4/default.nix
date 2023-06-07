@@ -50,6 +50,8 @@
     libvirtUsers = [ "hernad" ];
   };
 
+  testConfig.enable = true;
+
 
   #boot = {
   #  kernelPackages = pkgs.linuxKernel.packages.linux_zen;
