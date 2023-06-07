@@ -73,7 +73,7 @@
         hostNic = "br0";
         diskSize = "30";
         vcpu = "2";
-        CDROM = true;
+        CDROM = false;
       };
     };
   };
