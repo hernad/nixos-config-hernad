@@ -45,7 +45,8 @@
 
     in
     rec {
-      # Your custom packages
+      
+      # Custom packages
       # Acessible through 'nix build', 'nix shell', etc
       packages = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};
