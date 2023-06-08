@@ -17,6 +17,9 @@ with lib; {
     iperf3
   ];
 
+  # test from live iso
+  networking.firewall.enable = false;
+
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users = {
     mutableUsers = false;
