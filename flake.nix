@@ -92,6 +92,9 @@
         hped800g3-4 = mkNixosSystem [
             ./hosts/hped800g3-4
         ];
+        hped800g3-3 = mkNixosSystem [
+            ./hosts/hped800g3-3
+        ];
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
         #  modules = [
