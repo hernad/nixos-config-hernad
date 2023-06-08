@@ -6,9 +6,11 @@ in
 
   environment.systemPackages = with pkgs; [ 
     htop
+    tmux
     vim
     fio
     iperf3
+    traceroute
     installer-iso  # build iso, result =>  /nix/store 
   ];
 

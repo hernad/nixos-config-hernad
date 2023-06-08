@@ -93,6 +93,33 @@ in {
             </hostdev>
             '';
 
+            # https://forums.unraid.net/topic/101283-what-is-the-difference-between-virtio-and-virtio-net/
+            # https://insujang.github.io/2021-03-15/virtio-and-vhost-architecture-part-2/
+            # https://linuxconfig.org/how-to-use-bridged-networking-with-libvirt-and-kvm
+            # https://joshrosso.com/c/vm-networks/
+
+
+            # https://libvirt.org/formatdomain.html#setting-nic-driver-specific-options
+
+            # https://serverfault.com/questions/1076615/loading-a-kvm-guest-with-static-ip-using-xml-file
+            #<ip address="${value.ip2.address}" prefix="${value.ip2.prefix}" gateway="${value.ip2.gateway}" />
+
+
+            #ovo stimanje vhost drivera dalo je znacajne rezultate - puno manje retry-a
+            # bilo je cca 16000, sada 3000
+            xml_bridge2 = ''
+              <interface type="bridge">
+                    <source bridge="${value.hostBridge2}"/>
+                    <mac address="${value.mac2}"/>
+                    <model type="virtio"/>
+                    <driver name="vhost" txmode="iothread" ioeventfd="on" event_idx="off" queues="${value.vcpu}" rx_queue_size="256" tx_queue_size="256">
+                      <host csum="off" gso="off" tso4="off" tso6="off" ecn="off" ufo="off" mrg_rxbuf="off"/>
+                      <guest csum="off" tso4="off" tso6="off" ecn="off" ufo="off"/>
+                    </driver>
+                    <mtu size="${value.mtu2}"/>
+               </interface>
+            '';
+
             xml = pkgs.writeText "libvirt-guest-${name}.xml"
                 ''
                 <domain type="kvm">
@@ -132,7 +159,8 @@ in {
                     ${optionalString value.CDROM xml_cdrom}" 
                     ${optionalString value.pci1enable xml_pci1}"  
                     ${optionalString value.pci2enable xml_pci2}"
-                    ${optionalString value.pci3enable xml_pci3}"  
+                    ${optionalString value.pci3enable xml_pci3}" 
+                    ${optionalString value.bridge2enable xml_bridge2}"
   
 
                     <graphics type='spice' autoport='yes'>

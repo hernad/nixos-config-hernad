@@ -24,25 +24,45 @@
     #dhcpd.enable = false;
     useDHCP = true;
 
+    # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
+
+    interfaces."enp1s0" = {
+       macAddress = "24:1c:04:f3:73:47";
+       mtu = 9000;
+    };
+
     bridges = {
        "br0" = {
           interfaces = [ "eno1" ];
+       };
+
+       "br10" = {
+          interfaces = [ "enp1s0" ];
+          rstp = true;
        };
     };
 
     interfaces.br0 = {
       useDHCP = false;
       wakeOnLan.enable = true;
-
-      # network-addresses-eno1.service
-
       ipv4 = {
         addresses = [{
           address = "192.168.168.109";
           prefixLength = 24;
         }];
       };
+    };
 
+    interfaces.br10 = {
+      useDHCP = false;
+      wakeOnLan.enable = false;
+      mtu = 9000;
+      ipv4 = {
+        addresses = [{
+          address = "10.0.99.4";
+          prefixLength = 24;
+        }];
+      };
     };
   };
 
@@ -58,8 +78,8 @@
     #	03:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co., Ltd. ADATA XPG GAMMIXS1 1L Media [1cc1:5766] (rev 01)
 
 
-
-    pciIDs = "1cc1:5766,8086:10fb";
+    # ethernet 10g intel 8086:10fb
+    pciIDs = "1cc1:5766";
     libvirtUsers = [ "hernad" ];
   };
 
@@ -80,7 +100,7 @@
         #pciDomain = "0x0100";
 
         # 01:00.0 Ethernet controller [0200]: Intel Corporation 82599ES 10-Gigabit SFI/SFP+
-        pci1enable = true;
+        pci1enable = false;
         pciBus1 = "0x01";
         pciSlot1 = "0x0";
 
@@ -93,7 +113,18 @@
         pci3enable = true;
         pciBus3 = "0x03";
         pciSlot3 = "0x0";
+
+        bridge2enable = true;
+        hostBridge2 = "br10";
+        mac2 = "52:54:00:14:1f:22";
+        mtu2 = "9000";
+        ip2 = {
+          address = "10.0.99.14";
+          prefix = "24";
+          gateway = "10.0.99.3";
+        };
       };
+
       guest2 = {
         osInfo = "http://nixos.org/nixos/22.11";
         currentMemory= "2097152"; #2GB
@@ -115,7 +146,16 @@
         pci3enable = false;
         pciBus3 = "0x00";
         pciSlot3 = "0x0";
-        
+
+        bridge2enable = false;
+        hostBridge2 = "br10";
+        mac2 = "52:54:00:14:7e:12";
+        mtu2 = "9000";
+        ip2 = {
+          address = "10.0.99.24";
+          prefix = "24";
+          gateway = "10.0.99.3";
+        };
       };
     };
   };

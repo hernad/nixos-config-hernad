@@ -12,9 +12,11 @@ with lib; {
 
   environment.systemPackages = with pkgs; [ 
     htop
+    tmux
     vim
     fio
     iperf3
+    traceroute
   ];
 
   # test from live iso
