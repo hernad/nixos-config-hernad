@@ -46,7 +46,17 @@
   pciPassthrough = {
     enable = true;
     cpuType = "intel";
-    pciIDs = "1cc1:5766";
+    
+    # 01:00.0 Ethernet controller [0200]: Intel Corporation 82599ES 10-Gigabit SFI/SFP+ Network Connection [8086:10fb] (rev 01)
+
+    #IOMMU Group 9:
+    #	02:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co., Ltd. ADATA XPG GAMMIXS1 1L Media [1cc1:5766] (rev 01)
+    #IOMMU Group 10:
+    #	03:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co., Ltd. ADATA XPG GAMMIXS1 1L Media [1cc1:5766] (rev 01)
+
+
+
+    pciIDs = "1cc1:5766,8086:10fb";
     libvirtUsers = [ "hernad" ];
   };
 
@@ -64,6 +74,10 @@
         diskSize = "40";
         vcpu = "2";
         CDROM = true;
+        #pciDomain = "0x0100";
+        pci1enable = true;
+        pciBus1 = "0x01";
+        pciSlot1 = "0x0";
       };
       guest2 = {
         osInfo = "http://nixos.org/nixos/22.11";
@@ -74,6 +88,11 @@
         diskSize = "30";
         vcpu = "2";
         CDROM = false;
+        pci1enable = false;
+        #pciDomain = "0x0000";
+        pciBus1 = "0x00";
+        pciSlot1 = "0x0";
+        
       };
     };
   };

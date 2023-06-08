@@ -78,6 +78,7 @@ in
       # These modules are required for PCI passthrough, and must come before early modesetting stuff
       boot.kernelModules = [ "kvm-intel" "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
 
+      # https://astrid.tech/2022/09/22/0/nixos-gpu-vfio/
       boot.extraModprobeConfig ="options vfio-pci ids=${cfg.pciIDs}";
 
       #environment.systemPackages = with pkgs; [

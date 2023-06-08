@@ -68,6 +68,31 @@ in {
                     </disk>
             '';
 
+
+            xml_pci1 = ''
+            <hostdev mode="subsystem" type="pci" managed="yes">
+            <source>
+                <address domain="0x0000" bus="${value.pciBus1}" slot="${value.pciSlot1}" function="0x0"/>
+            </source>
+            </hostdev>
+            '';
+
+            xml_pci2 = ''
+            <hostdev mode="subsystem" type="pci" managed="yes">
+            <source>
+                <address domain="0x0000" bus="${value.pciBus2}" slot="${value.pciSlot2}" function="0x0"/>
+            </source>
+            </hostdev>
+            '';
+
+            xml_pci3 = ''
+            <hostdev mode="subsystem" type="pci" managed="yes">
+            <source>
+                <address domain="0x0000" bus="${value.pciBus3}" slot="${value.pciSlot3}" function="0x0"/>
+            </source>
+            </hostdev>
+            '';
+
             xml = pkgs.writeText "libvirt-guest-${name}.xml"
                 ''
                 <domain type="kvm">
@@ -104,7 +129,8 @@ in {
                         <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
                     </disk>
 
-                    ${optionalString value.CDROM xml_cdrom}"  
+                    ${optionalString value.CDROM xml_cdrom}" 
+                    ${optionalString value.pci1enable xml_pci1}"  
 
                     <graphics type='spice' autoport='yes'>
                          <listen type='address'/>
