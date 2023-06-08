@@ -1,10 +1,13 @@
 keys:
   # Users
-  - &users:
-    - &hernad age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+  #- &users:
+  #  - &hernad age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
   # Hosts
-  #- &hosts:
-  #  - &hped800g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+  - &hosts:
+    - &hped800g3-3 age186sqmma0vsyh6tutgcak68mglxkmkxgc2sfz6dra0qmkhh8zfppqjy3u09
+    - &hped800g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+
+
 
 
 creation_rules:

@@ -86,7 +86,7 @@ sops age from ssh key
 
      scp root@192.168.168.109:/persist/etc/ssh/ssh_host_ed25519_key .
 
-     nix-shell -p ssh-to-age --run "ssh-to-age -private-key -i ssh_host_ed25519_key > ~/.config/sops/age/keys.txt"
+     nix-shell -p ssh-to-age --run "ssh-to-age -private-key -i ssh_host_ed25519_key >> ~/.config/sops/age/keys.txt"
 
      nix-shell -p age --run "age-keygen -y ~/.config/sops/age/keys.txt"
      age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz

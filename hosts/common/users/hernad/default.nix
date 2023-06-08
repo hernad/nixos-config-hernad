@@ -12,7 +12,7 @@ in
   #As users are not created yet, it's not possible to set an owner for these secrets.
 
   sops.secrets.hernad-password = {
-    sopsFile = ../../../../secrets/user-secrets.yaml;
+    sopsFile = "../../../../secrets/user-secrets-${config.networking.hostName}.yaml";
     neededForUsers = true;
     #mode = "0440";
     #owner = config.users.users.hernad.name;
@@ -43,9 +43,6 @@ in
     passwordFile = config.sops.secrets.hernad-password.path;
     packages = [ pkgs.home-manager ];
   };
-
-
-
 
   home-manager.users.hernad = import ../../../../home-manager/hernad/${config.networking.hostName}.nix;
 
