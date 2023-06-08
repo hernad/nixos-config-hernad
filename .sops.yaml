@@ -11,9 +11,17 @@ keys:
 
 
 creation_rules:
-  - path_regex: secrets/[^/]+\.yaml$
+  - path: secrets/user-secrets-hped800g3-3.yaml
     key_groups:
-    - age:
-      - *hernad
-      #age:
-      #- *admin_bob
+      - age:
+        - *hped800g3-3
+  - path: secrets/user-secrets-hped800g3-4.yaml
+    key_groups:
+      - age:
+        - *hped800g3-4        
+  #- path_regex: secrets/[^/]+\.yaml$
+  #  key_groups:
+  #  - age:
+  #    #- *hernad
+  #    #age:
+  #    #- *admin_bob
