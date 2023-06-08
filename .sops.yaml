@@ -1,27 +1,18 @@
+# https://git.sr.ht/~bwolf/dotfiles/tree/master/item/.sops.yaml
 keys:
-  # Users
-  #- &users:
-  #  - &hernad age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
-  # Hosts
-  - &hosts:
-    - &hped800g3-3 age186sqmma0vsyh6tutgcak68mglxkmkxgc2sfz6dra0qmkhh8zfppqjy3u09
-    - &hped800g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
-
-
-
+  - &host-g3-3 age186sqmma0vsyh6tutgcak68mglxkmkxgc2sfz6dra0qmkhh8zfppqjy3u09
+  - &host-g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
 
 creation_rules:
-  - path: secrets/user-secrets-hped800g3-3.yaml
+  - path_regex: secrets/.*3\.yaml$
     key_groups:
-      - age:
-        - *hped800g3-3
-  - path: secrets/user-secrets-hped800g3-4.yaml
+    - age:
+      - *host-g3-3
+  - path_regex: secrets/.*4\.yaml$
     key_groups:
-      - age:
-        - *hped800g3-4        
-  #- path_regex: secrets/[^/]+\.yaml$
-  #  key_groups:
-  #  - age:
-  #    #- *hernad
-  #    #age:
-  #    #- *admin_bob
+    - age:
+      - *host-g3-4
+
+
+
+
