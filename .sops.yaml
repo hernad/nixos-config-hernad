@@ -4,11 +4,11 @@ keys:
   - &host-g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
 
 creation_rules:
-  - path_regex: secrets/.*3\.yaml$
+  - path_regex: secrets/.*g3\-3\.yaml$
     key_groups:
     - age:
       - *host-g3-3
-  - path_regex: secrets/.*4\.yaml$
+  - path_regex: secrets/.*g3\-4\.yaml$
     key_groups:
     - age:
       - *host-g3-4
