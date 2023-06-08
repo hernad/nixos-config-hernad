@@ -14,6 +14,7 @@ with lib; {
     htop
     vim
     fio
+    iperf3
   ];
 
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];

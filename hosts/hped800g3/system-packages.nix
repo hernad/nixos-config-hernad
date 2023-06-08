@@ -8,6 +8,7 @@ in
     htop
     vim
     fio
+    iperf3
     installer-iso  # build iso, result =>  /nix/store 
   ];
 
