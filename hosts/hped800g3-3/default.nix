@@ -21,6 +21,9 @@
     #dhcpd.enable = false;
     useDHCP = true;
 
+    # test phase
+    firewall.enable = false;
+
     bridges = {
        "br0" = {
           interfaces = [ "eno1" ];

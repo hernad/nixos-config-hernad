@@ -14,6 +14,9 @@
     hostName = "hped800g3-4";
     defaultGateway = "192.168.168.251";
 
+    # test phase
+    firewall.enable = false;
+
     nameservers = [ 
         "192.168.168.10" 
         "192.168.169.10" 
