@@ -131,6 +131,9 @@ in {
 
                     ${optionalString value.CDROM xml_cdrom}" 
                     ${optionalString value.pci1enable xml_pci1}"  
+                    ${optionalString value.pci2enable xml_pci2}"
+                    ${optionalString value.pci3enable xml_pci3}"  
+  
 
                     <graphics type='spice' autoport='yes'>
                          <listen type='address'/>

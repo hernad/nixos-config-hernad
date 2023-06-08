@@ -72,12 +72,24 @@
         mac = "52:54:00:14:1f:20";
         hostNic = "br0";
         diskSize = "40";
-        vcpu = "2";
+        vcpu = "4";
         CDROM = true;
         #pciDomain = "0x0100";
+
+        # 01:00.0 Ethernet controller [0200]: Intel Corporation 82599ES 10-Gigabit SFI/SFP+
         pci1enable = true;
         pciBus1 = "0x01";
         pciSlot1 = "0x0";
+
+        #	02:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co.
+        pci2enable = true;
+        pciBus2 = "0x02";
+        pciSlot2 = "0x0";
+
+        #	03:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co
+        pci3enable = true;
+        pciBus3 = "0x03";
+        pciSlot3 = "0x0";
       };
       guest2 = {
         osInfo = "http://nixos.org/nixos/22.11";
@@ -92,6 +104,14 @@
         #pciDomain = "0x0000";
         pciBus1 = "0x00";
         pciSlot1 = "0x0";
+
+        pci2enable = false;
+        pciBus2 = "0x00";
+        pciSlot2 = "0x0";
+
+        pci3enable = false;
+        pciBus3 = "0x00";
+        pciSlot3 = "0x0";
         
       };
     };
