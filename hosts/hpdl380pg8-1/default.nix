@@ -3,6 +3,7 @@
     ../hpdl380pg8
     ../common/global
     ../common/users/hernad
+    ./hardware-configuration.nix
   ];
 
   networking = {
@@ -21,18 +22,18 @@
 
     # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
 
-    interfaces."enp1s0" = {
+    interfaces."enp4s0" = {
        #macAddress = "24:1c:04:f3:73:47";
        mtu = 9000;
     };
 
     bridges = {
        "br0" = {
-          interfaces = [ "eno1" ];
+          interfaces = [ "eno1" "eno4" ];
        };
 
        "br10" = {
-          interfaces = [ "enp1s0" ];
+          interfaces = [ "enp4s0" ];
           rstp = true;
        };
     };

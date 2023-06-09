@@ -20,18 +20,17 @@
     };
   };
 
- fileSystems."/" = { device = "/dev/disk/by-uuid/bf6c0464-cc93-4e89-b686-7b0f3891c63a";
-      fsType = "ext4";
+ fileSystems."/" = { 
+    device = "/dev/disk/by-uuid/bf6c0464-cc93-4e89-b686-7b0f3891c63a";
+    fsType = "ext4";
   };
 
-  swapDevices =
-    [ 
-      { device = "/dev/disk/by-uuid/fc250fb2-e4e6-4c55-b8c6-79ea0c46f04c"; }
-    ];
+  swapDevices = [ 
+      { 
+        device = "/dev/disk/by-uuid/fc250fb2-e4e6-4c55-b8c6-79ea0c46f04c"; 
+      }
+  ];
 
-
-
-  };
 
 
   #swapDevices = [{
