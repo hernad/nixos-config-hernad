@@ -5,7 +5,7 @@
 with pkgs;
   pkgs.stdenv.mkDerivation rec {
     version = "1.0.0";
-    name = "hernad-script-utils-${version}";
+    name = "hernad-util-scripts-${version}";
 
     buildInputs = [bashInteractive coreutils pciutils];
 
