@@ -103,11 +103,8 @@
         hostBridge2 = "br10";
         mac2 = "52:54:00:01:1e:22";
         mtu2 = "9000";
-        ip2 = {
-          address = "10.0.99.14";
-          prefix = "24";
-          gateway = "10.0.99.3";
-        };
+        vhostConfig2 = true;
+
       };
     };
   };

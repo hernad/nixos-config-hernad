@@ -104,18 +104,24 @@ in {
             # https://serverfault.com/questions/1076615/loading-a-kvm-guest-with-static-ip-using-xml-file
             #<ip address="${value.ip2.address}" prefix="${value.ip2.prefix}" gateway="${value.ip2.gateway}" />
 
+            # hped800g3 hostovi:
+            # ovo podesenje vhost drivera dalo je znacajne rezultate - puno manje retry-a
+            # bilo je cca 16000, sada 3000; zato treba parametar vhostConfig2 = enable;
 
-            #ovo stimanje vhost drivera dalo je znacajne rezultate - puno manje retry-a
-            # bilo je cca 16000, sada 3000
+            # hpdl380pg8 host ovo podesenje vhosta daje losije rezultate - zato ga treba iskljuciti!
+            xml_vhost_config = ''
+                 <driver name="vhost" txmode="iothread" ioeventfd="on" event_idx="off" queues="${value.vcpu}" rx_queue_size="256" tx_queue_size="256">
+                      <host csum="off" gso="off" tso4="off" tso6="off" ecn="off" ufo="off" mrg_rxbuf="off"/>
+                      <guest csum="off" tso4="off" tso6="off" ecn="off" ufo="off"/>
+                    </driver>
+            '';
+
             xml_bridge2 = ''
               <interface type="bridge">
                     <source bridge="${value.hostBridge2}"/>
                     <mac address="${value.mac2}"/>
                     <model type="virtio"/>
-                    <driver name="vhost" txmode="iothread" ioeventfd="on" event_idx="off" queues="${value.vcpu}" rx_queue_size="256" tx_queue_size="256">
-                      <host csum="off" gso="off" tso4="off" tso6="off" ecn="off" ufo="off" mrg_rxbuf="off"/>
-                      <guest csum="off" tso4="off" tso6="off" ecn="off" ufo="off"/>
-                    </driver>
+                    ${optionalString value.vhostConfig2 xml_cdrom}" 
                     <mtu size="${value.mtu2}"/>
                </interface>
             '';
