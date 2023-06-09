@@ -1,21 +1,5 @@
 { inputs, outputs, ... }: {
   imports = [
-    #inputs.home-manager.nixosModules.home-manager
-    #./acme.nix
-    #./auto-upgrade.nix
-    #./system-packages.nix
-    ./fish.nix
-    ./locale.nix
-    #./nix.nix
-    ./openssh.nix
-    ./optin-persistence.nix
-    #./podman.nix
-    #./sops.nix
-    #./ssh-serve-store.nix
-    #./steam-hardware.nix
-    #./systemd-initrd.nix
-    #./tailscale.nix
-    ./libvirtd.nix
     ./hardware-configuration.nix
 
   ]; 

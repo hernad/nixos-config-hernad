@@ -3,6 +3,21 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./sops.nix
+    ./system-packages.nix
+    #./acme.nix
+    #./auto-upgrade.nix
+    #./system-packages.nix
+    ./fish.nix
+    ./locale.nix
+    #./nix.nix
+    ./openssh.nix
+    ./optin-persistence.nix
+    #./podman.nix
+    #./ssh-serve-store.nix
+    #./steam-hardware.nix
+    #./systemd-initrd.nix
+    #./tailscale.nix
+    ./libvirtd.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };
