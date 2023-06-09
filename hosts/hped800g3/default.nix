@@ -3,7 +3,7 @@
     #inputs.home-manager.nixosModules.home-manager
     #./acme.nix
     #./auto-upgrade.nix
-    ./system-packages.nix
+    #./system-packages.nix
     ./fish.nix
     ./locale.nix
     #./nix.nix
