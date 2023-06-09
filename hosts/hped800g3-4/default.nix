@@ -90,6 +90,7 @@
     guests = {
       guest1 = {
         osInfo = "http://nixos.org/nixos/22.11";
+        efi = false;
         currentMemory = "4194304"; #4GB
         memory = "8388608";
         mac = "52:54:00:14:1f:20";
@@ -123,6 +124,7 @@
 
       guest2 = {
         osInfo = "http://nixos.org/nixos/22.11";
+        efi = false;
         currentMemory= "2097152"; #2GB
         memory = "8388608";  #8GB
         mac = "52:54:00:14:7e:10";

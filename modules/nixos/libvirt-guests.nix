@@ -17,7 +17,6 @@ with lib;
 let
   cfg = config.libvirtGuests;
 
-
 in {
 
 
@@ -57,6 +56,10 @@ in {
 
         script =
             let
+
+            bootBios = !value.efi;
+            bootEfi = value.efi;
+
             xml_cdrom = ''
                     <disk type="file" device="cdrom">
                             <driver name="qemu" type="raw"/>
@@ -126,6 +129,24 @@ in {
                </interface>
             '';
 
+            xml_efi = ''
+              <os>
+               <type arch="x86_64" machine="q35">hvm</type>
+               <loader readonly="yes" type="pflash">/run/libvirt/nix-ovmf/OVMF_CODE.fd</loader>
+               <!--
+               <boot dev="hd"/>
+               -->
+              </os>
+            ''; 
+
+            xml_bios = ''
+              <os>
+                <type arch="x86_64" machine="pc-q35">hvm</type>
+              </os>
+            '';
+
+            # https://nixos.org/manual/nix/stable/language/operators.html
+
             xml = pkgs.writeText "libvirt-guest-${name}.xml"
                 ''
                 <domain type="kvm">
@@ -141,10 +162,8 @@ in {
                         <access mode='shared'/>
                     </memoryBacking>
                     <vcpu placement='static'>${value.vcpu}</vcpu>
-
-                    <os>
-                    <type arch='x86_64' machine='pc-q35-7.2'>hvm</type>
-                    </os>
+                    ${optionalString bootBios xml_bios}
+                    ${optionalString bootEfi xml_efi}
                     <memory unit="KiB">${value.memory}</memory>
                     <currentMemory unit="KiB">${value.currentMemory}</currentMemory>
                     <on_poweroff>destroy</on_poweroff>
@@ -162,11 +181,11 @@ in {
                         <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
                     </disk>
 
-                    ${optionalString value.CDROM xml_cdrom}" 
-                    ${optionalString value.pci1enable xml_pci1}"  
-                    ${optionalString value.pci2enable xml_pci2}"
-                    ${optionalString value.pci3enable xml_pci3}" 
-                    ${optionalString value.bridge2enable xml_bridge2}"
+                    ${optionalString value.CDROM xml_cdrom} 
+                    ${optionalString value.pci1enable xml_pci1}
+                    ${optionalString value.pci2enable xml_pci2}
+                    ${optionalString value.pci3enable xml_pci3}
+                    ${optionalString value.bridge2enable xml_bridge2}
   
 
                     <graphics type='spice' autoport='yes'>

@@ -1,4 +1,6 @@
-{ self, system ? "x86_64-linux" }:
+{ self, pkgs, system ? "x86_64-linux" }:
+
+
 let
   installerSystem = self.lib.nixosSystem' {
     inherit system;

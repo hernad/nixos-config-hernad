@@ -78,6 +78,7 @@
     guests = {
       router = {
         osInfo = "http://nixos.org/nixos/22.11";
+        efi = true;
         currentMemory = "4194304"; #4GB
         memory = "4194304";
         mac = "52:54:00:01:1e:20";

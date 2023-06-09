@@ -1,0 +1,55 @@
+################# injectuj u qcow neki fajl ##################
+
+
+[root@hpdl380pg8-1:~]# modprobe nbd
+
+[root@hpdl380pg8-1:~]# qemu-nbd --connect /dev/nbd0 /var/lib/libvirt/images/router.qcow2
+
+[root@hpdl380pg8-1:~]# fdisk /dev/nbd0
+
+Welcome to fdisk (util-linux 2.38.1).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0xfa339625.
+
+Command (m for help): g
+Created a new GPT disklabel (GUID: E2A5B776-CCC4-1649-9E5D-4BF66CF5D9BF).
+
+Command (m for help): n
+Partition number (1-128, default 1): 
+First sector (2048-83886046, default 2048): 
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-83886046, default 83884031): +1G
+
+Created a new partition 1 of type 'Linux filesystem' and of size 1 GiB.
+
+Command (m for help): w
+The partition table has been altered.
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+
+[root@hpdl380pg8-1:~]# mkfs.fat -F32 -n boot /dev/nbd0
+nbd0    nbd0p1  
+
+[root@hpdl380pg8-1:~]# mkfs.fat -F32 -n boot /dev/nbd0p1
+mkfs.fat 4.2 (2021-01-31)
+mkfs.fat: Warning: lowercase labels might not work properly on some systems
+
+[root@hpdl380pg8-1:~]# mkdir /tmp/inject
+
+[root@hpdl380pg8-1:~]# mount /dev/nbd0p1 /tmp/inject
+
+[root@hpdl380pg8-1:~]# echo inject > /tmp/inject/inject.txt
+
+[root@hpdl380pg8-1:~]# umount /tmp/inject
+
+[root@hpdl380pg8-1:~]# qemu-nbd --disconnect /dev/nbd0 
+/dev/nbd0 disconnected
+
+[root@hpdl380pg8-1:~]# modprobe -r nbd0
+modprobe: FATAL: Module nbd0 not found.
+
+[root@hpdl380pg8-1:~]# modprobe -r nbd
+

@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 with pkgs;
   pkgs.stdenv.mkDerivation rec {
     version = "1.0.0";

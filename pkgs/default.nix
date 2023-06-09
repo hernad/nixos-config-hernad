@@ -9,18 +9,22 @@
 { self, nixos-generators, nixpkgs, pkgs }:
 let
   #flakeTime = self.sourceInfo.lastModified;
-  iso-images = import ./images/iso-images.nix { inherit pkgs; };
-in iso-images // {
+  #iso-images = import ./images/iso-images.nix { inherit pkgs ; };
+  
+
+in 
+{
   #authelia-bin = pkgs.callPackage ./authelia-bin.nix { };
+  hernad-util-scripts = import ./hernad-util-scripts { inherit pkgs; };
 
   #update-ci-workflow = pkgs.callPackage ./update-ci-workflow { inherit self; };
   #scan-ci-host-keys = pkgs.callPackage ./scan-ci-host-keys { inherit self; };
 
   #ci-import-and-tag-docker = pkgs.callPackage ./ci-import-and-tag-docker { };
-  installer-iso = pkgs.callPackage ./images/installer-iso { inherit self; };
+  installer-iso = pkgs.callPackage ./images/installer-iso { inherit self pkgs; };
 
   test-txt = import ./test-txt.nix { inherit pkgs; };
-  hernad-util-scripts = import ./hernad-util-scripts { inherit pkgs; }; 
+   
 
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 
