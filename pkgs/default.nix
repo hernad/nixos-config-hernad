@@ -20,6 +20,7 @@ in iso-images // {
   installer-iso = pkgs.callPackage ./images/installer-iso { inherit self; };
 
   test-txt = import ./test-txt.nix { inherit pkgs; };
+  hernad-script-utils = import ./hernad-script-utils { inherit pkgs; }; 
 
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 

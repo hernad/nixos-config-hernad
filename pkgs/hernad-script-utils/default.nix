@@ -1,11 +1,9 @@
 {
-  stdenv,
   pkgs,
-  lib,
   ...
 }:
 with pkgs;
-  stdenv.mkDerivation rec {
+  pkgs.stdenv.mkDerivation rec {
     version = "1.0.0";
     name = "hernad-script-utils-${version}";
 
@@ -32,6 +30,6 @@ with pkgs;
     meta = {
       description = "hernad util scripts";
       license = "MIT";
-      platforms = lib.platforms.linux;
+      platforms = pkgs.lib.platforms.linux;
     };
   }
