@@ -11,6 +11,7 @@ in
     fio
     iperf3
     traceroute
+    hernad-util-scripts
     installer-iso  # build iso, result =>  /nix/store 
   ];
 

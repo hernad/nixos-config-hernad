@@ -7,9 +7,9 @@ with pkgs;
     version = "1.0.0";
     name = "hernad-util-scripts-${version}";
 
-    buildInputs = [bashInteractive coreutils pciutils];
+    buildInputs = [bashInteractive coreutils pciutils makeWrapper];
 
-    #buildInputs = [bashInteractive btrfs-progs openssh makeWrapper coreutils pv hostname];
+    #buildInputs = [bashInteractive btrfs-progs openssh  coreutils pv hostname];
 
     src = ./.;
 
