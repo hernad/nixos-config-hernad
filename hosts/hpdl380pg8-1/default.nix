@@ -31,9 +31,16 @@
        "br0" = {
           interfaces = [ "eno2" ];
        };
-
        "br10" = {
           interfaces = [ "enp4s0" ];
+          rstp = true;
+       };
+       "brt1" = {
+          interfaces = [ "t1" ];
+          rstp = true;
+       };
+       "brt2" = {
+          interfaces = [ "t2" ];
           rstp = true;
        };
     };
@@ -72,6 +79,8 @@
         }];
       };
     };
+
+
   };
 
   pciPassthrough = {
@@ -113,10 +122,11 @@
         pciSlot3 = "0x0";
 
         bridge2enable = true;
-        hostBridge2 = "br10";
+        hostBridge2 = "brt1";
         mac2 = "52:54:00:01:1e:22";
-        mtu2 = "9000";
-        vhostConfig2 = true;
+        mtu2 = "1500";
+        vhostConfig2 = false;
+
 
       };
     };

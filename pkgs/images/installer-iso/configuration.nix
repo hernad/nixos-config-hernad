@@ -21,6 +21,7 @@ with lib; {
     fio
     iperf3
     traceroute
+    speedtest-cli
     hernad-util-scripts
   ];
 
