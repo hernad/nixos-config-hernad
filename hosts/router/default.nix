@@ -114,3 +114,35 @@
 
   system.stateVersion = "23.05";
 }
+
+
+#[root@router:~]# nft list tables
+#table ip filter
+#table ip nat
+#table ip6 filter
+#
+#[root@router:~]# nft list table ip filter
+#table ip filter {
+#	chain input {
+#		type filter hook input priority filter; policy drop;
+#		iifname "enp2s0" accept comment "Allow local network to access the router"
+#		iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
+#		iifname "enp1s0" icmp type { destination-unreachable, echo-request, time-exceeded } counter packets 1 bytes 56 accept comment "Allow select ICMP"
+#		iifname "enp1s0" counter packets 56 bytes 4340 drop comment "Drop all other unsolicited traffic from wan"
+#	}
+#
+#	chain forward {
+#		type filter hook forward priority filter; policy drop;
+#		iifname "enp2s0" oifname "enp1s0" accept comment "Allow trusted LAN to WAN"
+#		iifname "enp1s0" oifname "enp2s0" ct state established,related accept comment "Allow established back to LANs"
+#	}
+#}
+#
+#[root@router:~]# nft list table ip nat
+#table ip nat {
+#	chain postrouting {
+#		type nat hook postrouting priority srcnat; policy accept;
+#		oifname "enp1s0" masquerade
+#	}
+#}
+
