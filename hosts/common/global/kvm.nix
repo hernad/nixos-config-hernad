@@ -2,6 +2,7 @@
 { inputs, outputs, ... }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
+    ./init.nix
     ./sops.nix
     #./acme.nix
     #./auto-upgrade.nix

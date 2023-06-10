@@ -3,6 +3,7 @@ keys:
   - &host-g3-3 age186sqmma0vsyh6tutgcak68mglxkmkxgc2sfz6dra0qmkhh8zfppqjy3u09
   - &host-g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
   - &host-dl380pg8-1 age16kdzghtgedyjzp5k3x5aflacf38x9994upk32wcck26vdnjp9ucqgmc2xv
+  - &host-router age1unm53urxtpss493pfycwf2z0nartldl8sq9fzqsvdrzm59lvveeqsp0u98
 
 creation_rules:
   - path_regex: secrets/.*g3\-3\.yaml$
@@ -17,6 +18,11 @@ creation_rules:
     key_groups:
     - age:
       - *host-dl380pg8-1
+  - path_regex: secrets/user\-secrets\-router\.yaml$
+    key_groups:
+    - age:
+      - *host-router
+
 
 
 
