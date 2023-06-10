@@ -68,7 +68,7 @@
     };
   };
 
-  nftables = 
+  networking.nftables = 
   let
     lanInterface = "enp2s0";
     wanInterface = "enp1s0";
@@ -107,11 +107,10 @@
           }
         }
       '';
-    };
   };
+  
 
   testConfig.enable = false;
-
 
   system.stateVersion = "23.05";
 }
