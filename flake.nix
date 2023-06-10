@@ -98,6 +98,10 @@
         hpdl380pg8-1 = mkNixosSystem [
             ./hosts/hpdl380pg8-1
         ];
+        router = mkNixosSystem [
+            ./hosts/router
+        ];
+
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
         #  modules = [
