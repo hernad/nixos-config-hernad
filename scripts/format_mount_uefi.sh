@@ -3,7 +3,7 @@
 # example:
 # ssh -T root@192.168.168.101 < scripts/format_mount_uefi.sh
 
-https://nixos.org/manual/nixos/stable/index.html#sec-installation
+# https://nixos.org/manual/nixos/stable/index.html#sec-installation
 
 
 DISK=vda
@@ -20,3 +20,7 @@ mount /dev/disk/by-label/${LABEL} /mnt
 
 mkdir -p /mnt/boot
 mount /dev/disk/by-label/${LABEL_BOOT} /mnt/boot
+
+swapon /dev/${DISK}2
+
+mount | grep "on /mnt"

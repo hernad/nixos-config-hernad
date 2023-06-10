@@ -115,3 +115,5 @@ build installer iso
 
 
    ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
+   ssh -T root@192.168.168.101 < scripts/format_mount_uefi.sh
+   ssh -T root@192.168.168.101 < scripts/nixos_install_uefi.sh
