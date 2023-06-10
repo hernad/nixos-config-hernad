@@ -29,13 +29,25 @@
 
     bridges = {
        "br0" = {
-          interfaces = [ "eno1" "eno4" ];
+          interfaces = [ "eno2" ];
        };
 
        "br10" = {
           interfaces = [ "enp4s0" ];
           rstp = true;
        };
+    };
+
+    vlans = {
+      t1 = {
+        interface = "eno2";
+        id = 1001;
+      };
+
+      t2 = {
+        interface = "eno2";
+        id = 1002;
+      };
     };
 
     interfaces.br0 = {
