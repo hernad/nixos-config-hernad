@@ -3,7 +3,7 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     ./sops.nix
-    ./system-packages.nix
+    
     #./acme.nix
     #./auto-upgrade.nix
     #./system-packages.nix
@@ -17,8 +17,14 @@
     #./steam-hardware.nix
     #./systemd-initrd.nix
     #./tailscale.nix
+    
+  ] ++ (if virtualisation.libvirtd.enable then [ 
+    ./system-packages.nix
     ./libvirtd.nix
-  ] ++ (builtins.attrValues outputs.nixosModules);
+  ] else [
+    ./system-packages-kvm.nix  
+  ])  ++ (builtins.attrValues outputs.nixosModules);
+ 
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };
 

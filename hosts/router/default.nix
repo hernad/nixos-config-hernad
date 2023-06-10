@@ -1,9 +1,9 @@
 { pkgs, inputs, ... }: {
   imports = [
+    ./hardware-configuration.nix
     ../kvm
     ../common/global
     ../common/users/hernad
-
   ];
 
   

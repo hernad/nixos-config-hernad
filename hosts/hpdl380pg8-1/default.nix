@@ -106,7 +106,8 @@
         hostNic = "br0";
         diskSize = "40";
         vcpu = "4";
-        CDROM = true;
+        #CDROM = true;
+        CDROM = false;
         #pciDomain = "0x0100";
 
         pci1enable = false;
