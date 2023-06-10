@@ -1,5 +1,7 @@
 #!/usr/bin/env/bash
 
+# example:
+# ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
 
 
 DISK=vda

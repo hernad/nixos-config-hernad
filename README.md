@@ -109,3 +109,9 @@ build installer iso
    ls -l result/test/text.txt
    lrwxrwxrwx 1 root root 52 Jan  1  1970 result/test/text.txt -> /nix/store/9gzn9al449pygm5w2iarvajanmgfargk-test.txt
 
+
+
+# KVM host 192.168.168.101 partition uefi
+
+
+   ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
