@@ -2,27 +2,17 @@
 { inputs, outputs, ... }: {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    ./init.nix
     ./sops.nix
-    
     #./acme.nix
     #./auto-upgrade.nix
     #./system-packages.nix
     ./fish.nix
     ./locale.nix
-    #./nix.nix
     ./openssh.nix
     ./optin-persistence.nix
-    #./podman.nix
-    #./ssh-serve-store.nix
-    #./steam-hardware.nix
-    #./systemd-initrd.nix
-    #./tailscale.nix
-    ./libvirtd.nix
-    ./system-packages.nix 
+    ./system-packages.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
  
-
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };
 
@@ -33,5 +23,24 @@
     };
   };
 
+  environment.enableAllTerminfo = true;
 
+  hardware.enableRedistributableFirmware = true;
+  #networking.domain = "m7.rs";
+
+  # Increase open file limit for sudoers
+  security.pam.loginLimits = [
+    {
+      domain = "@wheel";
+      item = "nofile";
+      type = "soft";
+      value = "524288";
+    }
+    {
+      domain = "@wheel";
+      item = "nofile";
+      type = "hard";
+      value = "1048576";
+    }
+  ];
 }

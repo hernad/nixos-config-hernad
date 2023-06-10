@@ -2,7 +2,7 @@
   imports = [
     ./hardware-configuration.nix
     ../kvm
-    ../common/global
+    ../common/global/kvm.nix
     ../common/users/hernad
   ];
 

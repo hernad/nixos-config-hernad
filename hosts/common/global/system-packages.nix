@@ -13,8 +13,13 @@ in
     traceroute
     speedtest-cli
     hernad-util-scripts
-    installer-iso  # build iso, result =>  /nix/store 
-  ];
+  ] ++ (
+    if config.virtualisation.libvirtd.enable then [
+        installer-iso  # build iso, result =>  /nix/store 
+    ] else [
+
+    ]
+  );
 
   #environment.persistence = {
   #  "/persist".directories = [ "/var/lib/headscale" ];

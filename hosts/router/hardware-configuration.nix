@@ -5,10 +5,7 @@
   #];
 
   boot = {
-    initrd = {
-      availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
-      kernelModules = [];
-    };
+    
     loader = {
       systemd-boot = {
         enable = true;
@@ -18,24 +15,21 @@
     };
   };
 
-  fileSystems = {
-    "/boot" = {
-      device = "/dev/disk/by-label/boot";
-      fsType = "vfat";
-    };
-
-    "/" = {
-      device = "/dev/disk/by-label/nixos";
+  fileSystems."/" =
+    { device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
-  };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-label/boot";
+      fsType = "vfat";
+    };
+
+  swapDevices =
+    [ { device = "/dev/disk/by-label/swap"; }
+    ];
 
 
-  #swapDevices = [{
-  #  device = "/swap/swapfile";
-  #  size = 8196;
-  #}];
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   #hardware.cpu.amd.updateMicrocode = true;
