@@ -4,7 +4,7 @@ keys:
   - &host-g3-4 age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
   - &host-dl380pg8-1 age16kdzghtgedyjzp5k3x5aflacf38x9994upk32wcck26vdnjp9ucqgmc2xv
   - &host-router age1unm53urxtpss493pfycwf2z0nartldl8sq9fzqsvdrzm59lvveeqsp0u98
-  - &host-guest31 age1unm53urxtpss493pfycwf2z0nartldl8sq9fzqsvdrzm59lvveeqsp0u98
+  - &host-guest31 age1r5ftcajj3p4heex9hdfjjd9mhh2g9p4653527982frcvezkqyd8qw9jn42
   
 creation_rules:
   - path_regex: secrets/.*g3\-3\.yaml$
