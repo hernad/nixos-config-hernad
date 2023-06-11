@@ -123,7 +123,7 @@ in {
                     <source bridge="${value.net2.hostBridge}"/>
                     <mac address="${value.net2.mac}"/>
                     <model type="virtio"/>
-                    ${optionalString value.net2.vhostConfig xml_cdrom}" 
+                    ${optionalString value.net2.vhostConfig xml_vhost_config}" 
                     <mtu size="${value.net2.mtu}"/>
                </interface>
             '';
@@ -133,7 +133,7 @@ in {
                     <source bridge="${value.net3.hostBridge}"/>
                     <mac address="${value.net3.mac}"/>
                     <model type="virtio"/>
-                    ${optionalString value.net3.vhostConfig xml_cdrom}" 
+                    ${optionalString value.net3.vhostConfig xml_vhost_config}" 
                     <mtu size="${value.net3.mtu}"/>
                </interface>
             '';
@@ -180,6 +180,12 @@ in {
                     <on_crash>destroy</on_crash>
 
                     <devices>
+
+                    <!-- qemu guest agent -->
+                    <channel type="unix">
+                    <target type="virtio" name="org.qemu.guest_agent.0"/>
+                    <address type="virtio-serial" controller="0" bus="0" port="1"/>
+                    </channel>
 
                     <disk type='file' device='disk'>
                         <driver name='qemu' type='qcow2' discard='unmap'/>

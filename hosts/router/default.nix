@@ -38,8 +38,8 @@ in {
         "192.168.168.10" 
         "192.168.169.10"
     ];
-    #dhcpd.enable = false;
-    useDHCP = true;
+    
+    useDHCP = false;
 
     # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
 
@@ -51,6 +51,9 @@ in {
       # lan mreza
       "enp2s0" = {
          mtu = 1500;
+      };
+      "enp4s0" = {
+         mtu = 9000;
       };
     };
 
@@ -149,7 +152,10 @@ in {
   #  '';
   #};
 
+  # the following new units were started: kea-dhcp4-server.service
+
   services.kea.dhcp4 = {
+    enable = true;
     settings = {
         interfaces-config = {
           interfaces = [
@@ -157,7 +163,7 @@ in {
           ];
         };
         lease-database = {
-          name = "/var/lib/kea/dhcp4.leases";
+          name = "/var/lib/kea/dhcpd4.leases";
           persist = true;
           type = "memfile";
         };

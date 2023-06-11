@@ -46,4 +46,6 @@ with lib; {
       wantedBy = [ "multi-user.target" ];
   };
 
+  services.qemuGuest.enable = true;
+
 }

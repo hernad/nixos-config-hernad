@@ -170,7 +170,7 @@
           mac = "52:54:00:13:5e:05";
           hostBridge = "br00";
           mtu = "1500";
-          vhostConfig = true;
+          vhostConfig = false;
         };
 
         

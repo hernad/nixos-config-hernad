@@ -10,8 +10,8 @@
       kernelModules = [ "kvm-intel" ];
     };
     loader = {
-       grub.device = "/dev/sdc";
-
+       grub.device = "/dev/disk/by-id/ata-TS240GSSD220S_H659880480";
+                      
     #  systemd-boot = {
     #    enable = true;
     #    consoleMode = "max";
@@ -21,13 +21,13 @@
   };
 
  fileSystems."/" = { 
-    device = "/dev/disk/by-uuid/bf6c0464-cc93-4e89-b686-7b0f3891c63a";
+    device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
   };
 
   swapDevices = [ 
       { 
-        device = "/dev/disk/by-uuid/fc250fb2-e4e6-4c55-b8c6-79ea0c46f04c"; 
+        device = "/dev/disk/by-label/swap"; 
       }
   ];
 
