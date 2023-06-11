@@ -40,16 +40,29 @@
     # https://www.reddit.com/r/networking/comments/d15bj6/10g_home_lab_experiment_iperf3_how_many_retries/
 
 
+    vlans = {
+      lan10 = {
+        interface = "enp1s0";
+        id = 2000;
+      };
+    };
+
+    interfaces = {
+        lan10.mtu = 9000;
+    };
+
     bridges = {
        "br0" = {
           interfaces = [ "eno1" ];
        };
 
+      # 10Gb SFP
        "br10" = {
-          interfaces = [ "enp1s0" ];
+          interfaces = [ "lan10" ];
           rstp = true;
        };
     };
+
 
     interfaces.br0 = {
       useDHCP = false;

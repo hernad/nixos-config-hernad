@@ -20,19 +20,32 @@
     #dhcpd.enable = false;
     useDHCP = true;
 
+    vlans = {
+      lan10 = {
+        # 10G SFP+
+        interface = "enp4s0";
+        id = 2000;
+      };
+    };
+
+    interfaces = {
+        lan10.mtu = 9000;
+    };
+
+
     # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
 
-    interfaces."enp4s0" = {
+    #interfaces."enp4s0" = {
        #macAddress = "24:1c:04:f3:73:47";
-       mtu = 9000;
-    };
+    #   mtu = 9000;
+    #};
 
     bridges = {
        "br0" = {
           interfaces = [ "eno2" ];
        };
        "br10" = {
-          interfaces = [ "enp4s0" ];
+          interfaces = [ "lan10" ];
           rstp = true;
        };
        "brt1" = {
