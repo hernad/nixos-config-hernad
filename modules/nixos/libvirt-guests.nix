@@ -71,11 +71,10 @@ in {
                     </disk>
             '';
 
-
             xml_pci1 = ''
             <hostdev mode="subsystem" type="pci" managed="yes">
             <source>
-                <address domain="0x0000" bus="${value.pciBus1}" slot="${value.pciSlot1}" function="0x0"/>
+                <address domain="0x0000" bus="${value.pci1.bus}" slot="${value.pci1.slot}" function="${value.pci1.function}"/>
             </source>
             </hostdev>
             '';
@@ -83,7 +82,7 @@ in {
             xml_pci2 = ''
             <hostdev mode="subsystem" type="pci" managed="yes">
             <source>
-                <address domain="0x0000" bus="${value.pciBus2}" slot="${value.pciSlot2}" function="0x0"/>
+                <address domain="0x0000" bus="${value.pci2.bus}" slot="${value.pci2.slot}" function="${value.pci2.function}"/>
             </source>
             </hostdev>
             '';
@@ -91,7 +90,7 @@ in {
             xml_pci3 = ''
             <hostdev mode="subsystem" type="pci" managed="yes">
             <source>
-                <address domain="0x0000" bus="${value.pciBus3}" slot="${value.pciSlot3}" function="0x0"/>
+                <address domain="0x0000" bus="${value.pci3.bus}" slot="${value.pci3.slot}" function="${value.pci3.function}"/>
             </source>
             </hostdev>
             '';
@@ -121,11 +120,21 @@ in {
 
             xml_bridge2 = ''
               <interface type="bridge">
-                    <source bridge="${value.hostBridge2}"/>
-                    <mac address="${value.mac2}"/>
+                    <source bridge="${value.net2.hostBridge}"/>
+                    <mac address="${value.net2.mac}"/>
                     <model type="virtio"/>
-                    ${optionalString value.vhostConfig2 xml_cdrom}" 
-                    <mtu size="${value.mtu2}"/>
+                    ${optionalString value.net2.vhostConfig xml_cdrom}" 
+                    <mtu size="${value.net2.mtu}"/>
+               </interface>
+            '';
+
+            xml_bridge3 = ''
+              <interface type="bridge">
+                    <source bridge="${value.net3.hostBridge}"/>
+                    <mac address="${value.net3.mac}"/>
+                    <model type="virtio"/>
+                    ${optionalString value.net3.vhostConfig xml_cdrom}" 
+                    <mtu size="${value.net3.mtu}"/>
                </interface>
             '';
 
@@ -170,7 +179,6 @@ in {
                     <on_reboot>restart</on_reboot>
                     <on_crash>destroy</on_crash>
 
-
                     <devices>
 
                     <disk type='file' device='disk'>
@@ -182,27 +190,27 @@ in {
                     </disk>
 
                     ${optionalString value.CDROM xml_cdrom} 
-                    ${optionalString value.pci1enable xml_pci1}
-                    ${optionalString value.pci2enable xml_pci2}
-                    ${optionalString value.pci3enable xml_pci3}
-                    ${optionalString value.bridge2enable xml_bridge2}
-  
-
+                    ${optionalString value.pci1.enable xml_pci1}
+                    ${optionalString value.pci2.enable xml_pci2}
+                    ${optionalString value.pci3.enable xml_pci3}
+                    
                     <graphics type='spice' autoport='yes'>
                          <listen type='address'/>
                          <image compression='off'/>
                     </graphics>
 
-
                     <input type="keyboard" bus="usb"/>
 
                     <interface type="bridge">
-                        <source bridge="${value.hostNic}"/>
-                        <mac address="${value.mac}"/>
+                        <source bridge="${value.net1.hostBridge}"/>
+                        <mac address="${value.net1.mac}"/>
                         <model type="virtio"/>
                         <address type='pci' domain='0x0000' bus='0x02' slot='0x00' function='0x0'/>
                     </interface>
 
+                    ${optionalString value.net2.enable xml_bridge2}
+                    ${optionalString value.net3.enable xml_bridge3}
+  
                     <rng model='virtio'>
                         <backend model='random'>/dev/urandom</backend>
                         <address type='pci' domain='0x0000' bus='0x07' slot='0x00' function='0x0'/>

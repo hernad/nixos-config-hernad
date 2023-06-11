@@ -1,4 +1,11 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, ... }: 
+
+let
+    lan10DnsServers = "192.168.168.10, 192.168.169.10";
+    lanInterface = "enp2s0";
+    wanInterface = "enp1s0";
+    lan10Interface = "enp4s0";
+in {
   imports = [
     ./hardware-configuration.nix
     ../kvm
@@ -6,9 +13,13 @@
     ../common/users/hernad
   ];
 
-  
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  environment.systemPackages = with pkgs; [
+    pciutils 
+    tcpdump
+  ];
 
   # router
   boot.kernel.sysctl = {
@@ -66,28 +77,39 @@
         }];
       };
     };
-  };
 
-  networking.nftables = 
-  let
-    lanInterface = "enp2s0";
-    wanInterface = "enp1s0";
-  in
-  {
+    # 10G SPF+
+    interfaces.enp4s0 = {
+      useDHCP = false;
+      wakeOnLan.enable = false;
+      ipv4 = {
+        addresses = [{
+          address = "10.0.99.254";
+          prefixLength = 24;
+        }];
+      };
+    };
+
+    nftables = 
+    {
       enable = true;
       ruleset = ''
         table ip filter {
           chain input {
             type filter hook input priority 0; policy drop;
-            iifname { "${lanInterface}" } accept comment "Allow local network to access the router"
+            iifname { "${lanInterface}", "${lan10Interface}" } accept comment "Allow local network to access the router"
             iifname { "${wanInterface}" } ct state { established, related } accept comment "Allow established traffic"
             iifname { "${wanInterface}" } icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname { "${wanInterface}" } counter drop comment "Drop all other unsolicited traffic from wan"
           }
           chain forward {
             type filter hook forward priority filter; policy drop;
-            iifname { "${lanInterface}" } oifname { "${wanInterface}" } accept comment "Allow trusted LAN to WAN"
-            iifname { "${wanInterface}" } oifname { "${lanInterface}" } ct state established, related accept comment "Allow established back to LANs"
+            iifname { "${lanInterface}", "${lan10Interface}"} oifname { "${wanInterface}" } accept comment "Allow trusted LAN to WAN"
+            iifname { "${wanInterface}" } oifname { "${lanInterface}", "${lan10Interface}" } ct state established, related accept comment "Allow established back to LANs"
+            
+            iifname { "${lanInterface}" } oifname { "${lan10Interface}" } accept comment "Allow lan -> lan10"
+            iifname { "${lan10Interface}" } oifname { "${lanInterface}" } ct state established, related accept comment "Allow established lan10 back to lan"
+            
           }
         }
 
@@ -107,9 +129,54 @@
           }
         }
       '';
-  };
-  
+    };
 
+  };
+
+  
+  
+  #services.dhcpd4 = {
+  #  enable = true;
+  #  interfaces = [ "${lan10Interface}" ];
+  #  extraConfig = ''
+  #    subnet 10.0.99.0 netmask 255.255.255.0 {
+  #      option routers 10.0.99.254;
+  #      option domain-name-servers ${lan10DnsServers};
+  #      option subnet-mask 255.255.255.0;
+  #      interface enp2s0;
+  #      range 10.0.99.1 10.0.99.253;
+  #    }
+  #  '';
+  #};
+
+  services.kea.dhcp4 = {
+    settings = {
+        interfaces-config = {
+          interfaces = [
+            "${lan10Interface}"
+          ];
+        };
+        lease-database = {
+          name = "/var/lib/kea/dhcp4.leases";
+          persist = true;
+          type = "memfile";
+        };
+        rebind-timer = 2000;
+        renew-timer = 1000;
+        subnet4 = [
+          {
+            pools = [
+              {
+                pool = "10.0.99.1 - 10.0.99.244";
+              }
+            ];
+            subnet = "10.0.99.0/24";
+          }
+        ];
+        valid-lifetime = 4000;
+    };
+  };
+   
   testConfig.enable = false;
 
   system.stateVersion = "23.05";
