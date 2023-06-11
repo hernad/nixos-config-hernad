@@ -12,6 +12,12 @@
 
   networking = {
     hostName = "hped800g3-3";
+
+    extraHosts =
+    ''
+    10.0.99.4 hped800g3-4
+    '';
+
     defaultGateway = "192.168.168.251";
 
     nameservers = [ 
@@ -122,7 +128,9 @@
         memory = "8388608";
         diskSize = "40";
         vcpu = "4";
-        CDROM = true;
+        #CDROM = true;
+        CDROM = false;
+
         #pciDomain = "0x0100";
 
         # 01:00.0 Ethernet controller [0200]: Intel Corporation 82599ES 10-Gigabit SFI/SFP+
@@ -135,7 +143,7 @@
 
         #	02:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co.
         pci2 = {
-          enable = true;
+          enable = false;
           bus = "0x02";
           slot = "0x0";
           function = "0x0";
@@ -143,7 +151,7 @@
 
         #	03:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co
         pci3 = { 
-          enable = true;
+          enable = false;
           bus = "0x03";
           slot = "0x0";
           function = "0x0";

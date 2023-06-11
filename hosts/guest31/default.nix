@@ -44,24 +44,24 @@ in {
     # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
 
     interfaces = {
-      # T1
+      # lan10 10.0.99.0/24
       "enp1s0" = {
-         mtu = 1500;
+         mtu = 9000;
       };
-      # lan mreza
+      # lan 168 mreza
       "enp2s0" = {
          mtu = 1500;
       };
     };
 
- 
+
     interfaces.enp1s0 = {
       useDHCP = false;
       wakeOnLan.enable = true;
       ipv4 = {
-        # Telemach T1 
+        
         addresses = [{
-          address = "192.168.254.10";
+          address = "10.0.99.31";
           prefixLength = 24;
         }];
       };
@@ -72,18 +72,16 @@ in {
       wakeOnLan.enable = false;
       ipv4 = {
         addresses = [{
-          address = "192.168.168.106";
+          address = "192.168.168.188";
           prefixLength = 24;
         }];
       };
     };
 
     
-
   };
 
-  
-   
+     
   testConfig.enable = false;
 
   system.stateVersion = "23.05";

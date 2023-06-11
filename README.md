@@ -117,3 +117,13 @@ build installer iso
    ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
    ssh -T root@192.168.168.101 < scripts/format_mount_uefi.sh
    ssh -T root@192.168.168.101 < scripts/nixos_install_uefi.sh
+
+
+
+
+# libvirti migrate
+
+      [root@hped800g3-4:~]# virsh migrate guest31 qemu+ssh://hped800g3-3/system --unsafe --live --copy-storage-all --persistent  --verbose
+      Migration: [100 %]
+
+
