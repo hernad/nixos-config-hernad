@@ -101,6 +101,9 @@
         router = mkNixosSystem [
             ./hosts/router
         ];
+        guest31 = mkNixosSystem [
+            ./hosts/guest31
+        ];
 
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
