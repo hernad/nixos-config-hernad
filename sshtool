@@ -1,0 +1,132 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p pass -p openssl -i bash
+
+CMDFILE="$1"
+if [ -z "$CMDFILE" ] || [ ! -f "$CMDFILE" ]; then
+	echo "sshtool is not meant to be called on its own."
+	echo "See scripts that use it (e.g. deploy_nixos) for usage examples."
+	exit 1
+fi
+shift 1
+
+cd $(dirname $CMDFILE)
+CMDFILE=./$(basename $CMDFILE)
+
+CLUSTER="$1"
+if [ -z "$CLUSTER" ] || [ ! -d "cluster/$CLUSTER" ]; then
+	echo "Usage: $CMDFILE <cluster name>"
+	echo "The cluster name must be the name of a subdirectory of cluster/"
+	exit 1
+fi
+shift 1
+
+if [ -z "$1" ]; then
+	NIXHOSTLIST=$(ls cluster/$CLUSTER/node | grep '\.nix$' | grep -v '\.site\.')
+else
+	NIXHOSTLIST="$@"
+fi
+
+if [ -z "$ROOT_PASS" ]; then
+	read -s -p "Enter remote sudo password: " ROOT_PASS
+	echo
+fi
+
+SSH_CONFIG=cluster/$CLUSTER/ssh_config
+
+function header {
+	RANDNAME=$(openssl rand -hex 12)
+	cat <<EOF
+cat > /tmp/deploytool_askpass_$RANDNAME <<EOG
+#!/usr/bin/env sh
+echo "\\\$DEPLOYTOOL_ROOT_PASSWORD"
+EOG
+chmod +x /tmp/deploytool_askpass_$RANDNAME
+export SUDO_ASKPASS=/tmp/deploytool_askpass_$RANDNAME
+export DEPLOYTOOL_ROOT_PASSWORD="$ROOT_PASS"
+sudo -A sh - <<'EOEVERYTHING'
+set -e
+EOF
+}
+
+function footer {
+	echo rm -v '/tmp/deploytool_askpass*'
+	echo EOEVERYTHING
+}
+
+function message {
+	echo "base64 -d <<EOG"
+	echo "$@" | base64
+	echo "EOG"
+}
+
+function cmd {
+	echo "echo '- run $@'"
+	echo "$@"
+}
+
+function set_env {
+	echo "echo '- set $@'"
+	echo "export $@"
+}
+
+function copy {
+	local FROM=$1
+	local TO=$2
+	cat <<EOF
+echo '- write $TO from $FROM'
+base64 -d <<EOG | tee $TO > /dev/null
+$(base64 <$FROM)
+EOG
+EOF
+}
+
+function copy_secret {
+	local FROM=$1
+	local TO=$2
+	cat <<EOF
+echo '- write secret $TO from $FROM'
+base64 -d <<EOG | tee $TO > /dev/null
+$(base64 <$FROM)
+EOG
+chown root:root $TO
+chmod 0600 $TO
+EOF
+}
+
+function write_pass {
+	local PASSKEY=$1
+	local TO=$2
+	cat <<EOF
+echo '- write secret $TO from pass $PASSKEY'
+base64 -d <<EOG | tee $TO > /dev/null
+$(pass $PASSKEY | base64)
+EOG
+chown root:root $TO
+chmod 0600 $TO
+EOF
+}
+
+function pipe_pass {
+	local PASSKEY=$1
+	local CMD=$2
+	cat <<EOF
+echo '- pipe secret $PASSKEY to command $CMD'
+base64 -d <<EOG | $CMD > /dev/null
+$(pass $PASSKEY | base64)
+EOG
+EOF
+}
+
+for NIXHOST in $NIXHOSTLIST; do
+	NIXHOST=${NIXHOST%.*}
+
+	if [ -z "$SSH_USER" ]; then
+		SSH_DEST=$NIXHOST
+	else
+		SSH_DEST=$SSH_USER@$NIXHOST
+	fi
+
+	echo "==== DOING $NIXHOST ===="
+
+	(header; . $CMDFILE; footer) | ssh -F $SSH_CONFIG $SSH_DEST sh -
+done

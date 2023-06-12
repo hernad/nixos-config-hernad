@@ -113,10 +113,10 @@ build installer iso
 
 # KVM host 192.168.168.101 partition uefi
 
-
-   ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
-   ssh -T root@192.168.168.101 < scripts/format_mount_uefi.sh
-   ssh -T root@192.168.168.101 < scripts/nixos_install_uefi.sh
+   export HOST_IP=192.168.168.134
+   ssh -T root@$HOST_IP < scripts/partition_uefi.sh
+   ssh -T root@$HOST_IP < scripts/format_mount_uefi.sh
+   ssh -T root@$HOST_IP < scripts/nixos_install_uefi.sh
 
 
 

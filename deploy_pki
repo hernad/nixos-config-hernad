@@ -1,0 +1,64 @@
+#!/usr/bin/env ./sshtool
+
+ORG=bring-out
+
+PKI=$ORG/cluster/$CLUSTER
+YEAR=$(date +%Y)
+
+cmd mkdir -p /var/lib/nomad/pki /var/lib/consul/pki
+
+for file in consul-ca.crt consul$YEAR.crt consul$YEAR.key \
+	consul$YEAR-client.crt consul$YEAR-client.key
+do
+	if pass $PKI/$file >/dev/null; then
+		write_pass $PKI/$file /var/lib/consul/pki/$file
+		cmd chown consul:root /var/lib/consul/pki/$file
+	fi
+done
+
+cmd ln -sf /var/lib/consul/pki/consul$YEAR.crt /var/lib/consul/pki/consul.crt
+cmd ln -sf /var/lib/consul/pki/consul$YEAR.key /var/lib/consul/pki/consul.key
+cmd ln -sf /var/lib/consul/pki/consul$YEAR-client.crt /var/lib/consul/pki/consul-client.crt
+cmd ln -sf /var/lib/consul/pki/consul$YEAR-client.key /var/lib/consul/pki/consul-client.key
+
+if [ ! "$CLUSTER" = "prod" ]; then
+	cmd systemctl restart consul
+	cmd sleep 10
+fi
+
+for file in nomad-ca.crt nomad$YEAR.crt nomad$YEAR.key \
+	nomad$YEAR-client.crt nomad$YEAR-client.key \
+	consul$YEAR.crt consul$YEAR-client.crt consul$YEAR-client.key
+do
+	if pass $PKI/$file >/dev/null; then
+		write_pass $PKI/$file /var/lib/nomad/pki/$file
+		cmd "chown \$(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/$file"
+	fi
+done
+
+cmd ln -sf /var/lib/nomad/pki/nomad$YEAR.crt /var/lib/nomad/pki/nomad.crt
+cmd ln -sf /var/lib/nomad/pki/nomad$YEAR.key /var/lib/nomad/pki/nomad.key
+cmd ln -sf /var/lib/nomad/pki/nomad$YEAR-client.crt /var/lib/nomad/pki/nomad-client.crt
+cmd ln -sf /var/lib/nomad/pki/nomad$YEAR-client.key /var/lib/nomad/pki/nomad-client.key
+cmd ln -sf /var/lib/nomad/pki/consul$YEAR.crt /var/lib/nomad/pki/consul.crt
+cmd ln -sf /var/lib/nomad/pki/consul$YEAR-client.crt /var/lib/nomad/pki/consul-client.crt
+cmd ln -sf /var/lib/nomad/pki/consul$YEAR-client.key /var/lib/nomad/pki/consul-client.key
+
+if [ ! "$CLUSTER" = "prod" ]; then
+	cmd systemctl restart nomad
+fi
+
+set_env CONSUL_HTTP_ADDR=https://localhost:8501
+set_env CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+set_env CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+set_env CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+
+cmd "consul kv put secrets/consul/consul-ca.crt - < /var/lib/consul/pki/consul-ca.crt"
+cmd "consul kv put secrets/consul/consul.crt - < /var/lib/consul/pki/consul.crt"
+cmd "consul kv put secrets/consul/consul-client.crt - < /var/lib/consul/pki/consul-client.crt"
+cmd "consul kv put secrets/consul/consul-client.key - < /var/lib/consul/pki/consul-client.key"
+
+cmd "consul kv put secrets/nomad/nomad-ca.crt - < /var/lib/nomad/pki/nomad-ca.crt"
+cmd "consul kv put secrets/nomad/nomad.crt - < /var/lib/nomad/pki/nomad.crt"
+cmd "consul kv put secrets/nomad/nomad-client.crt - < /var/lib/nomad/pki/nomad-client.crt"
+cmd "consul kv put secrets/nomad/nomad-client.key - < /var/lib/nomad/pki/nomad-client.key"

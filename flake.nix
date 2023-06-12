@@ -105,6 +105,13 @@
             ./hosts/guest31
         ];
 
+        node1 = mkNixosSystem [
+            ./hosts/node1
+        ];
+        node2 = mkNixosSystem [
+            ./hosts/node2
+        ];
+
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };
         #  modules = [

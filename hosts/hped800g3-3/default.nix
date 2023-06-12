@@ -184,36 +184,68 @@
         
       };
 
-      #guest32 = {
-      #  osInfo = "http://nixos.org/nixos/22.11";
-      #  efi = false;
-      #  currentMemory= "2097152"; #2GB
-      #  memory = "8388608";  #8GB
-      #  mac = "52:53:00:13:7e:01";
-      #  hostNic = "br0";
-      #  diskSize = "30";
-      #  vcpu = "2";
-      #  CDROM = false;
-      #  pci1enable = false;
-      #  #pciDomain = "0x0000";
-      #  pciBus1 = "0x00";
-      #  pciSlot1 = "0x0";
-      #
-      #  pci2enable = false;
-      #  pciBus2 = "0x00";
-      #  pciSlot2 = "0x0";
-      #
-      #  pci3enable = false;
-      #  pciBus3 = "0x00";
-      #  pciSlot3 = "0x0";
-      #
-      #  bridge2enable = true;
-      #  hostBridge2 = "br10";
-      #  mac2 = "52:53:00:13:7e:03";
-      #  mtu2 = "9000";
-      #  vhostConfig2 = true;
-      #  
-      #};
+      node1 = {
+        osInfo = "http://nixos.org/nixos/22.11";
+        efi = true;
+        currentMemory = "4194304"; #4GB
+        memory = "8388608";
+        diskSize = "40";
+        vcpu = "4";
+        #CDROM = true;
+        CDROM = true;
+
+        #pciDomain = "0x0100";
+
+        # 01:00.0 Ethernet controller [0200]: Intel Corporation 82599ES 10-Gigabit SFI/SFP+
+        pci1 = {
+          enable = false;
+          bus = "0x01";
+          slot = "0x0";
+          function = "0x0";
+        };
+
+        #	02:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co.
+        pci2 = {
+          enable = false;
+          bus = "0x02";
+          slot = "0x0";
+          function = "0x0";
+        };
+
+        #	03:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co
+        pci3 = { 
+          enable = false;
+          bus = "0x03";
+          slot = "0x0";
+          function = "0x0";
+        };
+
+        net1 = {
+          enable = true;
+          mac = "52:54:0a:13:5a:02";
+          hostBridge = "br0";
+          mtu = "1500";
+          vhostConfig = false;
+        };
+
+        net2 = {
+          enable = true;
+          mac = "52:54:0a:13:5a:04";
+          hostBridge = "br10";
+          mtu = "9000";
+          vhostConfig = true;
+        };
+
+        net3 = {
+          enable = false;
+          mac = "52:54:0a:13:5a:05";
+          hostBridge = "br00";
+          mtu = "1500";
+          vhostConfig = false;
+        };
+  
+      };
+
     };
   };
 

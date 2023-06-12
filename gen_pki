@@ -1,0 +1,123 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -p pass -p openssl -i bash
+
+set -ex
+
+ORG=bring-out
+COUNTRY=BA
+
+cd $(dirname $0)
+
+CLUSTER="$1"
+if [ -z "$CLUSTER" ] || [ ! -d "cluster/$CLUSTER" ]; then
+	echo "Usage: $0 <cluster name>"
+	echo "The cluster name must be the name of a subdirectory of cluster/"
+	exit 1
+fi
+
+PREFIX="$ORG/cluster/$CLUSTER"
+
+YEAR=$(date +%Y)
+for APP in consul nomad; do
+	# 1. Create certificate authority
+	if ! pass $PREFIX/$APP-ca.key >/dev/null; then
+		echo "Generating $APP CA keys..."
+		openssl genrsa 4096 | pass insert -m $PREFIX/$APP-ca.key
+
+		openssl req -x509 -new -nodes \
+			-key <(pass $PREFIX/$APP-ca.key) -sha256 \
+			-days 3650 -subj "/C=$COUNTRY/O=$ORG/CN=$APP" \
+			| pass insert -m -f $PREFIX/$APP-ca.crt
+	fi
+
+	CERT="${APP}${YEAR}"
+
+	# 2. Create and sign certificates for inter-node communication
+	if ! pass $PREFIX/$CERT.crt >/dev/null; then
+		echo "Generating $CERT agent keys..."
+		if ! pass $PREFIX/$CERT.key >/dev/null; then
+			openssl genrsa 4096 | pass insert -m $PREFIX/$CERT.key
+		fi
+		openssl req -new -sha256 -key <(pass $PREFIX/$CERT.key) \
+			-subj "/C=$COUNTRY/O=$ORG/CN=$APP" \
+			-out /tmp/tmp-$CLUSTER-$CERT.csr
+		openssl req -in /tmp/tmp-$CLUSTER-$CERT.csr  -noout -text
+		openssl x509 -req -in /tmp/tmp-$CLUSTER-$CERT.csr \
+			-extensions v3_req \
+			-extfile <(cat <<EOF
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = $COUNTRY
+O = $ORG
+CN = $APP
+
+[v3_req]
+keyUsage = keyEncipherment, keyCertSign, dataEncipherment
+extendedKeyUsage = serverAuth, clientAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = server.$CLUSTER.$APP
+DNS.2 = client.$CLUSTER.$APP
+DNS.3 = $APP.service.$CLUSTER.consul
+DNS.4 = localhost
+DNS.5 = 127.0.0.1
+EOF
+	) \
+			-CA <(pass $PREFIX/$APP-ca.crt) \
+			-CAkey <(pass $PREFIX/$APP-ca.key) -CAcreateserial \
+			-CAserial /tmp/tmp-$CLUSTER-$CERT.srl \
+			-days 700 \
+			| pass insert -m $PREFIX/$CERT.crt
+		rm /tmp/tmp-$CLUSTER-$CERT.{csr,srl}
+	fi
+
+	# 3. Create client-only certificate used for the CLI
+	if ! pass $PREFIX/$CERT-client.crt >/dev/null; then
+		echo "Generating $CERT client keys..."
+		if ! pass $PREFIX/$CERT-client.key >/dev/null; then
+			openssl genrsa 4096 | pass insert -m $PREFIX/$CERT-client.key
+		fi
+		openssl req -new -sha256 -key <(pass $PREFIX/$CERT-client.key) \
+			-subj "/C=$COUNTRY/O=$ORG/CN=$APP-client" \
+			-out /tmp/tmp-$CLUSTER-$CERT-client.csr
+		openssl req -in /tmp/tmp-$CLUSTER-$CERT-client.csr -noout -text
+		openssl x509 -req -in /tmp/tmp-$CLUSTER-$CERT-client.csr \
+			-extensions v3_req \
+			-extfile <(cat <<EOF
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = $COUNTRY
+O = $ORG
+CN = $APP-client
+
+[v3_req]
+keyUsage = keyEncipherment, keyCertSign, dataEncipherment
+extendedKeyUsage = clientAuth
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = client.$CLUSTER.$APP
+EOF
+	) \
+			-CA <(pass $PREFIX/$APP-ca.crt) \
+			-CAkey <(pass $PREFIX/$APP-ca.key) \
+			-CAcreateserial -days 700 \
+			-CAserial /tmp/tmp-$CLUSTER-$CERT-client.srl \
+			| pass insert -m $PREFIX/$CERT-client.crt
+		rm /tmp/tmp-$CLUSTER-$CERT-client.{csr,srl}
+	fi
+
+	#if [ ! -f $CERT-client.p12 ]; then
+	#	openssl pkcs12 -export -out $CERT-client.p12 \
+	#		-in $APP-ca.pem -in $CERT-client.crt -inkey $CERT-client.key
+	#fi
+done
