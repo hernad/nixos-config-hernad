@@ -1,0 +1,8 @@
+UserKnownHostsFile ./cluster/staging/known_hosts
+
+Host node1
+	HostName node1.staging.machine.bring-out.me
+
+Host node2
+	HostName node2.staging.machine.bring-out.me
+

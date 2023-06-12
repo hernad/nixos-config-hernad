@@ -138,7 +138,6 @@
           function = "0x0";
         };
 
-
         #	02:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co.
         #pci2enable = true;
         #pciBus2 = "0x02";
@@ -183,7 +182,7 @@
         diskSize = "40";
         vcpu = "4";
         #CDROM = true;
-        CDROM = true;
+        CDROM = false;
 
         #pciDomain = "0x0100";
 

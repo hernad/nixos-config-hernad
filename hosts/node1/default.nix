@@ -81,7 +81,6 @@ in {
     
   };
 
-     
   testConfig.enable = false;
 
   system.stateVersion = "23.05";
