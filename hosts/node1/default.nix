@@ -83,6 +83,21 @@ in {
 
   testConfig.enable = false;
 
+  consul-cluster = {
+    clusterName = "staging";
+
+    # The IP range to use for the Wireguard overlay of this cluster
+    clusterPrefix = "10.183.0.0/16";
+
+    clusterNodes."node1" = {
+      siteName = "sa1";
+      publicKey = "VvXT0fPDfWsHxumZaVShpS33dJQbdpJ1E79ZbCBJP49=";
+      address = "10.183.1.1";
+      endpoint = "77.207.15.215:33731";
+    };
+
+  };
+
   system.stateVersion = "23.05";
 }
 

@@ -4,7 +4,6 @@
     inputs.home-manager.nixosModules.home-manager
     ./init.nix
     ./sops.nix
-    
     #./acme.nix
     #./auto-upgrade.nix
     #./system-packages.nix
@@ -22,7 +21,8 @@
     ./system-packages.nix 
   ] ++ (builtins.attrValues outputs.nixosModules);
  
-
+  # Turn on this option if you want to enable all the firmware with a license allowing redistribution.
+  hardware.enableRedistributableFirmware = true;
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };
 

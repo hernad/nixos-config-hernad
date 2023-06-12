@@ -1,8 +1,10 @@
 UserKnownHostsFile ./cluster/staging/known_hosts
 
 Host node1
-	HostName node1.staging.machine.bring-out.me
+	#HostName node1.staging.machine.bring-out.me
+	HostName 192.168.168.134
 
 Host node2
-	HostName node2.staging.machine.bring-out.me
+	#HostName node2.staging.machine.bring-out.me
+	HostName 192.168.168.89
 

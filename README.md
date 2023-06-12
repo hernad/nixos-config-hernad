@@ -127,3 +127,8 @@ build installer iso
       Migration: [100 %]
 
 
+# Cluster staging / sa1
+
+   export SSH_USER=root
+   export ROOT_PASS=dummy
+   ./deploy_pki staging node1

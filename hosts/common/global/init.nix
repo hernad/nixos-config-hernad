@@ -4,9 +4,13 @@
   ];
 
   environment.enableAllTerminfo = true;
+  services.timesyncd.enable = true;
 
-  hardware.enableRedistributableFirmware = true;
+
   #networking.domain = "m7.rs";
+
+  #hardware.enableAllFirmware
+  #Default false
 
   # Increase open file limit for sudoers
   security.pam.loginLimits = [
