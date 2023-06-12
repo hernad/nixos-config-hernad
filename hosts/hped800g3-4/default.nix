@@ -174,6 +174,8 @@
 
       };
 
+      
+
       node2 = {
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
@@ -235,36 +237,73 @@
         };
   
       };
+
+      node3 = {
+        osInfo = "http://nixos.org/nixos/22.11";
+        efi = true;
+        currentMemory = "4194304"; #4GB
+        memory = "8388608";
+        diskSize = "40";
+        vcpu = "4";
+        #CDROM = true;
+        CDROM = false;
+
+        #pciDomain = "0x0100";
+
+        # 01:00.0 Ethernet controller [0200]: Intel Corporation 82599ES 10-Gigabit SFI/SFP+
+        pci1 = {
+          enable = false;
+          bus = "0x01";
+          slot = "0x0";
+          function = "0x0";
+        };
+
+        #	02:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co.
+        pci2 = {
+          enable = false;
+          bus = "0x02";
+          slot = "0x0";
+          function = "0x0";
+        };
+
+        #	03:00.0 Non-Volatile memory controller [0108]: ADATA Technology Co
+        pci3 = { 
+          enable = false;
+          bus = "0x03";
+          slot = "0x0";
+          function = "0x0";
+        };
+
+        net1 = {
+          enable = true;
+          mac = "52:54:09:13:6c:02";
+          hostBridge = "br0";
+          mtu = "1500";
+          vhostConfig = false;
+        };
+
+        net2 = {
+          enable = true;
+          mac = "52:54:09:13:6c:04";
+          hostBridge = "br10";
+          mtu = "9000";
+          vhostConfig = true;
+        };
+
+        net3 = {
+          enable = false;
+          mac = "52:54:09:13:6c:05";
+          hostBridge = "br00";
+          mtu = "1500";
+          vhostConfig = false;
+        };
+  
+      };
+
     };
   };
 
 
-  #boot = {
-  #  kernelPackages = pkgs.linuxKernel.packages.linux_zen;
-  #  binfmt.emulatedSystems = [ "aarch64-linux" "i686-linux" ];
-  #};
-
-  #programs = {
-  #  adb.enable = true;
-  #  dconf.enable = true;
-  #  kdeconnect.enable = true;
-  #};
-
-  #xdg.portal = {
-  #  enable = true;
-  #  wlr.enable = true;
-  #};
-
-  #hardware = {
-  #  opengl = {
-  #    enable = true;
-  #    extraPackages = with pkgs; [ amdvlk ];
-  #    driSupport = true;
-  #    driSupport32Bit = true;
-  #  };
-  #  openrgb.enable = true;
-  #  opentabletdriver.enable = true;
-  #};
 
   system.stateVersion = "23.05";
 }

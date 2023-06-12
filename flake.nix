@@ -111,6 +111,9 @@
         node2 = mkNixosSystem [
             ./hosts/node2
         ];
+        node3 = mkNixosSystem [
+            ./hosts/node3
+        ];
 
         #your-hostname = nixpkgs.lib.nixosSystem {
         #  specialArgs = { inherit inputs outputs; };

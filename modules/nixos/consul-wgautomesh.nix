@@ -1,5 +1,5 @@
 let
-  wgautomesh = builtins.fetchTarball {
+  wgautomeshGit = builtins.fetchTarball {
     url = "https://git.deuxfleurs.fr/attachments/ce203833-1ae7-43d4-9bf4-b49b560c9f4b";
     sha256 = "sha256:1kc990s7xkwff53vs6c3slg7ljsyr9xz1i13j61ivfj6djyh8rmj";
   };
@@ -8,16 +8,16 @@ in
 { lib, config, pkgs, ... }:
 with lib;
 let 
-  cfg = config.services.wgautomesh;
+  cfg = config.services.wgautomeshGit;
 in
   with builtins;
   {
-    options.services.wgautomesh = {
+    options.services.wgautomeshGit = {
       enable = mkEnableOption "wgautomesh";
       logLevel = mkOption {
         type = types.enum [ "trace" "debug" "info" "warn" "error" ];
         default = "info";
-        description = "wgautomesh log level (trace/debug/info/warn/error)";
+        description = "wgautomes log level (trace/debug/info/warn/error)";
       };
       interface = mkOption {
         type = types.str;
@@ -98,7 +98,7 @@ in
         ${concatStringsSep "\n" peerDefs}
         '';
     in {
-      systemd.services.wgautomesh = {
+      systemd.services.wgautomeshGit = {
         enable = true;
         path = [ pkgs.wireguard-tools ];
         environment = {
@@ -108,7 +108,7 @@ in
         serviceConfig = {
           Type = "simple";
 
-          ExecStart = "${wgautomesh}/bin/wgautomesh ${configfile}";
+          ExecStart = "${wgautomeshGit}/bin/wgautomesh ${configfile}";
           Restart = "always";
           RestartSec = "30";
 
