@@ -41,6 +41,8 @@ in {
 
     # test phase
     # firewall.enable = false;
+    firewall.allowedTCPPorts = [ 5201 ];
+
 
     nameservers = [ 
         "192.168.168.10" 
@@ -117,14 +119,14 @@ in {
       siteName = "sa1";
       publicKey = "YEW6NWaa9eHmXAxVwLedAOH0zPICR21JlHmC2VVi6n0=";
       address = "10.183.1.1";
-      endpoint = "192.168.168.134:33799"; 
+      endpoint = "10.0.99.10:33799"; 
     };
 
     clusterNodes."node2" = {
       siteName = "sa1";
       publicKey = "nHfxdSExo2cVUVbwZWM+wnLUrfMxrZiFJTtskTPPcG8=";
       address = "10.183.1.2";
-      endpoint = "192.168.168.89:33799"; 
+      endpoint = "10.0.99.11:33799"; 
     };
 
     # New Wireguard key was generated.
@@ -134,7 +136,7 @@ in {
       siteName = "sa1";
       publicKey = "9kuzKR41MvQgXYL15xMzaUn8k2hutZtZjYbjwSdaXnk=";
       address = "10.183.1.3";
-      endpoint = "192.168.168.91:33799"; 
+      endpoint = "10.0.99.12:33799"; 
     };
 
   };

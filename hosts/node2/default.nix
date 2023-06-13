@@ -21,6 +21,7 @@ in {
   SystemMaxUse=1G
   '';
   
+  
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -41,6 +42,7 @@ in {
 
     # test phase
     # firewall.enable = false;
+    firewall.allowedTCPPorts = [ 5201 ];
 
     nameservers = [ 
         "192.168.168.10" 
