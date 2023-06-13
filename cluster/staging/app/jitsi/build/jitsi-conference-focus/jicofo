@@ -1,0 +1,11 @@
+#!/bin/bash
+
+update-ca-certificates -f
+
+exec java \
+  -Dlog4j2.formatMsgNoLookups=true \
+  -Djdk.tls.ephemeralDHKeySize=2048 \
+  -Djava.util.logging.config.file=/usr/share/jicofo/lib/logging.properties \
+  -Dconfig.file=/etc/jitsi/jicofo.conf \
+  -cp "/usr/share/jicofo/*:/usr/share/jicofo/lib/*" \
+  org.jitsi.jicofo.Main

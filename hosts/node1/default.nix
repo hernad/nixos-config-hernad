@@ -106,9 +106,10 @@ in {
       ];
     };
     bootstrap = true;
+    cnameTarget = "jedan.bring-out.me.";
 
     hostName = "node1";
-    staticIPv4.address = "192.168.168.134";
+    staticIPv4.address = "10.0.99.10";
     #staticIPv6.address = "2a02:a03f:6510:5102:6e4b:90ff:fe3b:e86c";
     isRaftServer = true;
 
@@ -118,7 +119,7 @@ in {
     # The IP range to use for the Wireguard overlay of this cluster
     clusterPrefix = "10.183.0.0/16";
 
-    clusterNodes = import ../cluster.nix
+    clusterNodes = import ../cluster.nix;
     
   };
 

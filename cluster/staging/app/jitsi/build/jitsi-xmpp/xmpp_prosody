@@ -1,0 +1,9 @@
+#!/bin/bash
+prosodyctl register focus auth.jitsi ${JICOFO_AUTH_PASSWORD}
+prosodyctl register jvb auth.jitsi ${JVB_AUTH_PASSWORD}
+
+# copied from jitsi-meet.postinst
+# Make sure the focus@auth user's roster includes the proxy component (this is idempotent)
+prosodyctl mod_roster_command subscribe focus.jitsi focus@auth.jitsi
+
+exec prosody

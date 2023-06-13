@@ -1,0 +1,35 @@
+version: '3.4'
+services:
+  # VoIP
+  jitsi-meet:
+    build:
+      context: ./jitsi-meet
+      args:
+        # https://github.com/jitsi/jitsi-meet
+        MEET_TAG: stable/jitsi-meet_8252
+    image: superboum/amd64_jitsi_meet:v6
+
+  jitsi-conference-focus:
+    build:
+      context: ./jitsi-conference-focus
+      args:
+        # https://github.com/jitsi/jicofo
+        JICOFO_TAG: stable/jitsi-meet_8252
+    image: superboum/amd64_jitsi_conference_focus:v10
+
+  jitsi-videobridge:
+    build:
+      context: ./jitsi-videobridge
+      args:
+        # https://github.com/jitsi/jitsi-videobridge
+        # note: JVB is not tagged with non-stable tags
+        JVB_TAG: stable/jitsi-meet_8252
+    image: superboum/amd64_jitsi_videobridge:v21
+
+  jitsi-xmpp:
+    build:
+      context: ./jitsi-xmpp
+      args:
+        MEET_TAG: stable/jitsi-meet_8252
+        PROSODY_VERSION: 1nightly191-1~bookworm
+    image: superboum/amd64_jitsi_xmpp:v11

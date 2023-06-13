@@ -1,0 +1,25 @@
+From 5e890bd4dd378913a2dabaf4468ce1839b84ec4f Mon Sep 17 00:00:00 2001
+From: Quentin Dufour <quentin@bring-out.me>
+Date: Thu, 2 Feb 2023 13:51:27 +0100
+Subject: [PATCH] allow broken openssl routines
+
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 040f8c977..bcbf82658 100644
+--- a/Makefile
++++ b/Makefile
+@@ -27,7 +27,7 @@ endif
+ all: compile deploy clean
+ 
+ compile:
+-	NODE_OPTIONS=--max-old-space-size=8192 \
++	NODE_OPTIONS="--max-old-space-size=8192 --openssl-legacy-provider" \
+ 	$(WEBPACK)
+ 
+ clean:
+-- 
+2.38.1
+

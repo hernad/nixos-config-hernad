@@ -1,0 +1,38 @@
+block_size = 1048576
+
+metadata_dir = "/meta"
+data_dir = "/data"
+db_engine = "lmdb"
+
+replication_mode = "3"
+
+{{ with $a := env "attr.unique.hostname" | printf "diplonat/autodiscovery/ipv6/%s" | key | parseJSON }}
+rpc_bind_addr = "[{{ $a.address }}]:3901"
+rpc_public_addr = "[{{ $a.address }}]:3901"
+{{ end }}
+rpc_secret = "{{ key "secrets/garage/rpc_secret" | trimSpace }}"
+
+[consul_discovery]
+consul_http_addr = "https://consul.service.staging.consul:8501"
+service_name = "garage-prod-discovery"
+ca_cert = "/etc/garage/consul-ca.crt"
+client_cert = "/etc/garage/consul-client.crt"
+client_key = "/etc/garage/consul-client.key"
+tls_skip_verify = true
+
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+root_domain = ".garage.bring-out.me"
+
+[k2v_api]
+api_bind_addr = "[::]:3904"
+
+[s3_web]
+bind_addr = "[::]:3902"
+root_domain = ".web.bring-out.me"
+
+[admin]
+api_bind_addr = "[::]:3903"
+metrics_token = "{{ key "secrets/garage/metrics_token" | trimSpace }}"
+admin_token = "{{ key "secrets/garage/admin_token" | trimSpace }}"

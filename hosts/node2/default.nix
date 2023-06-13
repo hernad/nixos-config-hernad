@@ -104,9 +104,10 @@ in {
       ];
     };
     #bootstrap = true;
+    cnameTarget = "jedan.bring-out.me.";
 
     hostName = "node2";
-    staticIPv4.address = "192.168.168.89";
+    staticIPv4.address = "10.0.99.11";
     #staticIPv6.address = "2a02:a03f:6510:5102:6e4b:90ff:fe3b:e86c";
     isRaftServer = true;
 
@@ -116,29 +117,7 @@ in {
     # The IP range to use for the Wireguard overlay of this cluster
     clusterPrefix = "10.183.0.0/16";
 
-    clusterNodes."node1" = {
-      siteName = "sa1";
-      publicKey = "YEW6NWaa9eHmXAxVwLedAOH0zPICR21JlHmC2VVi6n0=";
-      address = "10.183.1.1";
-      endpoint = "192.168.168.134:33799"; 
-    };
-
-    clusterNodes."node2" = {
-      siteName = "sa1";
-      publicKey = "nHfxdSExo2cVUVbwZWM+wnLUrfMxrZiFJTtskTPPcG8=";
-      address = "10.183.1.2";
-      endpoint = "192.168.168.89:33799"; 
-    };
-
-    # New Wireguard key was generated.
-    # This node's Wireguard public key is: 9kuzKR41MvQgXYL15xMzaUn8k2hutZtZjYbjwSdaXnk=
-
-    clusterNodes."node3" = {
-      siteName = "sa1";
-      publicKey = "9kuzKR41MvQgXYL15xMzaUn8k2hutZtZjYbjwSdaXnk=";
-      address = "10.183.1.3";
-      endpoint = "192.168.168.91:33799"; 
-    };
+    clusterNodes = import ../cluster.nix;
     
   };
 

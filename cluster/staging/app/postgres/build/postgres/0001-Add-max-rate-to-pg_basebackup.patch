@@ -1,0 +1,25 @@
+From c4e0e967752868626772a3317a17d25d181daeda Mon Sep 17 00:00:00 2001
+From: Quentin Dufour <quentin@bring-out.me>
+Date: Thu, 15 Apr 2021 12:35:12 +0200
+Subject: [PATCH] Add max-rate to pg_basebackup
+
+---
+ internal/postgresql/postgresql.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/internal/postgresql/postgresql.go b/internal/postgresql/postgresql.go
+index 00c14bc..a37a28c 100644
+--- a/internal/postgresql/postgresql.go
++++ b/internal/postgresql/postgresql.go
+@@ -963,7 +963,7 @@ func (p *Manager) SyncFromFollowed(followedConnParams ConnParams, replSlot strin
+ 
+ 	log.Infow("running pg_basebackup")
+ 	name := filepath.Join(p.pgBinPath, "pg_basebackup")
+-	args := []string{"-R", "-v", "-P", "-Xs", "-D", p.dataDir, "-d", followedConnString}
++	args := []string{"-R", "-v", "-P", "--max-rate", "5M", "-Xs", "-D", p.dataDir, "-d", followedConnString}
+ 	if replSlot != "" {
+ 		args = append(args, "--slot", replSlot)
+ 	}
+-- 
+2.30.2
+

@@ -1,0 +1,42 @@
+version: '3.4'
+services:
+  jitsi-xmpp:
+    image: superboum/amd64_jitsi_xmpp:v11
+    volumes:
+      - "./prosody/prosody.cfg.lua:/etc/prosody/prosody.cfg.lua:ro"
+      - "./prosody/certs/jitsi.crt:/var/lib/prosody/jitsi.crt:ro"
+      - "./prosody/certs/jitsi.key:/var/lib/prosody/jitsi.key:ro"
+      - "./prosody/certs/auth.jitsi.crt:/var/lib/prosody/auth.jitsi.crt:ro"
+      - "./prosody/certs/auth.jitsi.key:/var/lib/prosody/auth.jitsi.key:ro"
+    environment:
+      - JICOFO_AUTH_PASSWORD=jicofopass
+      - JVB_AUTH_PASSWORD=jvbpass
+ 
+  jitsi-conference-focus:
+    image: superboum/amd64_jitsi_conference_focus:v10
+    volumes:
+      - "./prosody/certs/jitsi.crt:/usr/local/share/ca-certificates/jitsi.crt:ro"
+      - "./prosody/certs/auth.jitsi.crt:/usr/local/share/ca-certificates/auth.jitsi.crt:ro"
+      - "./jicofo/jicofo.conf:/etc/jitsi/jicofo.conf:ro"
+
+  jitsi-videobridge:
+    image: superboum/amd64_jitsi_videobridge:v21
+    volumes:
+      - "./prosody/certs/jitsi.crt:/usr/local/share/ca-certificates/jitsi.crt:ro"
+      - "./prosody/certs/auth.jitsi.crt:/usr/local/share/ca-certificates/auth.jitsi.crt:ro"
+      - "./jvb/videobridge.conf:/etc/jitsi/videobridge.conf:ro"
+      - "./jvb/logging.properties:/usr/share/jvb/lib/logging.properties:ro"
+    ports:
+      - "8089:8089/tcp"
+      - "10000:10000/udp"
+
+  jitsi-meet:
+    image: superboum/amd64_jitsi_meet:v6
+    volumes:
+      - "./prosody/certs/jitsi.crt:/etc/nginx/jitsi.crt:ro"
+      - "./prosody/certs/jitsi.key:/etc/nginx/jitsi.key:ro"
+      - "./meet/config.js:/srv/jitsi-meet/config.js:ro"
+      - "./meet/nginx.conf:/etc/nginx/nginx.conf:ro"
+    ports:
+      - "443:443"
+

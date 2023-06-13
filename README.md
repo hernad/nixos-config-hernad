@@ -180,11 +180,11 @@ build installer iso
 
 
 
-[root@node1:~]# export CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
-
-[root@node1:~]# export CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
-
-[root@node1:~]# export CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+[root@node1:~]# 
+export CONSUL_HTTP_ADDR=https://localhost:8501
+export CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+export CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+export CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
 
 [root@node1:~]# consul members
 Node   Address          Status  Type    Build   Protocol  DC       Partition  Segment
@@ -413,3 +413,70 @@ Success! Data written to: secrets/nomad/nomad-client.crt
 - run consul kv put secrets/nomad/nomad-client.key - < /var/lib/nomad/pki/nomad-client.key
 Success! Data written to: secrets/nomad/nomad-client.key
 removed '/tmp/deploytool_askpass_ba81282a0591ecc65ff42e07'
+
+
+# consul
+
+[root@node1:~]# ping consul.service.staging.consul
+PING consul.service.staging.consul (10.183.1.1) 56(84) bytes of data.
+64 bytes from node1 (10.183.1.1): icmp_seq=1 ttl=64 time=0.034 ms
+
+
+[root@node2:~]# ping consul.service.staging.consul
+PING consul.service.staging.consul (10.183.1.2) 56(84) bytes of data.
+64 bytes from node2 (10.183.1.2): icmp_seq=1 ttl=64 time=0.043 ms
+
+
+[root@node2:~]# nix-shell -p dig --run "dig @127.0.0.1 consul.service.staging.consul"
+these 2 paths will be fetched (0.40 MiB download, 1.83 MiB unpacked):
+  /nix/store/7xi79pp0a0vlzlyws8m8bb9aa1rpzg54-bind-9.18.14-dnsutils
+  /nix/store/ywv0pi4c10ib0kmndr34fh86dhf4wax1-bind-9.18.14
+copying path '/nix/store/ywv0pi4c10ib0kmndr34fh86dhf4wax1-bind-9.18.14' from 'https://cache.nixos.org'...
+copying path '/nix/store/7xi79pp0a0vlzlyws8m8bb9aa1rpzg54-bind-9.18.14-dnsutils' from 'https://cache.nixos.org'...
+
+; <<>> DiG 9.18.14 <<>> @127.0.0.1 consul.service.staging.consul
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 47775
+;; flags: qr rd ra; QUERY: 1, ANSWER: 3, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+;; QUESTION SECTION:
+;consul.service.staging.consul.	IN	A
+
+;; ANSWER SECTION:
+consul.service.staging.consul. 0 IN	A	10.183.1.3
+consul.service.staging.consul. 0 IN	A	10.183.1.1
+consul.service.staging.consul. 0 IN	A	10.183.1.2
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1) (UDP)
+;; WHEN: Tue Jun 13 11:20:36 CEST 2023
+;; MSG SIZE  rcvd: 106
+
+
+# nomad run
+
+   DIR=/run/user/1000/tmp.XlxMl57UUj && export NOMAD_ADDR=http://localhost:4646 && NOMAD_CLIENT_CERT=$DIR/nomad-client.crt && NOMAD_CLIENT_KEY=$DIR/nomad-client.key && NOMAD_CAFILE=$DIR/nomad.crt && export NOMAD_CLIENT_CERT NOMAD_CLIENT_KEY NOMAD_CAFILE
+
+
+# consul put key
+
+Run:
+   export SSH_USER=root; export ROOT_PASS=dummy
+   export KEY=secrets/d53/gandi_api_key
+   export VALUE=xyz12
+   ./consul_put_key staging node1
+
+
+Output:
+
+   - set CONSUL_HTTP_ADDR=https://localhost:8501
+   - set CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+   - set CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+   - set CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+   - run consul kv put secrets/d53/gandi_api_key xyz12
+   Success! Data written to: secrets/d53/gandi_api_key
+   removed '/tmp/deploytool_askpass_81625ea27317e1b565801393'

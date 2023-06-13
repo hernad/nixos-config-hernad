@@ -1,0 +1,9 @@
+version: '3.4'
+services:
+  postgres:
+    build:
+      args:
+        # https://github.com/sorintlab/stolon/releases
+        STOLON_VERSION: 3bb7499f815f77140551eb762b200cf4557f57d3
+      context: ./postgres
+    image: superboum/amd64_postgres:v11

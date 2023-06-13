@@ -1,0 +1,40 @@
+From 01507442620e5a57624c921b508eac7d572440d0 Mon Sep 17 00:00:00 2001
+From: Quentin Dufour <quentin@bring-out.me>
+Date: Tue, 25 Jan 2022 14:46:22 +0100
+Subject: [PATCH] Remove deprecated argument
+
+---
+ .../main/kotlin/org/jitsi/videobridge/Main.kt   | 17 -----------------
+ 1 file changed, 17 deletions(-)
+
+diff --git a/jvb/src/main/kotlin/org/jitsi/videobridge/Main.kt b/jvb/src/main/kotlin/org/jitsi/videobridge/Main.kt
+index 4f6cb78..3db00f2 100644
+--- a/jvb/src/main/kotlin/org/jitsi/videobridge/Main.kt
++++ b/jvb/src/main/kotlin/org/jitsi/videobridge/Main.kt
+@@ -52,23 +52,6 @@ import org.jitsi.videobridge.websocket.singleton as webSocketServiceSingleton
+ fun main(args: Array<String>) {
+     val logger = LoggerImpl("org.jitsi.videobridge.Main")
+ 
+-    // We only support command line arguments for backward compatibility. The --apis options is the last one supported,
+-    // and it is only used to enable/disable the REST API (XMPP is only controlled through the config files).
+-    // TODO: fully remove support for --apis
+-    CmdLine().apply {
+-        parse(args)
+-        getOptionValue("--apis")?.let {
+-            logger.warn(
+-                "A deprecated command line argument (--apis) is present. Please use the config file to control the " +
+-                    "REST API instead (see rest.md). Support for --apis will be removed in a future version."
+-            )
+-            System.setProperty(
+-                Videobridge.REST_API_PNAME,
+-                it.contains(Videobridge.REST_API).toString()
+-            )
+-        }
+-    }
+-
+     setupMetaconfigLogger()
+ 
+     setSystemPropertyDefaults()
+-- 
+2.33.1
+

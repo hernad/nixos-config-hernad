@@ -1,0 +1,22 @@
+#!/bin/bash
+update-ca-certificates -f
+
+if [ -z "${JITSI_NAT_LOCAL_IP}" ]; then 
+  JITSI_NAT_LOCAL_IP=$(ip route get $(ip route show 0.0.0.0/0 | grep -oP 'via \K\S+') | grep -oP 'src \K\S+')
+fi
+
+if [ -z "${JITSI_NAT_PUBLIC_IP}" ]; then
+  JITSI_NAT_PUBLIC_IP=$(curl https://ifconfig.me)
+fi
+
+echo "NAT config: ${JITSI_NAT_LOCAL_IP} -> ${JITSI_NAT_PUBLIC_IP}"
+
+exec java \
+  -Dlog4j2.formatMsgNoLookups=true \
+  -Djdk.tls.ephemeralDHKeySize=2048 \
+  -Djava.util.logging.config.file=/usr/share/jvb/lib/logging.properties \
+  -Dconfig.file=/etc/jitsi/videobridge.conf \
+  -Dorg.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=${JITSI_NAT_LOCAL_IP} \
+  -Dorg.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=${JITSI_NAT_PUBLIC_IP} \
+  -cp '/usr/share/jvb/jitsi-videobridge.jar:/usr/share/jvb/lib/*' \
+  org.jitsi.videobridge.MainKt

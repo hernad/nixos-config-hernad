@@ -1,0 +1,91 @@
+From 3da458fc04560e8ddd597f7910c4f53b714d58ab Mon Sep 17 00:00:00 2001
+From: Quentin Dufour <quentin@dufour.io>
+Date: Mon, 1 Feb 2021 06:53:21 +0100
+Subject: [PATCH] Remove broken command line args parameters setting
+
+---
+ src/main/java/org/jitsi/jicofo/Main.java | 61 ------------------------
+ 1 file changed, 61 deletions(-)
+
+diff --git a/src/main/java/org/jitsi/jicofo/Main.java b/src/main/java/org/jitsi/jicofo/Main.java
+index 558d1b3..59e04bb 100644
+--- a/src/main/java/org/jitsi/jicofo/Main.java
++++ b/src/main/java/org/jitsi/jicofo/Main.java
+@@ -50,7 +50,6 @@ public static void main(String[] args)
+                 logger.error("An uncaught exception occurred in thread=" + t, e));
+ 
+         setupMetaconfigLogger();
+-        setSystemProperties(args);
+         JitsiConfig.Companion.reloadNewConfig();
+ 
+         // Make sure that passwords are not printed by ConfigurationService
+@@ -80,66 +79,6 @@ public static void main(String[] args)
+         JicofoServices.jicofoServicesSingleton = null;
+     }
+ 
+-    /**
+-     * Read the command line arguments and env variables, and set the corresponding system properties used for
+-     * configuration of the XMPP component and client connections.
+-     */
+-    private static void setSystemProperties(String[] args)
+-            throws ParseException
+-    {
+-        CmdLine cmdLine = new CmdLine();
+-
+-        // We may end execution here if one of required arguments is missing
+-        cmdLine.parse(args);
+-
+-        // XMPP host/domain
+-        String host;
+-        String componentDomain;
+-        // Try to get domain, can be null after this call(we'll fix that later)
+-        componentDomain = cmdLine.getOptionValue("domain");
+-        // Host name
+-        host = cmdLine.getOptionValue("--host", componentDomain == null ? "localhost" : componentDomain);
+-        // Try to fix component domain
+-        if (isBlank(componentDomain))
+-        {
+-            componentDomain = host;
+-        }
+-        if (componentDomain != null)
+-        {
+-            // For backward compat, the "--domain" command line argument controls the domain for the XMPP component
+-            // as well as XMPP client connection.
+-            System.setProperty(XmppClientConnectionConfig.legacyXmppDomainPropertyName, componentDomain);
+-        }
+-        if (host != null)
+-        {
+-            // For backward compat, the "--host" command line argument controls the hostname for the XMPP component
+-            // as well as XMPP client connection.
+-            System.setProperty(XmppClientConnectionConfig.legacyHostnamePropertyName, host);
+-        }
+-
+-        // XMPP client connection
+-        String focusDomain = cmdLine.getOptionValue("--user_domain");
+-        String focusUserName = cmdLine.getOptionValue("--user_name");
+-        String focusPassword = cmdLine.getOptionValue("--user_password");
+-        if (isBlank(focusPassword))
+-        {
+-            focusPassword = System.getenv("JICOFO_AUTH_PASSWORD");
+-        }
+-
+-        if (focusDomain != null)
+-        {
+-            System.setProperty(XmppClientConnectionConfig.legacyDomainPropertyName, focusDomain);
+-        }
+-        if (focusUserName != null)
+-        {
+-            System.setProperty(XmppClientConnectionConfig.legacyUsernamePropertyName, focusUserName);
+-        }
+-        if (isNotBlank(focusPassword))
+-        {
+-            System.setProperty(XmppClientConnectionConfig.legacyPasswordPropertyName, focusPassword);
+-        }
+-    }
+-
+     private static void setupMetaconfigLogger()
+     {
+         org.jitsi.utils.logging2.Logger configLogger = new org.jitsi.utils.logging2.LoggerImpl("org.jitsi.config");
+-- 
+2.25.1
+
