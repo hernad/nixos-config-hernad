@@ -1,16 +1,7 @@
 #!/usr/bin/env ./sshtool
-
-#if [ -z "$1" ] ; then
-#  echo ./$0 key value
-#  echo ./$0 secrets/d53/gandi_api_key
-#  exit 1
-#fi
-
 ORG=bring-out
 
 PKI=$ORG/cluster/$CLUSTER
-YEAR=$(date +%Y)
-
 
 set_env CONSUL_HTTP_ADDR=https://localhost:8501
 set_env CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
@@ -18,7 +9,6 @@ set_env CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
 set_env CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
 
 cmd "consul kv put $KEY $VALUE"
-
 
 
 
