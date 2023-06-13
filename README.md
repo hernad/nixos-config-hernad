@@ -1,23 +1,31 @@
-# Start
+# Notes
 
+# Init flake from template
 
-## Notes
-
+<pre>
    nix flake init -t github:misterio77/nix-starter-config#standard
-
+</pre>
  
-lenovo16 configuration.nix
+# lenovo16 configuration.nix
 
+<pre>
    services.pcscd.enable = true;
    programs.gnupg.agent = {
       enable = true;
       pinentryFlavor = "curses";
       enableSSHSupport = true;
    };
+</pre>
 
+# GPG generate key
 
+Run:
+<pre>
    gpg --full-generate-key
+</pre>
 
+Output:
+<pre>
       gpg: revocation certificate stored as '/home/hernad/.gnupg/openpgp-revocs.d/453454CDE1C7FE12A2995CAC85669FDDE2456A79.rev'
       public and secret key created and signed.
 
@@ -25,11 +33,11 @@ lenovo16 configuration.nix
             453454CDE1C7FE12A2995CAC85669FDDE2456A79
       uid                      Ernad Husremovic (bring.out doo Sarajevo) <hernad@bring.out.ba>
       sub   cv25519 2023-06-02 [E]
+</pre>
 
-
-   
+<pre>   
     gpg --keyring secring.gpg --export-secret-keys 453454CDE1C7FE12A2995CAC85669FDDE2456A79 > ~/.gnupg/secring.gpg
-
+</pre>
 
 
    systemctl --user restart gpg-agent
@@ -41,48 +49,40 @@ lenovo16 configuration.nix
 
 
 
-sops password file
+# sops password file
 
+<pre>
    nix-shell -p sops --run "sops secrets/age.yaml"
+</pre>
 
-
+<pre>
    nix-shell -p sops age --run "sops -e -d secrets/age.yaml"
    hello: test
    example_key: value1
+</pre>
 
 
 
+# Push flake on remote host
 
-Push flake on remote host
-
+<pre>
    nixos-rebuild  --flake .#hped800g3-4 --target-host root@192.168.168.109 --build-host root@192.168.168.109 --use-remote-sudo switch 
+</pre>
+
+
+# check iommu:
+
+
+<pre>
+iommu_check
+</pre>
 
 
 
-check.sh:
 
+# sops age from ssh key
 
-      #!/bin/bash
-      # This is a slightly modified version of the script found at 
-      #    https://wiki.archlinux.org/index.php/PCI_passthrough_via_OVMF#Ensuring_that_the_groups_are_valid
-      # It adds a tab to make the output prettier and sorts the output per-group
-      shopt -s nullglob;
-      for d in /sys/kernel/iommu_groups/*/devices/*;
-      do
-            n="${d#*/iommu_groups/*}";
-            n="${n%%/*}";
-            printf 'IOMMU Group %s \t' "$n";
-            lspci -nns "${d##*/}";
-      done | sort -h -k 3
-
-
-   nix-shell -p pciutils --run "bash check.sh"
-
-
-
-sops age from ssh key
-
-
+<pre>
      # /persist/etc/ssh ... !!!
      scp root@192.168.168.109:/persist/etc/ssh/ssh_host_ed25519_key .
 
@@ -90,54 +90,61 @@ sops age from ssh key
 
      nix-shell -p age --run "age-keygen -y ~/.config/sops/age/keys.txt"
      age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
+</pre>
 
+# nixos-rebuild sops
 
-nixos-rebuild  ...
-
+<pre>
       ....
       activating the configuration...
       sops-install-secrets: Imported /persist/etc/ssh/ssh_host_ed25519_key as age key with fingerprint age13sdmfcrdh8dn05v594nr7dxywklmmanugj7j66ndaawy6hg6hs8sw5hcuz
       ....
+</pre>
 
 
+# build installer iso
 
-build installer iso
-
+<pre>
    nix build .#installer-iso
    nix build .#test-txt
 
    ls -l result/test/text.txt
    lrwxrwxrwx 1 root root 52 Jan  1  1970 result/test/text.txt -> /nix/store/9gzn9al449pygm5w2iarvajanmgfargk-test.txt
+</pre>
 
 
+# Install nixos at kvm guest on host 192.168.168.101
 
-# KVM host 192.168.168.101 partition uefi
-
+<pre>
    export HOST_IP=192.168.168.134
    ssh -T root@$HOST_IP < scripts/partition_uefi.sh
    ssh -T root@$HOST_IP < scripts/format_mount_uefi.sh
    ssh -T root@$HOST_IP < scripts/nixos_install_uefi.sh
-
+</pre>
 
 
 
 # libvirt migrate
 
+<pre>
       [root@hped800g3-4:~]# virsh migrate guest31 qemu+ssh://hped800g3-3/system --unsafe --live --copy-storage-all --persistent  --verbose
       Migration: [100 %]
+</pre>
 
+# Cluster staging, gen-pki, deploy-pki, tlsproxy
 
-# Cluster staging / sa1
-
+<pre>
    export SSH_USER=root; export ROOT_PASS=dummy
    ./deploy_pki staging
+</pre>
 
+Run:
 
-   # Error! Failed writing data: Unexpected response code: 500 (No cluster leader)
+<pre>
+./tlsproxy staging
+</pre>
 
-
-
-   ./tlsproxy staging
+<pre>
    + ORG=bring-out
    ++ dirname ./tlsproxy
    + cd .
@@ -162,24 +169,21 @@ build installer iso
    + socat -dd tcp-listen:8500,reuseaddr,fork,bind=localhost openssl:localhost:8501,cert=/run/user/1000/tmp.blE6R0JHo1/consul-client.crt,key=/run/user/1000/tmp.blE6R0JHo1/consul-client.key,cafile=/run/user/1000/tmp.blE6R0JHo1/consul.crt,verify=0
    2023/06/12 12:29:30 socat[874035] N listening on AF=2 127.0.0.1:8500
    2023/06/12 12:29:30 socat[874034] N listening on AF=2 127.0.0.1:4646
-
+</pre>
 
 
 
 # wgautomesh gossip_secret
 
-? mozda ovo treba uraditi
-            endpoint = mkOption {
-              type = types.nullOr types.str;
-              description = "bootstrap endpoint";
-            };
+on every node set gossip_secret for wgautomesh functioning:
 
+<pre>
    [root@node1:~]# echo f5ed529a-0936-11ee-a168-2b2699a12b5e > /var/lib/wgautomesh/gossip_secret
+</pre>
 
+# run consul client
 
-
-
-
+<pre>
 [root@node1:~]# 
 export CONSUL_HTTP_ADDR=https://localhost:8501
 export CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
@@ -195,10 +199,17 @@ Node   Address          Status  Type    Build   Protocol  DC       Partition  Se
 node1  10.183.1.1:8301  alive   server  1.15.2  2         staging  default    <all>
 node2  10.183.1.2:8301  alive   server  1.15.2  2         staging  default    <all>
 node3  10.183.1.3:8301  alive   server  1.15.2  2         staging  default    <all>
+</pre>
 
+deploy pki:
 
+<pre>
+ ./deploy_pki staging 
+</pre>
 
-❯ ./deploy_pki staging 
+output:
+
+<pre>
 ==== DOING node1 ====
 - run mkdir -p /var/lib/nomad/pki /var/lib/consul/pki
 - write secret /var/lib/consul/pki/consul-ca.crt from pass bring-out/cluster/staging/consul-ca.crt
@@ -413,21 +424,35 @@ Success! Data written to: secrets/nomad/nomad-client.crt
 - run consul kv put secrets/nomad/nomad-client.key - < /var/lib/nomad/pki/nomad-client.key
 Success! Data written to: secrets/nomad/nomad-client.key
 removed '/tmp/deploytool_askpass_ba81282a0591ecc65ff42e07'
+</pre>
 
+# consul, dns server unbound
 
-# consul
+run on node1:
 
+<pre>
 [root@node1:~]# ping consul.service.staging.consul
 PING consul.service.staging.consul (10.183.1.1) 56(84) bytes of data.
 64 bytes from node1 (10.183.1.1): icmp_seq=1 ttl=64 time=0.034 ms
+</pre>
 
 
+run on node2:
+
+<pre>
 [root@node2:~]# ping consul.service.staging.consul
 PING consul.service.staging.consul (10.183.1.2) 56(84) bytes of data.
 64 bytes from node2 (10.183.1.2): icmp_seq=1 ttl=64 time=0.043 ms
+</pre>
 
+dns server dig:
 
+<pre>
 [root@node2:~]# nix-shell -p dig --run "dig @127.0.0.1 consul.service.staging.consul"
+</pre>
+
+output:
+<pre>
 these 2 paths will be fetched (0.40 MiB download, 1.83 MiB unpacked):
   /nix/store/7xi79pp0a0vlzlyws8m8bb9aa1rpzg54-bind-9.18.14-dnsutils
   /nix/store/ywv0pi4c10ib0kmndr34fh86dhf4wax1-bind-9.18.14
@@ -455,24 +480,57 @@ consul.service.staging.consul. 0 IN	A	10.183.1.2
 ;; SERVER: 127.0.0.1#53(127.0.0.1) (UDP)
 ;; WHEN: Tue Jun 13 11:20:36 CEST 2023
 ;; MSG SIZE  rcvd: 106
+</pre>
 
 
-# nomad run
+# nomad run job
 
-   DIR=/run/user/1000/tmp.XlxMl57UUj && export NOMAD_ADDR=http://localhost:4646 && NOMAD_CLIENT_CERT=$DIR/nomad-client.crt && NOMAD_CLIENT_KEY=$DIR/nomad-client.key && NOMAD_CAFILE=$DIR/nomad.crt && export NOMAD_CLIENT_CERT NOMAD_CLIENT_KEY NOMAD_CAFILE
+<pre>
+# DIR taken from ./tlsproxy command 
+DIR=/run/user/1000/tmp.XlxMl57UUj && export NOMAD_ADDR=http://localhost:4646 && NOMAD_CLIENT_CERT=$DIR/nomad-client.crt && NOMAD_CLIENT_KEY=$DIR/nomad-client.key && NOMAD_CAFILE=$DIR/nomad.crt && export NOMAD_CLIENT_CERT NOMAD_CLIENT_KEY NOMAD_CAFILE
 
+nomad run deploy/d53.hcl 
+</pre>
+
+Output:
+<pre>
+
+==> 2023-06-13T18:23:14+02:00: Monitoring evaluation "1c372003"
+    2023-06-13T18:23:14+02:00: Evaluation triggered by job "core-d53"
+    2023-06-13T18:23:15+02:00: Evaluation within deployment: "1d76cdff"
+    2023-06-13T18:23:15+02:00: Allocation "3c60f828" created: node "bc13f4eb", group "D53"
+    2023-06-13T18:23:15+02:00: Allocation "ee53d630" created: node "bc13f4eb", group "gitea-dummy"
+    2023-06-13T18:23:15+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2023-06-13T18:23:15+02:00: Evaluation "1c372003" finished with status "complete"
+==> 2023-06-13T18:23:15+02:00: Monitoring deployment "1d76cdff"
+  ✓ Deployment "1d76cdff" successful
+    
+    2023-06-13T18:23:26+02:00
+    ID          = 1d76cdff
+    Job ID      = core-d53
+    Job Version = 4
+    Status      = successful
+    Description = Deployment completed successfully
+    
+    Deployed
+    Task Group   Desired  Placed  Healthy  Unhealthy  Progress Deadline
+    D53          1        1       1        0          2023-06-13T18:33:25+02:00
+    gitea-dummy  1        1       1        0          2023-06-13T18:33:26+02:00
+</pre>
 
 # consul put key
 
 Run:
+<pre>
    export SSH_USER=root; export ROOT_PASS=dummy
    export KEY=secrets/d53/gandi_api_key
    export VALUE=xyz12
    ./consul_put_key staging node1
-
+</pre>
 
 Output:
 
+<pre>
    - set CONSUL_HTTP_ADDR=https://localhost:8501
    - set CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
    - set CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
@@ -480,3 +538,4 @@ Output:
    - run consul kv put secrets/d53/gandi_api_key xyz12
    Success! Data written to: secrets/d53/gandi_api_key
    removed '/tmp/deploytool_askpass_81625ea27317e1b565801393'
+</pre>
