@@ -140,38 +140,6 @@ iommu_check
 
 Run:
 
-<pre>
-./tlsproxy staging
-</pre>
-
-<pre>
-   + ORG=bring-out
-   ++ dirname ./tlsproxy
-   + cd .
-   + CLUSTER=staging
-   + '[' '!' -d cluster/staging ']'
-   + PREFIX=bring-out/cluster/staging
-   ++ date +%Y
-   + YEAR=2023
-   ++ mktemp -d
-   + CERTDIR=/run/user/1000/tmp.blE6R0JHo1
-   + trap _int SIGINT
-   + pass bring-out/cluster/staging/nomad2023.crt
-   + pass bring-out/cluster/staging/nomad2023-client.crt
-   + pass bring-out/cluster/staging/nomad2023-client.key
-   + pass bring-out/cluster/staging/consul2023.crt
-   + pass bring-out/cluster/staging/consul2023-client.crt
-   + pass bring-out/cluster/staging/consul2023-client.key
-   + child1=874034
-   + socat -dd tcp-listen:4646,reuseaddr,fork,bind=localhost openssl:localhost:14646,cert=/run/user/1000/tmp.blE6R0JHo1/nomad-client.crt,key=/run/user/1000/tmp.blE6R0JHo1/nomad-client.key,cafile=/run/user/1000/tmp.blE6R0JHo1/nomad.crt,verify=0
-   + child2=874035
-   + wait 874034
-   + socat -dd tcp-listen:8500,reuseaddr,fork,bind=localhost openssl:localhost:8501,cert=/run/user/1000/tmp.blE6R0JHo1/consul-client.crt,key=/run/user/1000/tmp.blE6R0JHo1/consul-client.key,cafile=/run/user/1000/tmp.blE6R0JHo1/consul.crt,verify=0
-   2023/06/12 12:29:30 socat[874035] N listening on AF=2 127.0.0.1:8500
-   2023/06/12 12:29:30 socat[874034] N listening on AF=2 127.0.0.1:4646
-</pre>
-
-
 
 # wgautomesh gossip_secret
 
@@ -485,9 +453,44 @@ consul.service.staging.consul. 0 IN	A	10.183.1.2
 
 # nomad run job
 
+run tlsproxy for cluster `staging`
+
 <pre>
-# DIR taken from ./tlsproxy command 
-DIR=/run/user/1000/tmp.XlxMl57UUj && export NOMAD_ADDR=http://localhost:4646 && NOMAD_CLIENT_CERT=$DIR/nomad-client.crt && NOMAD_CLIENT_KEY=$DIR/nomad-client.key && NOMAD_CAFILE=$DIR/nomad.crt && export NOMAD_CLIENT_CERT NOMAD_CLIENT_KEY NOMAD_CAFILE
+./tlsproxy staging
+</pre>
+
+tlsproxy output:
+
+<pre>
+   + ORG=bring-out
+   ++ dirname ./tlsproxy
+   + cd .
+   + CLUSTER=staging
+   + '[' '!' -d cluster/staging ']'
+   + PREFIX=bring-out/cluster/staging
+   ++ date +%Y
+   + YEAR=2023
+   ++ mktemp -d
+   + CERTDIR=/run/user/1000/tmp.blE6R0JHo1
+   + trap _int SIGINT
+   + pass bring-out/cluster/staging/nomad2023.crt
+   + pass bring-out/cluster/staging/nomad2023-client.crt
+   + pass bring-out/cluster/staging/nomad2023-client.key
+   + pass bring-out/cluster/staging/consul2023.crt
+   + pass bring-out/cluster/staging/consul2023-client.crt
+   + pass bring-out/cluster/staging/consul2023-client.key
+   + child1=874034
+   + socat -dd tcp-listen:4646,reuseaddr,fork,bind=localhost openssl:localhost:14646,cert=/run/user/1000/tmp.blE6R0JHo1/nomad-client.crt,key=/run/user/1000/tmp.blE6R0JHo1/nomad-client.key,cafile=/run/user/1000/tmp.blE6R0JHo1/nomad.crt,verify=0
+   + child2=874035
+   + wait 874034
+   + socat -dd tcp-listen:8500,reuseaddr,fork,bind=localhost openssl:localhost:8501,cert=/run/user/1000/tmp.blE6R0JHo1/consul-client.crt,key=/run/user/1000/tmp.blE6R0JHo1/consul-client.key,cafile=/run/user/1000/tmp.blE6R0JHo1/consul.crt,verify=0
+   2023/06/12 12:29:30 socat[874035] N listening on AF=2 127.0.0.1:8500
+   2023/06/12 12:29:30 socat[874034] N listening on AF=2 127.0.0.1:4646
+</pre>
+
+<pre>
+# running on my developer workstation, DIR envar taken from ./tlsproxy command 
+DIR=/run/user/1000/tmp.blE6R0JHo1 && export NOMAD_ADDR=http://localhost:4646 && NOMAD_CLIENT_CERT=$DIR/nomad-client.crt && NOMAD_CLIENT_KEY=$DIR/nomad-client.key && NOMAD_CAFILE=$DIR/nomad.crt && export NOMAD_CLIENT_CERT NOMAD_CLIENT_KEY NOMAD_CAFILE
 
 nomad run deploy/d53.hcl 
 </pre>
