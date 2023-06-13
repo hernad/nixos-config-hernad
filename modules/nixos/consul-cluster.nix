@@ -130,26 +130,10 @@ in
     };
   };
 
-  imports = [
-      ./consul-wgautomesh.nix
-    ];
+  #imports = [
+  #    ./consul-wgautomesh.nix
+  #  ];
 
-#    let
-#      clusterNodeCfg = (if cfg.enable then getAttr cfg.hostName cfg.clusterNodes else null);
-#      clusterAddress = (if cfg.enable then clusterNodeCfg.address else null);
-#      node_meta = (if cfg.enable then {
-#        "site" = cfg.siteName;
-#      } else {}) //
-#      #(if cfg.staticIPv6.address != null
-#      #  then { "public_ipv6" = cfg.staticIPv6.address; }
-#      #  else {}) //
-#      (if cfg.publicIPv4 != null
-#        then { "public_ipv4" = cfg.publicIPv4; }
-#        else {}) //
-#      (if cfg.cnameTarget != null
-#        then { "cname_target" = cfg.cnameTarget; }
-#        else {});
-#    in 
 
   config = (mkIf cfg.enable (
   let
@@ -274,21 +258,25 @@ in
     networking.wireguard.interfaces.wg0 = {
       ips = [ "${clusterAddress}/16" ];
       listenPort = cfg.wireguardPort;
-      privateKeyFile = "/var/lib/consulCluster/wireguard-keys/private";
+      privateKeyFile = "/var/lib/consul-cluster/wireguard-keys/private";
       mtu = 1420;
     };
 
-    services.wgautomeshGit = {
+    services.wgautomesh = {
       enable = true;
-      interface = "wg0";
-      gossipPort = cfg.wgautomeshPort;
+      logLevel = "debug";
+      settings.interface = "wg0";
+      settings.gossip_port = cfg.wgautomeshPort;
+      enableGossipEncryption = true;
       gossipSecretFile = "/var/lib/wgautomesh/gossip_secret";
-      persistFile = "/var/lib/wgautomesh/state";
-      upnpForwardPublicPort =
+      #persistFile = "/var/lib/wgautomesh/state";
+      enablePersistence = true;
+      #Public port number to try to redirect to this machine’s Wireguard daemon using UPnP IGD.
+      settings.upnp_forward_public_port =
         if clusterNodeCfg.endpoint != null then
           strings.toInt (lists.last (builtins.split ":" clusterNodeCfg.endpoint))
         else null;
-      peers = attrValues (mapAttrs (hostname: { publicKey, endpoint, address, ... }: {
+      settings.peers = attrValues (mapAttrs (hostname: { publicKey, endpoint, address, ... }: {
         inherit address endpoint;
         pubkey = publicKey;
       }) cfg.clusterNodes);
@@ -299,7 +287,7 @@ in
     # networking.wg-quick.interfaces.wg0 = {
     #   address = [ "${clusterAddress}/16" ];
     #   listenPort = cfg.wireguardPort;
-    #   privateKeyFile = "/var/lib/consulCluster/wireguard-keys/private";
+    #   privateKeyFile = "/var/lib/consul-cluster/wireguard-keys/private";
     #   mtu = 1420;
     #   peers = map ({ publicKey, endpoint, address, ... }: {
     #     inherit publicKey endpoint;
@@ -307,12 +295,16 @@ in
     #     persistentKeepalive = 25;
     # };
 
+    # A set of shell script fragments that are executed when a NixOS system configuration is activated. Examples are updating /etc, creating accounts, and so on. 
+    # Since these are executed every time you boot the system or run nixos-rebuild, 
+    # it’s important that they are idempotent and fast.
+
     system.activationScripts.generate_df_wg_key = ''
-      if [ ! -f /var/lib/consulCluster/wireguard-keys/private ]; then
-        mkdir -p /var/lib/consulCluster/wireguard-keys
-        (umask 077; ${pkgs.wireguard-tools}/bin/wg genkey > /var/lib/consulCluster/wireguard-keys/private)
+      if [ ! -f /var/lib/consul-cluster/wireguard-keys/private ]; then
+        mkdir -p /var/lib/consul-cluster/wireguard-keys
+        (umask 077; ${pkgs.wireguard-tools}/bin/wg genkey > /var/lib/consul-cluster/wireguard-keys/private)
         echo "New Wireguard key was generated."
-        echo "This node's Wireguard public key is: $(${pkgs.wireguard-tools}/bin/wg pubkey < /var/lib/consulCluster/wireguard-keys/private)"
+        echo "This node's Wireguard public key is: $(${pkgs.wireguard-tools}/bin/wg pubkey < /var/lib/consul-cluster/wireguard-keys/private)"
       fi
     '';
 
@@ -365,6 +357,19 @@ in
       pkgs.glibc
       pkgs.zstd
     ];
+    
+    # https://search.nixos.org/options?channel=23.05&show=services.nomad.settings&from=0&size=50&sort=relevance&type=packages&query=nomad
+    #{
+    #  # A minimal config example:
+    #  server = {
+    #    enabled = true;
+    #    bootstrap_expect = 1; # for demo; no fault tolerance
+    #  };
+    #  client = {
+    #    enabled = true;
+    #  };
+    #}
+
     services.nomad.settings =
       (if cfg.isRaftServer
       then {

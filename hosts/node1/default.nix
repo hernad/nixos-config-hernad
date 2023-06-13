@@ -13,6 +13,15 @@ in {
     ../common/users/hernad
   ];
 
+
+  boot.kernel.sysctl = {
+    "vm.max_map_count" = 262144;
+  };
+
+  services.journald.extraConfig = ''
+  SystemMaxUse=1G
+  '';
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -94,6 +103,8 @@ in {
         "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC0xP+KKZzsiYdP84jJWPUbppag5ldMl3evYtyh01CZ+Us3xIPPCtApmAGvFsjfgg3mJIPen+B1kHmmc4QaZNbbgF5J2f10eH7WH8b2JazyJsZo2S4eObtH4J2gqstFgFxWeZOG/nGDi9Q1JqVrF0ubtK0Mu5f4dSBQ4YYh3fsuj351CA7snF+KcIJ9uLCAJUYezX9LIyhNd7fDpKPuMsHiUCwsTSji0l5kT4xlZ4OoOE+B1fmZ0vFP3gfah+YXQXv4eUbjt79kMdgCIvG6gh6x7Xm5RbE/LdAAYNnevWHv7gDjQKuyakKQp/lEdr6K5fSJNNJ5PB6uvE8/NT95rEP/hr7vE2N5qlMRyozQfZbYp6o1pD6vKSohTK8cLkfNcfwDXRyWvl2vOvgLYv5u2E+OR/MoCUybcfEmwnthRPAA+jXYrMyLTL5ZzeP8UBST6zTkjB2aU/G2AUQW2nKre5isAxjWUo1T0gzBQKTlP5N5vaGWxPVL/xZsJDfARgbIeik= hernad@dev"
       ];
     };
+    bootstrap = true;
+
 
     hostName = "node1";
     staticIPv4.address = "192.168.168.134";
@@ -108,19 +119,34 @@ in {
 
     clusterNodes."node1" = {
       siteName = "sa1";
-      publicKey = "VvXT0fPDfWsHxumZaVShpS33dJQbdpJ1E79ZbCBJP49=";
+      publicKey = "YEW6NWaa9eHmXAxVwLedAOH0zPICR21JlHmC2VVi6n0=";
       address = "10.183.1.1";
-      endpoint = "77.207.15.215:33731";
+      endpoint = "192.168.168.134:33799"; 
     };
 
     clusterNodes."node2" = {
       siteName = "sa1";
-      publicKey = "VvXT0fPDfWsHxum0aVShpS33dJQxdpJ1E79ZbCBJP10=";
+      publicKey = "nHfxdSExo2cVUVbwZWM+wnLUrfMxrZiFJTtskTPPcG8=";
       address = "10.183.1.2";
-      endpoint = "77.207.15.215:33731";
+      endpoint = "192.168.168.89:33799"; 
+    };
+
+    # New Wireguard key was generated.
+    # This node's Wireguard public key is: 9kuzKR41MvQgXYL15xMzaUn8k2hutZtZjYbjwSdaXnk=
+
+    clusterNodes."node3" = {
+      siteName = "sa1";
+      publicKey = "9kuzKR41MvQgXYL15xMzaUn8k2hutZtZjYbjwSdaXnk=";
+      address = "10.183.1.3";
+      endpoint = "192.168.168.91:33799"; 
     };
 
   };
+
+  services.consul.extraConfig.start_join = [ 
+    "10.183.1.2"
+    "10.183.1.3"
+  ];
 
   system.stateVersion = "23.05";
 }

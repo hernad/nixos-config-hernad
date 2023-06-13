@@ -130,7 +130,11 @@ build installer iso
 # Cluster staging / sa1
 
    export SSH_USER=root; export ROOT_PASS=dummy
-   ./deploy_pki staging node1
+   ./deploy_pki staging
+
+
+   # Error! Failed writing data: Unexpected response code: 500 (No cluster leader)
+
 
 
    ./tlsproxy staging
@@ -158,3 +162,254 @@ build installer iso
    + socat -dd tcp-listen:8500,reuseaddr,fork,bind=localhost openssl:localhost:8501,cert=/run/user/1000/tmp.blE6R0JHo1/consul-client.crt,key=/run/user/1000/tmp.blE6R0JHo1/consul-client.key,cafile=/run/user/1000/tmp.blE6R0JHo1/consul.crt,verify=0
    2023/06/12 12:29:30 socat[874035] N listening on AF=2 127.0.0.1:8500
    2023/06/12 12:29:30 socat[874034] N listening on AF=2 127.0.0.1:4646
+
+
+
+
+# wgautomesh gossip_secret
+
+? mozda ovo treba uraditi
+            endpoint = mkOption {
+              type = types.nullOr types.str;
+              description = "bootstrap endpoint";
+            };
+
+   [root@node1:~]# echo f5ed529a-0936-11ee-a168-2b2699a12b5e > /var/lib/wgautomesh/gossip_secret
+
+
+
+
+
+[root@node1:~]# export CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+
+[root@node1:~]# export CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+
+[root@node1:~]# export CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+
+[root@node1:~]# consul members
+Node   Address          Status  Type    Build   Protocol  DC       Partition  Segment
+node1  10.183.1.1:8301  alive   server  1.15.2  2         staging  default    <all>
+
+[root@node1:~]# consul members
+Node   Address          Status  Type    Build   Protocol  DC       Partition  Segment
+node1  10.183.1.1:8301  alive   server  1.15.2  2         staging  default    <all>
+node2  10.183.1.2:8301  alive   server  1.15.2  2         staging  default    <all>
+node3  10.183.1.3:8301  alive   server  1.15.2  2         staging  default    <all>
+
+
+
+❯ ./deploy_pki staging 
+==== DOING node1 ====
+- run mkdir -p /var/lib/nomad/pki /var/lib/consul/pki
+- write secret /var/lib/consul/pki/consul-ca.crt from pass bring-out/cluster/staging/consul-ca.crt
+- run chown consul:root /var/lib/consul/pki/consul-ca.crt
+- write secret /var/lib/consul/pki/consul2023.crt from pass bring-out/cluster/staging/consul2023.crt
+- run chown consul:root /var/lib/consul/pki/consul2023.crt
+- write secret /var/lib/consul/pki/consul2023.key from pass bring-out/cluster/staging/consul2023.key
+- run chown consul:root /var/lib/consul/pki/consul2023.key
+- write secret /var/lib/consul/pki/consul2023-client.crt from pass bring-out/cluster/staging/consul2023-client.crt
+- run chown consul:root /var/lib/consul/pki/consul2023-client.crt
+- write secret /var/lib/consul/pki/consul2023-client.key from pass bring-out/cluster/staging/consul2023-client.key
+- run chown consul:root /var/lib/consul/pki/consul2023-client.key
+- run ln -sf /var/lib/consul/pki/consul2023.crt /var/lib/consul/pki/consul.crt
+- run ln -sf /var/lib/consul/pki/consul2023.key /var/lib/consul/pki/consul.key
+- run ln -sf /var/lib/consul/pki/consul2023-client.crt /var/lib/consul/pki/consul-client.crt
+- run ln -sf /var/lib/consul/pki/consul2023-client.key /var/lib/consul/pki/consul-client.key
+- run systemctl restart consul
+- run sleep 10
+- write secret /var/lib/nomad/pki/nomad-ca.crt from pass bring-out/cluster/staging/nomad-ca.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad-ca.crt
+- write secret /var/lib/nomad/pki/nomad2023.crt from pass bring-out/cluster/staging/nomad2023.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023.crt
+- write secret /var/lib/nomad/pki/nomad2023.key from pass bring-out/cluster/staging/nomad2023.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023.key
+- write secret /var/lib/nomad/pki/nomad2023-client.crt from pass bring-out/cluster/staging/nomad2023-client.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023-client.crt
+- write secret /var/lib/nomad/pki/nomad2023-client.key from pass bring-out/cluster/staging/nomad2023-client.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023-client.key
+- write secret /var/lib/nomad/pki/consul2023.crt from pass bring-out/cluster/staging/consul2023.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023.crt
+- write secret /var/lib/nomad/pki/consul2023-client.crt from pass bring-out/cluster/staging/consul2023-client.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023-client.crt
+- write secret /var/lib/nomad/pki/consul2023-client.key from pass bring-out/cluster/staging/consul2023-client.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023-client.key
+- run ln -sf /var/lib/nomad/pki/nomad2023.crt /var/lib/nomad/pki/nomad.crt
+- run ln -sf /var/lib/nomad/pki/nomad2023.key /var/lib/nomad/pki/nomad.key
+- run ln -sf /var/lib/nomad/pki/nomad2023-client.crt /var/lib/nomad/pki/nomad-client.crt
+- run ln -sf /var/lib/nomad/pki/nomad2023-client.key /var/lib/nomad/pki/nomad-client.key
+- run ln -sf /var/lib/nomad/pki/consul2023.crt /var/lib/nomad/pki/consul.crt
+- run ln -sf /var/lib/nomad/pki/consul2023-client.crt /var/lib/nomad/pki/consul-client.crt
+- run ln -sf /var/lib/nomad/pki/consul2023-client.key /var/lib/nomad/pki/consul-client.key
+- run systemctl restart nomad
+- set CONSUL_HTTP_ADDR=https://localhost:8501
+- set CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+- set CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+- set CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+- run consul kv put secrets/consul/consul-ca.crt - < /var/lib/consul/pki/consul-ca.crt
+Success! Data written to: secrets/consul/consul-ca.crt
+- run consul kv put secrets/consul/consul.crt - < /var/lib/consul/pki/consul.crt
+Success! Data written to: secrets/consul/consul.crt
+- run consul kv put secrets/consul/consul-client.crt - < /var/lib/consul/pki/consul-client.crt
+Success! Data written to: secrets/consul/consul-client.crt
+- run consul kv put secrets/consul/consul-client.key - < /var/lib/consul/pki/consul-client.key
+Success! Data written to: secrets/consul/consul-client.key
+- run consul kv put secrets/nomad/nomad-ca.crt - < /var/lib/nomad/pki/nomad-ca.crt
+Success! Data written to: secrets/nomad/nomad-ca.crt
+- run consul kv put secrets/nomad/nomad.crt - < /var/lib/nomad/pki/nomad.crt
+Success! Data written to: secrets/nomad/nomad.crt
+- run consul kv put secrets/nomad/nomad-client.crt - < /var/lib/nomad/pki/nomad-client.crt
+Success! Data written to: secrets/nomad/nomad-client.crt
+- run consul kv put secrets/nomad/nomad-client.key - < /var/lib/nomad/pki/nomad-client.key
+Success! Data written to: secrets/nomad/nomad-client.key
+removed '/tmp/deploytool_askpass_299e920cfe325f4bade4b17c'
+removed '/tmp/deploytool_askpass_3058d9d9984d6a2ad7572f47'
+removed '/tmp/deploytool_askpass_37d50dc7be7fc82d05a0a749'
+removed '/tmp/deploytool_askpass_5285a3ca115149c473a0ee11'
+removed '/tmp/deploytool_askpass_5745f5efc1ad18a463272cee'
+removed '/tmp/deploytool_askpass_87efa953076a3efec53bdec1'
+removed '/tmp/deploytool_askpass_90a4ebfa8bd8b9e141299805'
+removed '/tmp/deploytool_askpass_928bf2208c7dbe8667ae1ec3'
+removed '/tmp/deploytool_askpass_9550098c5c9f6a697ee2e300'
+removed '/tmp/deploytool_askpass_a05dd8e89820566dee3f2119'
+removed '/tmp/deploytool_askpass_bedb5799bc971b59bd0ca9ee'
+removed '/tmp/deploytool_askpass_c0ca95d3bc545dccabff18dd'
+removed '/tmp/deploytool_askpass_c6f1c649ff6e7d05430e5c4e'
+removed '/tmp/deploytool_askpass_d8b6c29c0ea9b26dc83d8d8d'
+removed '/tmp/deploytool_askpass_dc778f1ca7720ee65f91ed0b'
+removed '/tmp/deploytool_askpass_f8a3fd8a9ec75221fe6c66cd'
+==== DOING node2 ====
+- run mkdir -p /var/lib/nomad/pki /var/lib/consul/pki
+- write secret /var/lib/consul/pki/consul-ca.crt from pass bring-out/cluster/staging/consul-ca.crt
+- run chown consul:root /var/lib/consul/pki/consul-ca.crt
+- write secret /var/lib/consul/pki/consul2023.crt from pass bring-out/cluster/staging/consul2023.crt
+- run chown consul:root /var/lib/consul/pki/consul2023.crt
+- write secret /var/lib/consul/pki/consul2023.key from pass bring-out/cluster/staging/consul2023.key
+- run chown consul:root /var/lib/consul/pki/consul2023.key
+- write secret /var/lib/consul/pki/consul2023-client.crt from pass bring-out/cluster/staging/consul2023-client.crt
+- run chown consul:root /var/lib/consul/pki/consul2023-client.crt
+- write secret /var/lib/consul/pki/consul2023-client.key from pass bring-out/cluster/staging/consul2023-client.key
+- run chown consul:root /var/lib/consul/pki/consul2023-client.key
+- run ln -sf /var/lib/consul/pki/consul2023.crt /var/lib/consul/pki/consul.crt
+- run ln -sf /var/lib/consul/pki/consul2023.key /var/lib/consul/pki/consul.key
+- run ln -sf /var/lib/consul/pki/consul2023-client.crt /var/lib/consul/pki/consul-client.crt
+- run ln -sf /var/lib/consul/pki/consul2023-client.key /var/lib/consul/pki/consul-client.key
+- run systemctl restart consul
+- run sleep 10
+- write secret /var/lib/nomad/pki/nomad-ca.crt from pass bring-out/cluster/staging/nomad-ca.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad-ca.crt
+- write secret /var/lib/nomad/pki/nomad2023.crt from pass bring-out/cluster/staging/nomad2023.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023.crt
+- write secret /var/lib/nomad/pki/nomad2023.key from pass bring-out/cluster/staging/nomad2023.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023.key
+- write secret /var/lib/nomad/pki/nomad2023-client.crt from pass bring-out/cluster/staging/nomad2023-client.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023-client.crt
+- write secret /var/lib/nomad/pki/nomad2023-client.key from pass bring-out/cluster/staging/nomad2023-client.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023-client.key
+- write secret /var/lib/nomad/pki/consul2023.crt from pass bring-out/cluster/staging/consul2023.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023.crt
+- write secret /var/lib/nomad/pki/consul2023-client.crt from pass bring-out/cluster/staging/consul2023-client.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023-client.crt
+- write secret /var/lib/nomad/pki/consul2023-client.key from pass bring-out/cluster/staging/consul2023-client.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023-client.key
+- run ln -sf /var/lib/nomad/pki/nomad2023.crt /var/lib/nomad/pki/nomad.crt
+- run ln -sf /var/lib/nomad/pki/nomad2023.key /var/lib/nomad/pki/nomad.key
+- run ln -sf /var/lib/nomad/pki/nomad2023-client.crt /var/lib/nomad/pki/nomad-client.crt
+- run ln -sf /var/lib/nomad/pki/nomad2023-client.key /var/lib/nomad/pki/nomad-client.key
+- run ln -sf /var/lib/nomad/pki/consul2023.crt /var/lib/nomad/pki/consul.crt
+- run ln -sf /var/lib/nomad/pki/consul2023-client.crt /var/lib/nomad/pki/consul-client.crt
+- run ln -sf /var/lib/nomad/pki/consul2023-client.key /var/lib/nomad/pki/consul-client.key
+- run systemctl restart nomad
+- set CONSUL_HTTP_ADDR=https://localhost:8501
+- set CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+- set CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+- set CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+- run consul kv put secrets/consul/consul-ca.crt - < /var/lib/consul/pki/consul-ca.crt
+Success! Data written to: secrets/consul/consul-ca.crt
+- run consul kv put secrets/consul/consul.crt - < /var/lib/consul/pki/consul.crt
+Success! Data written to: secrets/consul/consul.crt
+- run consul kv put secrets/consul/consul-client.crt - < /var/lib/consul/pki/consul-client.crt
+Success! Data written to: secrets/consul/consul-client.crt
+- run consul kv put secrets/consul/consul-client.key - < /var/lib/consul/pki/consul-client.key
+Success! Data written to: secrets/consul/consul-client.key
+- run consul kv put secrets/nomad/nomad-ca.crt - < /var/lib/nomad/pki/nomad-ca.crt
+Success! Data written to: secrets/nomad/nomad-ca.crt
+- run consul kv put secrets/nomad/nomad.crt - < /var/lib/nomad/pki/nomad.crt
+Success! Data written to: secrets/nomad/nomad.crt
+- run consul kv put secrets/nomad/nomad-client.crt - < /var/lib/nomad/pki/nomad-client.crt
+Success! Data written to: secrets/nomad/nomad-client.crt
+- run consul kv put secrets/nomad/nomad-client.key - < /var/lib/nomad/pki/nomad-client.key
+Success! Data written to: secrets/nomad/nomad-client.key
+removed '/tmp/deploytool_askpass_0cbf5a83c0ebf7722355d5dd'
+removed '/tmp/deploytool_askpass_15c4eaf10da9d215e7fa1a55'
+removed '/tmp/deploytool_askpass_2f94dae399c48ab2a42d6a58'
+removed '/tmp/deploytool_askpass_35ce292eed0289cfe1533e39'
+removed '/tmp/deploytool_askpass_448d80882bbea164de2e77da'
+removed '/tmp/deploytool_askpass_47f82b118b790f3d570797eb'
+removed '/tmp/deploytool_askpass_4fac1492a287cf8c7e96f00e'
+removed '/tmp/deploytool_askpass_5c021ebcf8329516b32044ea'
+removed '/tmp/deploytool_askpass_a92795619045d87c4e4344a8'
+removed '/tmp/deploytool_askpass_babc669bf0b2c991a61df4c3'
+removed '/tmp/deploytool_askpass_d055a9da5738d0ca48e9d8aa'
+==== DOING node3 ====
+- run mkdir -p /var/lib/nomad/pki /var/lib/consul/pki
+- write secret /var/lib/consul/pki/consul-ca.crt from pass bring-out/cluster/staging/consul-ca.crt
+- run chown consul:root /var/lib/consul/pki/consul-ca.crt
+- write secret /var/lib/consul/pki/consul2023.crt from pass bring-out/cluster/staging/consul2023.crt
+- run chown consul:root /var/lib/consul/pki/consul2023.crt
+- write secret /var/lib/consul/pki/consul2023.key from pass bring-out/cluster/staging/consul2023.key
+- run chown consul:root /var/lib/consul/pki/consul2023.key
+- write secret /var/lib/consul/pki/consul2023-client.crt from pass bring-out/cluster/staging/consul2023-client.crt
+- run chown consul:root /var/lib/consul/pki/consul2023-client.crt
+- write secret /var/lib/consul/pki/consul2023-client.key from pass bring-out/cluster/staging/consul2023-client.key
+- run chown consul:root /var/lib/consul/pki/consul2023-client.key
+- run ln -sf /var/lib/consul/pki/consul2023.crt /var/lib/consul/pki/consul.crt
+- run ln -sf /var/lib/consul/pki/consul2023.key /var/lib/consul/pki/consul.key
+- run ln -sf /var/lib/consul/pki/consul2023-client.crt /var/lib/consul/pki/consul-client.crt
+- run ln -sf /var/lib/consul/pki/consul2023-client.key /var/lib/consul/pki/consul-client.key
+- run systemctl restart consul
+- run sleep 10
+- write secret /var/lib/nomad/pki/nomad-ca.crt from pass bring-out/cluster/staging/nomad-ca.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad-ca.crt
+- write secret /var/lib/nomad/pki/nomad2023.crt from pass bring-out/cluster/staging/nomad2023.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023.crt
+- write secret /var/lib/nomad/pki/nomad2023.key from pass bring-out/cluster/staging/nomad2023.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023.key
+- write secret /var/lib/nomad/pki/nomad2023-client.crt from pass bring-out/cluster/staging/nomad2023-client.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023-client.crt
+- write secret /var/lib/nomad/pki/nomad2023-client.key from pass bring-out/cluster/staging/nomad2023-client.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/nomad2023-client.key
+- write secret /var/lib/nomad/pki/consul2023.crt from pass bring-out/cluster/staging/consul2023.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023.crt
+- write secret /var/lib/nomad/pki/consul2023-client.crt from pass bring-out/cluster/staging/consul2023-client.crt
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023-client.crt
+- write secret /var/lib/nomad/pki/consul2023-client.key from pass bring-out/cluster/staging/consul2023-client.key
+- run chown $(stat -c %u /var/lib/private/nomad/) /var/lib/nomad/pki/consul2023-client.key
+- run ln -sf /var/lib/nomad/pki/nomad2023.crt /var/lib/nomad/pki/nomad.crt
+- run ln -sf /var/lib/nomad/pki/nomad2023.key /var/lib/nomad/pki/nomad.key
+- run ln -sf /var/lib/nomad/pki/nomad2023-client.crt /var/lib/nomad/pki/nomad-client.crt
+- run ln -sf /var/lib/nomad/pki/nomad2023-client.key /var/lib/nomad/pki/nomad-client.key
+- run ln -sf /var/lib/nomad/pki/consul2023.crt /var/lib/nomad/pki/consul.crt
+- run ln -sf /var/lib/nomad/pki/consul2023-client.crt /var/lib/nomad/pki/consul-client.crt
+- run ln -sf /var/lib/nomad/pki/consul2023-client.key /var/lib/nomad/pki/consul-client.key
+- run systemctl restart nomad
+- set CONSUL_HTTP_ADDR=https://localhost:8501
+- set CONSUL_CACERT=/var/lib/consul/pki/consul-ca.crt
+- set CONSUL_CLIENT_CERT=/var/lib/consul/pki/consul-client.crt
+- set CONSUL_CLIENT_KEY=/var/lib/consul/pki/consul-client.key
+- run consul kv put secrets/consul/consul-ca.crt - < /var/lib/consul/pki/consul-ca.crt
+Success! Data written to: secrets/consul/consul-ca.crt
+- run consul kv put secrets/consul/consul.crt - < /var/lib/consul/pki/consul.crt
+Success! Data written to: secrets/consul/consul.crt
+- run consul kv put secrets/consul/consul-client.crt - < /var/lib/consul/pki/consul-client.crt
+Success! Data written to: secrets/consul/consul-client.crt
+- run consul kv put secrets/consul/consul-client.key - < /var/lib/consul/pki/consul-client.key
+Success! Data written to: secrets/consul/consul-client.key
+- run consul kv put secrets/nomad/nomad-ca.crt - < /var/lib/nomad/pki/nomad-ca.crt
+Success! Data written to: secrets/nomad/nomad-ca.crt
+- run consul kv put secrets/nomad/nomad.crt - < /var/lib/nomad/pki/nomad.crt
+Success! Data written to: secrets/nomad/nomad.crt
+- run consul kv put secrets/nomad/nomad-client.crt - < /var/lib/nomad/pki/nomad-client.crt
+Success! Data written to: secrets/nomad/nomad-client.crt
+- run consul kv put secrets/nomad/nomad-client.key - < /var/lib/nomad/pki/nomad-client.key
+Success! Data written to: secrets/nomad/nomad-client.key
+removed '/tmp/deploytool_askpass_ba81282a0591ecc65ff42e07'
