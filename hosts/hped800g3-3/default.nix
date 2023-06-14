@@ -13,6 +13,9 @@
   networking = {
     hostName = "hped800g3-3";
 
+    #head -c4 /dev/urandom | od -A none -t x4
+    hostId = "752837f1";
+
     extraHosts =
     ''
     10.0.99.4 hped800g3-4
@@ -116,6 +119,8 @@
     libvirtUsers = [ "hernad" ];
   };
 
+  services.drbd = import ../drbd.nix;
+  
   testConfig.enable = true;
 
   libvirtGuests = {

@@ -12,6 +12,11 @@
 
   networking = {
     hostName = "hped800g3-4";
+  
+    #head -c4 /dev/urandom | od -A none -t x4
+    hostId = "f6174120";
+
+
 
     extraHosts =
     ''
@@ -99,6 +104,9 @@
     pciIDs = "1cc1:5766";
     libvirtUsers = [ "hernad" ];
   };
+
+  services.drbd = import ../drbd.nix;
+  
 
   testConfig.enable = true;
 

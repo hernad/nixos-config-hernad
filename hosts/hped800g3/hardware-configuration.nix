@@ -32,11 +32,11 @@
   };
 
 
-  #swapDevices = [{
-  #  device = "/swap/swapfile";
-  #  size = 8196;
-  #}];
+  swapDevices = [{
+    device = "/dev/disk/by-label/swap";
+  }];
 
+  
   nixpkgs.hostPlatform.system = "x86_64-linux";
   #hardware.cpu.amd.updateMicrocode = true;
 }

@@ -1,9 +1,19 @@
-{ inputs, outputs, ... }: {
+{ pkgs, config, inputs, outputs, ... }: {
   imports = [
     ./hardware-configuration.nix
 
   ]; 
-  
+
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.forceImportRoot = false;
+
+ 
+  environment.systemPackages = with pkgs; [
+    drbd
+    zfs 
+  ];
+
+
   #++ (builtins.attrValues outputs.nixosModules);
 
   #home-manager.extraSpecialArgs = { inherit inputs outputs; };
