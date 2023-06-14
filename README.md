@@ -542,3 +542,62 @@ Output:
    Success! Data written to: secrets/d53/gandi_api_key
    removed '/tmp/deploytool_askpass_81625ea27317e1b565801393'
 </pre>
+
+# DRBD
+
+<pre>
+[root@hped800g3-4:~]# drbdadm create-md r0
+You want me to create a v08 style flexible-size internal meta data block.
+There appears to be a v08 flexible-size internal meta data block
+already in place on /dev/nvme0n1 at byte offset 1024209539072
+
+Do you really want to overwrite the existing meta-data?
+[need to type 'yes' to confirm] yes
+
+md_offset 1024209539072
+al_offset 1024209506304
+bm_offset 1024178249728
+
+Found some data
+
+ ==> This might destroy existing data! <==
+
+Do you want to proceed?
+[need to type 'yes' to confirm] yes
+
+initializing activity log
+initializing bitmap (30524 KB) to all zero
+Writing meta data...
+New drbd meta data block successfully created.
+
+
+[root@hped800g3-4:~]# drbdadm status r0
+r0 role:Secondary
+  disk:Inconsistent
+  peer connection:Connecting
+
+</pre>
+
+<pre>
+[root@hped800g3-3:~]# drbdadm create-md r0
+
+[root@hped800g3-3:~]# drbdadm up r0
+
+[root@hped800g3-3:~]# drbdadm status r0
+r0 role:Secondary
+  disk:Inconsistent
+  peer role:Secondary
+    replication:Established peer-disk:Inconsistent
+</pre>
+
+
+<pre>
+[root@hped800g3-3:~]# drbdadm -- --overwrite-data-of-peer primary r0
+
+[root@hped800g3-3:~]# drbdadm primary r0
+
+[root@hped800g3-3:~]# drbdadm status r0
+r0 role:Primary
+  disk:UpToDate
+  peer connection:Connecting
+</pre>

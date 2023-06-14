@@ -25,7 +25,7 @@ in
 
   test-txt = import ./test-txt.nix { inherit pkgs; };
    
-
+  drbd9 = import ./drbd9.nix { inherit pkgs; };
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 
   # https://ianthehenry.com/posts/how-to-learn-nix/builders/
