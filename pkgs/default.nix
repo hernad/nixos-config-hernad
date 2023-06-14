@@ -10,9 +10,9 @@
 let
   #flakeTime = self.sourceInfo.lastModified;
   #iso-images = import ./images/iso-images.nix { inherit pkgs ; };
+  lib = nixpkgs.lib;
+in
   
-
-in 
 {
   #authelia-bin = pkgs.callPackage ./authelia-bin.nix { };
   hernad-util-scripts = import ./hernad-util-scripts { inherit pkgs; };
@@ -25,7 +25,14 @@ in
 
   test-txt = import ./test-txt.nix { inherit pkgs; };
    
-  drbd9 = import ./drbd9.nix { inherit pkgs; };
+  #drbd9 = import ./drbd9.nix { inherit pkgs lib kernel; };
+  #drbd = pkgs.callPackage ./drbd9.nix { };
+  buildCModule = pkgs.callPackage ./c-module.nix {};
+  khelloworld = buildCModule {
+      name = "khelloworld";
+      src = ./khelloworld;
+  };
+
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 
   # https://ianthehenry.com/posts/how-to-learn-nix/builders/

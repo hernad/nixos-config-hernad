@@ -1,18 +1,18 @@
 # https://blog.prag.dev/building-kernel-modules-on-nixos
+{ lib, stdenv, fetchurl, kernel, perl, kmod, libelf, nukeReferences }:
+let
+  version = "9.2.4";
 
-{ stdenv
-, fetchpatch
-, nukeReferences
-, linuxPackages
-, kernel ? linuxPackages.kernel
-, version
-}:
+in
 
 stdenv.mkDerivation {
-  name = "drbd-${version}-module-${kernel.modDirVersion}";
-  inherit version;
+  #name = "drbd-${version}-module-${kernel.modDirVersion}";
+  name = "drbd-${version}-${kernel.version}";
+  #inherit version;
 
-  buildInputs = [ nukeReferences ];
+  buildInputs = [ 
+     nukeReferences 
+  ];
 
   kernel = kernel.dev;
   kernelVersion = kernel.modDirVersion;
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   # https://pkg.linbit.com/
 
   src = fetchurl {
-    url = "https://pkg.linbit.com//downloads/drbd/9/drbd-9.2.4.tar.gz";
+    url = "https://pkg.linbit.com//downloads/drbd/9/drbd-${version}.tar.gz";
     sha256 = "1l99kcrb0j85wxxmrdihpx9bk1a4sdi7wlp5m1x5l24k8ck1m5cf";
   };
 
