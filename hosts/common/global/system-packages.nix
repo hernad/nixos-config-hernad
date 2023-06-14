@@ -13,6 +13,7 @@ in
     traceroute
     speedtest-cli
     hernad-util-scripts
+    khelloworld
   ] ++ (
     if config.virtualisation.libvirtd.enable then [
         installer-iso  # build iso, result =>  /nix/store 

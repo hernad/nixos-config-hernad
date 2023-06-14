@@ -27,11 +27,22 @@ in
    
   #drbd9 = import ./drbd9.nix { inherit pkgs lib kernel; };
   #drbd = pkgs.callPackage ./drbd9.nix { };
-  buildCModule = pkgs.callPackage ./c-module.nix {};
-  khelloworld = buildCModule {
-      name = "khelloworld";
-      src = ./khelloworld;
+  
+  #khelloworld = (pkgs.callPackage ./c-module.nix {}) {
+  #    name = "khelloworld";
+  #    src = ./khelloworld;
+  #};
+  
+  khelloworld = pkgs.callPackage ./c-module.nix {
+    name = "khelloworld";
+    src = ./khelloworld;
   };
+      
+
+
+  #khelloworld = self.buildCModule {
+  #    
+  #};
 
   #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
 
