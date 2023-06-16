@@ -1,5 +1,5 @@
 {
-    enable = false;
+    enable = true;
     config = ''
 
       global {

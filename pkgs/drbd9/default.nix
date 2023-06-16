@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   KERNEL = kernel.dev;
   KERNEL_VERSION = kernel.modDirVersion;
+  
   #DESTDIR = "$out";
 
   buildInputs = [ 
@@ -23,6 +24,8 @@ stdenv.mkDerivation rec {
       coccinelle 
       git
   ];
+
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
   src = ./drbd;
 
@@ -40,16 +43,28 @@ stdenv.mkDerivation rec {
 
    # /home/hernad/nix/nixpkgs/pkgs/os-specific/linux/new-lg4ff/default.nix
 
-  installPhase = ''
-    
-    #mkdir -p $out/lib/modules/${KERNEL_VERSION}/extra/drbd9
-    mkdir -p $out/
-    xz drbd.ko
-    mv drbd.ko.xz $out
-    #/lib/modules/${KERNEL_VERSION}/extra/drbd9/
+  #installPhase = ''
+  #  
+  #  #mkdir -p $out/lib/modules/${KERNEL_VERSION}/extra/drbd9
+  #  mkdir -p $out/
+  #  xz drbd.ko
+  #  mv drbd.ko.xz $out
+  #  #/lib/modules/${KERNEL_VERSION}/extra/drbd9/
+  #
+  #'';
 
-  '';
+  # https://nixos.wiki/wiki/Linux_kernel
+  hardeningDisable = [ "pic" "format" ];
+  makeFlags = [
+    "KERNEL=${kernel.dev}"
+    "KERNEL_VERSION=${kernel.modDirVersion}"
+    "KERNELRELEASE=${kernel.modDirVersion}"                                 # 3
+    "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"    # 4
+    "INSTALL_MOD_PATH=$(out)"                                               # 5
+    "DESTDIR=$(out)"
+  ];
 
+  
   # Initially, nix-shell was designed to enter a package’s build environment for debugging purpose.
   # However, nix-shell can also be used to enter an custom environment defined
   # by the mkShell function.
@@ -59,6 +74,14 @@ stdenv.mkDerivation rec {
      echo KERNEL_VERSION = $KERNEL_VERSION
      #echo DESTDIR = $DESTDIR
   '';
+
+  meta = with lib; {
+    description = "A kernel module to create drbd v9 block device";
+    homepage = "https://github.com/LINBIT/drbd";
+    license = licenses.gpl2;
+    #maintainers = [ maintainers.makefu ];
+    platforms = platforms.linux;
+  };
 }
 
 

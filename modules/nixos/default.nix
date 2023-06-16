@@ -7,5 +7,5 @@
   testConfig = import ./test-config.nix;
   libvirtGuests = import ./libvirt-guests.nix;
   consulCluster = import ./consul-cluster.nix;
-  drbd9 = import ./consul-cluster.nix;
+  drbd9 = import ./drbd9.nix;
 }
