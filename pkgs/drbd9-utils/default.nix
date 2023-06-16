@@ -1,32 +1,25 @@
-{ lib
-, stdenv
-, docbook_xml_dtd_44
-, docbook_xml_dtd_45
-, docbook_xsl
-, asciidoctor
-, fetchurl
-, flex
-, kmod
-, libxslt
-, nixosTests
-, perl
-, systemd
-
+{ 
+pkgs
 # drbd-utils are compiled twice, once with forOCF = true to extract
 # its OCF definitions for use in the ocf-resource-agents derivation,
 # then again with forOCF = false, where the ocf-resource-agents is
 # provided as the OCF_ROOT.
 , forOCF ? false
-, ocf-resource-agents
+, ocf-resource-agents ? pkgs.ocf-resource-agents
 }:
 
+with pkgs;
+with builtins;
+
 stdenv.mkDerivation rec {
-  pname = "drbd-utils";
-  version = "9.2.4";
+  pname = "drbd9-utils";
+  version = "9.24.0";
+
+  # https://pkg.linbit.com/
 
   src = fetchurl {
-    url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    sha256 = "1l99kcrb0j85wxxmrdihpx9bk1a4sdi7wlp5m1x5l24k8ck1m5cf";
+    url = "https://pkg.linbit.com/downloads/drbd/utils/drbd-utils-${version}.tar.gz";
+    sha256 = "1viwvbazvh9br7cm6h6jwr11jqpd61k6lbz55f2mb6mv14w4lgn3";
   };
 
   nativeBuildInputs = [

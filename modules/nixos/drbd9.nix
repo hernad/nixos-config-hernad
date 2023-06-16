@@ -1,11 +1,13 @@
-# Support for DRBD, the Distributed Replicated Block Device.
+# Support for DRBD v9, the Distributed Replicated Block Device.
 
 { config, lib, pkgs, ... }:
 
 with lib;
 
-let cfg = config.services.drbd9; in
-
+let 
+  cfg = config.services.drbd9; 
+  drbd9-utils = pkgs.callPackage ../../pkgs/drbd9-utils {};
+in
 {
 
   ###### interface
@@ -36,8 +38,8 @@ let cfg = config.services.drbd9; in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ drbd9-utils ];
-    services.udev.packages = [ drbd9-utils ];
+    #environment.systemPackages = [ drbd9-utils ];
+    #services.udev.packages = [ drbd9-utils ];
 
     boot.kernelModules = [ "drbd" ];
 
