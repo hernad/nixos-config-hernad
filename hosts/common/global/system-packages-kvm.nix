@@ -13,6 +13,7 @@ in
     traceroute
     speedtest-cli
     hernad-util-scripts
+    drbd
   ];
 
   #environment.persistence = {

@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+In file included from /home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/can_include_vermagic_h.c:3:
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/vermagic.h:6:2: error: #error "This header can be included from kernel/module.c or *.mod.c only"
+    6 | #error "This header can be included from kernel/module.c or *.mod.c only"
+      |  ^~~~~

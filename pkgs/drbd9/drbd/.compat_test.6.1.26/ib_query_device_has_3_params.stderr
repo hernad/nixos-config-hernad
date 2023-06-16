@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_query_device_has_3_params.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_query_device_has_3_params.c:9:15: error: ‘struct ib_device’ has no member named ‘query_device’
+    9 |         device->query_device(device, &attr, &uhw);
+      |               ^~

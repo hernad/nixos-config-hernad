@@ -1,0 +1,216 @@
+--- drbd_transport_tcp.c
++++ /tmp/cocci-output-1016102-d7c9ef-drbd_transport_tcp.c
+@@ -646,7 +646,7 @@ static int dtt_wait_for_connect(struct d
+ 	rcu_read_unlock();
+ 
+ 	timeo = connect_int * HZ;
+-	timeo += get_random_u32_below(2) ? timeo / 7 : -timeo / 7; /* 28.5% random jitter */
++	timeo += (prandom_u32() % 2) ? timeo / 7 : -timeo / 7; /* 28.5% random jitter */
+ 
+ retry:
+ 	timeo = wait_event_interruptible_timeout(listener->wait,
+@@ -1112,7 +1112,7 @@ retry:
+ 				kernel_sock_shutdown(s, SHUT_RDWR);
+ 				sock_release(s);
+ randomize:
+-				if (get_random_u32_below(2))
++				if ((prandom_u32() % 2))
+ 					goto retry;
+ 			}
+ 		}
+@@ -1134,9 +1134,6 @@ randomize:
+ 	dsocket->sk->sk_allocation = GFP_NOIO;
+ 	csocket->sk->sk_allocation = GFP_NOIO;
+ 
+-	dsocket->sk->sk_use_task_frag = false;
+-	csocket->sk->sk_use_task_frag = false;
+-
+ 	dsocket->sk->sk_priority = TC_PRIO_INTERACTIVE_BULK;
+ 	csocket->sk->sk_priority = TC_PRIO_INTERACTIVE;
+ 
+--- drbd_state.c
++++ /tmp/cocci-output-1016102-68e6a7-drbd_state.c
+@@ -4611,7 +4611,7 @@ long twopc_retry_timeout(struct drbd_res
+ 			retries = 5;
+ 		timeout = resource->res_opts.twopc_retry_timeout *
+ 			  HZ / 10 * connections * (1 << retries);
+-		timeout = get_random_u32_below(timeout);
++		timeout = (prandom_u32() % timeout);
+ 	}
+ 	return timeout;
+ }
+@@ -4791,7 +4791,7 @@ change_cluster_wide_state(bool (*change)
+ 	}
+ 
+ 	do
+-		reply->tid = get_random_u32();
++		reply->tid = prandom_u32();
+ 	while (!reply->tid);
+ 
+ 	request.tid = reply->tid;
+@@ -5023,7 +5023,7 @@ retry:
+ 	*reply = (struct twopc_reply) { 0 };
+ 
+ 	do
+-		reply->tid = get_random_u32();
++		reply->tid = prandom_u32();
+ 	while (!reply->tid);
+ 
+ 	request.tid = reply->tid;
+--- drbd_receiver.c
++++ /tmp/cocci-output-1016102-88428b-drbd_receiver.c
+@@ -5488,7 +5488,7 @@ static int receive_protocol(struct drbd_
+ 		drbd_info(connection, "peer data-integrity-alg: %s\n",
+ 			  integrity_alg[0] ? integrity_alg : "(none)");
+ 
+-	kvfree_rcu_mightsleep(old_net_conf);
++	kvfree_rcu(old_net_conf);
+ 	return 0;
+ 
+ disconnect_rcu_unlock:
+@@ -5949,7 +5949,7 @@ static int receive_sizes(struct drbd_con
+ 			new_disk_conf->disk_size = p_usize;
+ 
+ 			rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
+-			kvfree_rcu_mightsleep(old_disk_conf);
++			kvfree_rcu(old_disk_conf);
+ 
+ 			drbd_info(peer_device, "Peer sets u_size to %llu sectors (old: %llu)\n",
+ 				 (unsigned long long)p_usize, (unsigned long long)my_usize);
+@@ -7191,7 +7191,7 @@ drbd_commit_size_change(struct drbd_devi
+ 		new_disk_conf->disk_size = tr->user_size;
+ 
+ 		rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
+-		kvfree_rcu_mightsleep(old_disk_conf);
++		kvfree_rcu(old_disk_conf);
+ 
+ 		drbd_info(device, "New u_size %llu sectors\n",
+ 			  (unsigned long long)tr->user_size);
+--- drbd_nl.c
++++ /tmp/cocci-output-1016102-b726e5-drbd_nl.c
+@@ -2302,7 +2302,7 @@ int drbd_adm_disk_opts(struct sk_buff *s
+ 			drbd_send_sync_param(peer_device);
+ 	}
+ 
+-	kvfree_rcu_mightsleep(old_disk_conf);
++	kvfree_rcu(old_disk_conf);
+ 	mod_timer(&device->request_timer, jiffies + HZ);
+ 	goto success;
+ 
+@@ -3727,7 +3727,7 @@ int drbd_adm_net_opts(struct sk_buff *sk
+ 
+ 	mutex_unlock(&connection->mutex[DATA_STREAM]);
+ 	mutex_unlock(&connection->resource->conf_update);
+-	kvfree_rcu_mightsleep(old_net_conf);
++	kvfree_rcu(old_net_conf);
+ 
+ 	if (connection->cstate[NOW] >= C_CONNECTED) {
+ 		struct drbd_peer_device *peer_device;
+@@ -3859,7 +3859,7 @@ int drbd_adm_peer_device_opts(struct sk_
+ 
+ 	rcu_assign_pointer(peer_device->conf, new_peer_device_conf);
+ 
+-	kvfree_rcu_mightsleep(old_peer_device_conf);
++	kvfree_rcu(old_peer_device_conf);
+ 	kfree(old_plan);
+ 
+ 	/* No need to call drbd_send_sync_param() here. The values in
+@@ -4879,7 +4879,7 @@ int drbd_adm_resize(struct sk_buff *skb,
+ 		new_disk_conf->disk_size = (sector_t)rs.resize_size;
+ 		rcu_assign_pointer(device->ldev->disk_conf, new_disk_conf);
+ 		mutex_unlock(&device->resource->conf_update);
+-		kvfree_rcu_mightsleep(old_disk_conf);
++		kvfree_rcu(old_disk_conf);
+ 		new_disk_conf = NULL;
+ 	}
+ 
+@@ -6507,9 +6507,9 @@ static int adm_del_resource(struct drbd_
+ 	drbd_debugfs_resource_cleanup(resource);
+ 	mutex_unlock(&resources_mutex);
+ 
+-	timer_shutdown_sync(&resource->twopc_timer);
+-	timer_shutdown_sync(&resource->peer_ack_timer);
+-	timer_shutdown_sync(&resource->repost_up_to_date_timer);
++	del_timer_sync(&resource->twopc_timer);
++	del_timer_sync(&resource->peer_ack_timer);
++	del_timer_sync(&resource->repost_up_to_date_timer);
+ 	call_rcu(&resource->rcu, drbd_reclaim_resource);
+ 
+ 	mutex_lock(&notification_mutex);
+@@ -7275,7 +7275,7 @@ int drbd_adm_rename_resource(struct sk_b
+ 	}
+ 	old_res_name = resource->name;
+ 	resource->name = new_res_name;
+-	kvfree_rcu_mightsleep(old_res_name);
++	kvfree_rcu(old_res_name);
+ 
+ 	drbd_debugfs_resource_rename(resource, new_res_name);
+ 
+--- drbd_main.c
++++ /tmp/cocci-output-1016102-9f81ce-drbd_main.c
+@@ -4152,7 +4152,7 @@ void drbd_unregister_device(struct drbd_
+ 	device->submit_conflict.wq = NULL;
+ 	destroy_workqueue(device->submit.wq);
+ 	device->submit.wq = NULL;
+-	timer_shutdown_sync(&device->request_timer);
++	del_timer_sync(&device->request_timer);
+ }
+ 
+ void drbd_reclaim_device(struct rcu_head *rp)
+@@ -4174,7 +4174,7 @@ void drbd_reclaim_device(struct rcu_head
+ 
+ static void shutdown_connect_timer(struct drbd_connection *connection)
+ {
+-	if (timer_shutdown_sync(&connection->connect_timer)) {
++	if (del_timer_sync(&connection->connect_timer)) {
+ 		kref_debug_put(&connection->kref_debug, 11);
+ 		kref_put(&connection->kref, drbd_destroy_connection);
+ 	}
+--- drbd_debugfs.c
++++ /tmp/cocci-output-1016102-cee224-drbd_debugfs.c
+@@ -1853,6 +1853,14 @@ static const struct file_operations drbd
+ 
+ static int drbd_compat_show(struct seq_file *m, void *ignored)
+ {
++	seq_puts(m, "fs_dax_get_by_bdev__no_takes_start_off_and_holder\n");
++	seq_puts(m, "fs_dax_get_by_bdev__no_takes_start_off\n");
++	seq_puts(m, "dax_direct_access__no_takes_mode\n");
++	seq_puts(m, "kvfree_rcu_mightsleep__no_present\n");
++	seq_puts(m, "get_random_u32_below__no_present\n");
++	seq_puts(m, "get_random_u32__no_present\n");
++	seq_puts(m, "sk_use_task_frag__no_present\n");
++	seq_puts(m, "timer_shutdown__no_present\n");
+ 	return 0;
+ }
+ 
+--- drbd_dax_pmem.c
++++ /tmp/cocci-output-1016102-2e1770-drbd_dax_pmem.c
+@@ -39,7 +39,7 @@ static int map_superblock_for_dax(struct
+ 	int id;
+ 
+ 	id = dax_read_lock();
+-	len = dax_direct_access(dax_dev, pgoff, want, DAX_ACCESS, &kaddr, &pfn_unused);
++	len = dax_direct_access(dax_dev, pgoff, want, &kaddr, &pfn_unused);
+ 	dax_read_unlock(id);
+ 
+ 	if (len < want)
+@@ -58,9 +58,8 @@ int drbd_dax_open(struct drbd_backing_de
+ {
+ 	struct dax_device *dax_dev;
+ 	int err;
+-	u64 part_off;
+ 
+-	dax_dev = fs_dax_get_by_bdev(bdev->md_bdev, &part_off, NULL, NULL);
++	dax_dev = fs_dax_get_by_bdev(bdev->md_bdev);
+ 	if (!dax_dev)
+ 		return -ENODEV;
+ 
+@@ -97,7 +96,7 @@ int drbd_dax_map(struct drbd_backing_dev
+ 	int id;
+ 
+ 	id = dax_read_lock();
+-	len = dax_direct_access(dax_dev, pgoff, want, DAX_ACCESS, &kaddr, &pfn_unused);
++	len = dax_direct_access(dax_dev, pgoff, want, &kaddr, &pfn_unused);
+ 	dax_read_unlock(id);
+ 
+ 	if (len < want)

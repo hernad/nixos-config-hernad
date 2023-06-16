@@ -1,0 +1,10 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_sk_use_task_frag.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_sk_use_task_frag.c:7:17: error: ‘struct sock’ has no member named ‘sk_use_task_frag’
+    7 |         return s->sk_use_task_frag;
+      |                 ^~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_sk_use_task_frag.c:8:1: error: control reaches end of non-void function [-Werror=return-type]
+    8 | }
+      | ^
+cc1: some warnings being treated as errors

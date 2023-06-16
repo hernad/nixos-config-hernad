@@ -1,0 +1,16 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdevname.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdevname.c:7:16: error: implicit declaration of function ‘bdevname’; did you mean ‘dev_name’? [-Werror=implicit-function-declaration]
+    7 |         return bdevname(bdev, b);
+      |                ^~~~~~~~
+      |                dev_name
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdevname.c:7:31: error: ‘b’ undeclared (first use in this function); did you mean ‘mb’?
+    7 |         return bdevname(bdev, b);
+      |                               ^
+      |                               mb
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdevname.c:7:31: note: each undeclared identifier is reported only once for each function it appears in
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdevname.c:8:1: error: control reaches end of non-void function [-Werror=return-type]
+    8 | }
+      | ^
+cc1: some warnings being treated as errors

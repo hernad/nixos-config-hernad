@@ -1,0 +1,11 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_split_q_bio_bioset.c: In function ‘dummy’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_split_q_bio_bioset.c:5:9: error: implicit declaration of function ‘blk_queue_split’; did you mean ‘blk_queue_exit’? [-Werror=implicit-function-declaration]
+    5 |         blk_queue_split(q, &bio, q->bio_split);
+      |         ^~~~~~~~~~~~~~~
+      |         blk_queue_exit
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_split_q_bio_bioset.c:5:35: error: ‘struct request_queue’ has no member named ‘bio_split’
+    5 |         blk_queue_split(q, &bio, q->bio_split);
+      |                                   ^~
+cc1: some warnings being treated as errors

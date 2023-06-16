@@ -1,0 +1,5 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bioset_init.c:4:23: warning: ‘foo’ defined but not used [-Wunused-function]
+    4 | static struct bio_set foo(void)
+      |                       ^~~

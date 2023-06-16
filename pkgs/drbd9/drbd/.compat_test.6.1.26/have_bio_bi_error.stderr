@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_bi_error.c: In function ‘dummy’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_bi_error.c:5:12: error: ‘struct bio’ has no member named ‘bi_error’
+    5 |         bio->bi_error = -EIO;
+      |            ^~

@@ -1,0 +1,1 @@
+#define COMPAT_HAVE_TIME64_TO_TM

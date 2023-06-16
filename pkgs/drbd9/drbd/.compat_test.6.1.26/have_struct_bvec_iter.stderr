@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_struct_bvec_iter.c: In function ‘main’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_struct_bvec_iter.c:5:26: warning: unused variable ‘iter’ [-Wunused-variable]
+    5 |         struct bvec_iter iter = {};
+      |                          ^~~~

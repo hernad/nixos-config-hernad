@@ -1,0 +1,7 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdi_congested.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdi_congested.c:7:16: error: implicit declaration of function ‘bdi_congested’ [-Werror=implicit-function-declaration]
+    7 |         return bdi_congested(bdi, cong_bits);
+      |                ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors

@@ -25,18 +25,36 @@ in
 
   test-txt = import ./test-txt.nix { inherit pkgs; };
    
-  #drbd9 = import ./drbd9.nix { inherit pkgs lib kernel; };
+  drbd9 = import ./drbd9.nix { inherit pkgs; };
   #drbd = pkgs.callPackage ./drbd9.nix { };
   
+  # Kernel derivation
+  #kernelDrv = buildLib.buildKernel {
+  #    inherit
+  #      (kernelArgs)
+  #      src
+  #      modDirVersion
+  #      version
+  #      enableRust
+  #      enableGdb
+  #      kernelPatches
+  #      ;
+  #
+  #    inherit configfile nixpkgs;
+  #};
+
+  #linuxDev = pkgs.linuxPackagesFor kernelDrv;
+  #kernel = linuxDev.kernel;
+
   #khelloworld = (pkgs.callPackage ./c-module.nix {}) {
   #    name = "khelloworld";
   #    src = ./khelloworld;
   #};
   
-  khelloworld = pkgs.callPackage ./c-module.nix {
-    name = "khelloworld";
-    src = ./khelloworld;
-  };
+  #khelloworld = pkgs.callPackage ./c-module.nix {
+  #  name = "khelloworld";
+  #  src = ./khelloworld;
+  #};
       
 
 

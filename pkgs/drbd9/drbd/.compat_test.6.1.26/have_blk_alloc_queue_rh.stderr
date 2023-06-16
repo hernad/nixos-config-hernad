@@ -1,0 +1,5 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_alloc_queue_rh.c:5:27: error: unknown type name ‘make_request_fn’
+    5 | struct request_queue *foo(make_request_fn *fn)
+      |                           ^~~~~~~~~~~~~~~

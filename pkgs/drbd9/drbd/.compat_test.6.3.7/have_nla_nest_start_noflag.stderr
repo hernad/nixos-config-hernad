@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_nla_nest_start_noflag.c: In function ‘dummy’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_nla_nest_start_noflag.c:6:16: warning: returning ‘struct nlattr *’ from a function with return type ‘int’ makes integer from pointer without a cast [-Wint-conversion]
+    6 |         return nla_nest_start_noflag(skb, attrtype);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

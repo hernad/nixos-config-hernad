@@ -1,0 +1,3 @@
+/home/hernad/nix/kernel/build-drbd/drbd/drbd.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_transport_tcp.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_transport_rdma.o

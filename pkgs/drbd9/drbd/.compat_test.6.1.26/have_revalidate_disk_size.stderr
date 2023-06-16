@@ -1,0 +1,8 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_revalidate_disk_size.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_revalidate_disk_size.c:7:9: error: implicit declaration of function ‘revalidate_disk_size’; did you mean ‘invalidate_disk’? [-Werror=implicit-function-declaration]
+    7 |         revalidate_disk_size(disk, false);
+      |         ^~~~~~~~~~~~~~~~~~~~
+      |         invalidate_disk
+cc1: some warnings being treated as errors

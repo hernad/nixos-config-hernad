@@ -1,0 +1,8 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_max_write_same_sectors.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_max_write_same_sectors.c:7:9: error: implicit declaration of function ‘blk_queue_max_write_same_sectors’; did you mean ‘blk_queue_max_write_zeroes_sectors’? [-Werror=implicit-function-declaration]
+    7 |         blk_queue_max_write_same_sectors(q, s);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         blk_queue_max_write_zeroes_sectors
+cc1: some warnings being treated as errors

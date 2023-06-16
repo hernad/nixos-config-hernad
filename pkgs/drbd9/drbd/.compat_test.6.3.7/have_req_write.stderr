@@ -1,0 +1,12 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_req_write.c:5:6: error: variable ‘dummy’ has initializer but incomplete type
+    5 | enum rq_flag_bits dummy = REQ_WRITE;
+      |      ^~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_req_write.c:5:27: error: ‘REQ_WRITE’ undeclared here (not in a function); did you mean ‘REQ_OP_WRITE’?
+    5 | enum rq_flag_bits dummy = REQ_WRITE;
+      |                           ^~~~~~~~~
+      |                           REQ_OP_WRITE
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_req_write.c:5:19: error: storage size of ‘dummy’ isn’t known
+    5 | enum rq_flag_bits dummy = REQ_WRITE;
+      |                   ^~~~~

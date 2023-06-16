@@ -1,0 +1,1 @@
+#define COMPAT_HAVE_NLA_PUT_64BIT

@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_queue_flag_discard.c:5:11: error: ‘QUEUE_FLAG_DISCARD’ undeclared here (not in a function); did you mean ‘QUEUE_FLAG_DAX’?
+    5 | int foo = QUEUE_FLAG_DISCARD;
+      |           ^~~~~~~~~~~~~~~~~~
+      |           QUEUE_FLAG_DAX

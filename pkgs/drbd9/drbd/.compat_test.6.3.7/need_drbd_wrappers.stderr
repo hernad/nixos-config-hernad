@@ -1,0 +1,5 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/need_drbd_wrappers.c:11:2: error: #error drbd_wrappers.h not required
+   11 | #error drbd_wrappers.h not required
+      |  ^~~~~

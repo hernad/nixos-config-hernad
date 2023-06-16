@@ -1,0 +1,11 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdgrab.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdgrab.c:6:16: error: implicit declaration of function ‘bdgrab’; did you mean ‘igrab’? [-Werror=implicit-function-declaration]
+    6 |         return bdgrab(b);
+      |                ^~~~~~
+      |                igrab
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdgrab.c:6:16: warning: returning ‘int’ from a function with return type ‘struct block_device *’ makes pointer from integer without a cast [-Wint-conversion]
+    6 |         return bdgrab(b);
+      |                ^~~~~~~~~
+cc1: some warnings being treated as errors

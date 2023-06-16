@@ -1,0 +1,5 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_op_shift.c:4:13: error: ‘BIO_OP_SHIFT’ undeclared here (not in a function)
+    4 | int dummy = BIO_OP_SHIFT;
+      |             ^~~~~~~~~~~~

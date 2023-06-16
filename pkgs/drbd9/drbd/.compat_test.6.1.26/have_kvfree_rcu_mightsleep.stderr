@@ -1,0 +1,7 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_kvfree_rcu_mightsleep.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_kvfree_rcu_mightsleep.c:7:9: error: implicit declaration of function ‘kvfree_rcu_mightsleep’ [-Werror=implicit-function-declaration]
+    7 |         kvfree_rcu_mightsleep(ptr);
+      |         ^~~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors

@@ -1,0 +1,21 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c:23:16: warning: ‘qp’ is used uninitialized [-Wuninitialized]
+   23 |         return ib_post_send(qp, send_wr, bad_send_wr);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c:18:23: note: ‘qp’ was declared here
+   18 |         struct ib_qp *qp;
+      |                       ^~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c:23:16: warning: ‘send_wr’ is used uninitialized [-Wuninitialized]
+   23 |         return ib_post_send(qp, send_wr, bad_send_wr);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c:19:34: note: ‘send_wr’ was declared here
+   19 |         const struct ib_send_wr *send_wr;
+      |                                  ^~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c:23:16: warning: ‘bad_send_wr’ is used uninitialized [-Wuninitialized]
+   23 |         return ib_post_send(qp, send_wr, bad_send_wr);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/ib_post_send_const_params.c:20:35: note: ‘bad_send_wr’ was declared here
+   20 |         const struct ib_send_wr **bad_send_wr;
+      |                                   ^~~~~~~~~~~

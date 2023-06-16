@@ -1,0 +1,10 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/blkdev_issue_discard_takes_flags.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/blkdev_issue_discard_takes_flags.c:8:16: error: too many arguments to function ‘blkdev_issue_discard’
+    8 |         return blkdev_issue_discard(bdev, sector, nr_sects, gfp_mask, flags);
+      |                ^~~~~~~~~~~~~~~~~~~~
+In file included from /home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/blkdev_issue_discard_takes_flags.c:3:
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/blkdev.h:1056:5: note: declared here
+ 1056 | int blkdev_issue_discard(struct block_device *bdev, sector_t sector,
+      |     ^~~~~~~~~~~~~~~~~~~~

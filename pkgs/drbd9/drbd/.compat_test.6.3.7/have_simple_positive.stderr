@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_simple_positive.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_simple_positive.c:7:13: warning: unused variable ‘r’ [-Wunused-variable]
+    7 |         int r = simple_positive((struct dentry *)NULL);
+      |             ^

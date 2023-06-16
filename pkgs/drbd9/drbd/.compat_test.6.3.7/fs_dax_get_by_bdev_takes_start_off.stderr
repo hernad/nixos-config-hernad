@@ -1,0 +1,14 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/fs_dax_get_by_bdev_takes_start_off.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/fs_dax_get_by_bdev_takes_start_off.c:8:16: error: too few arguments to function ‘fs_dax_get_by_bdev’
+    8 |         return fs_dax_get_by_bdev(bdev, start_off);
+      |                ^~~~~~~~~~~~~~~~~~
+In file included from /home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/fs_dax_get_by_bdev_takes_start_off.c:4:
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/dax.h:145:34: note: declared here
+  145 | static inline struct dax_device *fs_dax_get_by_bdev(struct block_device *bdev,
+      |                                  ^~~~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/fs_dax_get_by_bdev_takes_start_off.c:9:1: error: control reaches end of non-void function [-Werror=return-type]
+    9 | }
+      | ^
+cc1: some warnings being treated as errors

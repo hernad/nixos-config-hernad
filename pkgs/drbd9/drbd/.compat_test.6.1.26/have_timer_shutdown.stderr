@@ -1,0 +1,7 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_timer_shutdown.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_timer_shutdown.c:7:16: error: implicit declaration of function ‘timer_shutdown’ [-Werror=implicit-function-declaration]
+    7 |         return timer_shutdown(t);
+      |                ^~~~~~~~~~~~~~
+cc1: some warnings being treated as errors

@@ -1,0 +1,10 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_ib_get_dma_mr.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_ib_get_dma_mr.c:8:14: error: implicit declaration of function ‘ib_get_dma_mr’ [-Werror=implicit-function-declaration]
+    8 |         mr = ib_get_dma_mr(pd, 0);
+      |              ^~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_ib_get_dma_mr.c:8:12: warning: assignment to ‘struct ib_mr *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+    8 |         mr = ib_get_dma_mr(pd, 0);
+      |            ^
+cc1: some warnings being treated as errors

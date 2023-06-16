@@ -1,0 +1,7 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_generic_start_io_acct_rw_sect_part.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_generic_start_io_acct_rw_sect_part.c:7:9: error: implicit declaration of function ‘generic_start_io_acct’ [-Werror=implicit-function-declaration]
+    7 |         generic_start_io_acct(WRITE, 0, (struct hd_struct *) NULL);
+      |         ^~~~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors

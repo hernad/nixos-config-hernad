@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_req_noidle.c:4:13: error: ‘REQ_NOIDLE’ undeclared here (not in a function); did you mean ‘REQ_IDLE’?
+    4 | int dummy = REQ_NOIDLE;
+      |             ^~~~~~~~~~
+      |             REQ_IDLE

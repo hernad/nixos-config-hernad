@@ -1,0 +1,17 @@
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_dax_pmem.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_debugfs.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_buildtag.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_bitmap.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_proc.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_sender.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_receiver.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_req.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_actlog.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_main.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_strings.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_nl.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_interval.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_state.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/drbd_wrappers.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_nla.o
+/home/hernad/nix/kernel/build-drbd/drbd/drbd_transport.o

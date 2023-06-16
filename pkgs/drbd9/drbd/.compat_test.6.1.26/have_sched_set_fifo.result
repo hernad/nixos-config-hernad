@@ -1,0 +1,1 @@
+#define COMPAT_HAVE_SCHED_SET_FIFO

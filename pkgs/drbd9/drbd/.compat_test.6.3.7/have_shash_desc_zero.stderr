@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_shash_desc_zero.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_shash_desc_zero.c:5:16: warning: unused variable ‘p’ [-Wunused-variable]
+    5 |         void (*p)(struct shash_desc *) = shash_desc_zero;
+      |                ^

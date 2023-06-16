@@ -1,0 +1,47 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/before_4_13_kernel_read.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/before_4_13_kernel_read.c:19:34: warning: passing argument 2 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   19 |         return kernel_read(file, offset, addr, count);
+      |                                  ^~~~~~
+      |                                  |
+      |                                  loff_t {aka long long int}
+In file included from /home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/before_4_13_kernel_read.c:1:
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/fs.h:3033:43: note: expected ‘void *’ but argument is of type ‘loff_t’ {aka ‘long long int’}
+ 3033 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                           ^~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/before_4_13_kernel_read.c:19:42: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   19 |         return kernel_read(file, offset, addr, count);
+      |                                          ^~~~
+      |                                          |
+      |                                          char *
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/fs.h:3033:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘char *’
+ 3033 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/before_4_13_kernel_read.c:19:48: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   19 |         return kernel_read(file, offset, addr, count);
+      |                                                ^~~~~
+      |                                                |
+      |                                                long unsigned int
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/fs.h:3033:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘long unsigned int’
+ 3033 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+In file included from <command-line>:
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/compiler_types.h:357:45: error: call to ‘__compiletime_assert_216’ declared with attribute error: BUILD_BUG_ON failed: !(__same_type(kernel_read_before_4_13, kernel_read))
+  357 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |                                             ^
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/compiler_types.h:338:25: note: in definition of macro ‘__compiletime_assert’
+  338 |                         prefix ## suffix();                             \
+      |                         ^~~~~~
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/compiler_types.h:357:9: note: in expansion of macro ‘_compiletime_assert’
+  357 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+/nix/store/gl0cb943fyppp363vlazvxxv9bfiv70b-linux-6.1.26-dev/lib/modules/6.1.26/source/include/linux/build_bug.h:50:9: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |         ^~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/before_4_13_kernel_read.c:18:9: note: in expansion of macro ‘BUILD_BUG_ON’
+   18 |         BUILD_BUG_ON(!(__same_type(kernel_read_before_4_13, kernel_read)));
+      |         ^~~~~~~~~~~~

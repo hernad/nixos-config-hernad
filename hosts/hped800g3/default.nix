@@ -7,10 +7,26 @@
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
 
+  # https://nixos.wiki/wiki/Linux_kernel
+
+  # https://discourse.nixos.org/t/make-custom-kernel-build-with-custom-configuration/17464
+
+  # override linux_6_1
+  #boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_6_1.override {
+  #  argsOverride = rec {
+  #    src = pkgs.fetchurl {
+  #          url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
+  #          sha256 = "sha256-sm98vL+AMe/EnxHyNvNy/DSk/V/GrTFRuJPRqgOO1gM=";
+  #    };
+  #    version = "6.1.34";
+  #    modDirVersion = "6.1.34";
+  #    };
+  #});
+
  
   environment.systemPackages = with pkgs; [
-    drbd9
-    zfs 
+    #drbd9
+    zfs
   ];
 
 

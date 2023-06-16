@@ -1,0 +1,8 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/need_skb_abort_seq_read.c:16:12: warning: missing terminating ' character
+   16 | # error Don't need skb_abort_seq_read()
+      |            ^
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/need_skb_abort_seq_read.c:16:3: error: #error Don't need skb_abort_seq_read()
+   16 | # error Don't need skb_abort_seq_read()
+      |   ^~~~~

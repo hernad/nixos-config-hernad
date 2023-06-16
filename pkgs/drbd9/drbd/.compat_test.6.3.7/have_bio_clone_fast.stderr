@@ -1,0 +1,10 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_clone_fast.c: In function ‘dummy’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_clone_fast.c:8:16: error: implicit declaration of function ‘bio_clone_fast’ [-Werror=implicit-function-declaration]
+    8 |         bio2 = bio_clone_fast(bio, GFP_NOIO, bio_set);
+      |                ^~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_clone_fast.c:8:14: warning: assignment to ‘struct bio *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+    8 |         bio2 = bio_clone_fast(bio, GFP_NOIO, bio_set);
+      |              ^
+cc1: some warnings being treated as errors

@@ -1,0 +1,16 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_WB_congested_enum.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_WB_congested_enum.c:11:17: error: ‘WB_async_congested’ undeclared (first use in this function)
+   11 |         int a = WB_async_congested;
+      |                 ^~~~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_WB_congested_enum.c:11:17: note: each undeclared identifier is reported only once for each function it appears in
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_WB_congested_enum.c:12:17: error: ‘WB_sync_congested’ undeclared (first use in this function)
+   12 |         int b = WB_sync_congested;
+      |                 ^~~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_WB_congested_enum.c:12:13: warning: unused variable ‘b’ [-Wunused-variable]
+   12 |         int b = WB_sync_congested;
+      |             ^
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_WB_congested_enum.c:11:13: warning: unused variable ‘a’ [-Wunused-variable]
+   11 |         int a = WB_async_congested;
+      |             ^

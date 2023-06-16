@@ -1,0 +1,1 @@
+savedcmd_/home/hernad/nix/kernel/build-drbd/drbd/drbd_transport_tcp.mod := printf '%s\n'   drbd_transport_tcp.o | awk '!x[$$0]++ { print("/home/hernad/nix/kernel/build-drbd/drbd/"$$0) }' > /home/hernad/nix/kernel/build-drbd/drbd/drbd_transport_tcp.mod

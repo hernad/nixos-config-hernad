@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_security_netlink_recv.c:17:11: error: ‘security_netlink_recv’ undeclared here (not in a function); did you mean ‘security_netlink_send’?
+   17 | void *p = security_netlink_recv;
+      |           ^~~~~~~~~~~~~~~~~~~~~
+      |           security_netlink_send

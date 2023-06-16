@@ -1,0 +1,13 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+In file included from /home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_SHASH_DESC_ON_STACK.c:1:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_SHASH_DESC_ON_STACK.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_SHASH_DESC_ON_STACK.c:6:29: warning: unused variable ‘desc’ [-Wunused-variable]
+    6 |         SHASH_DESC_ON_STACK(desc, &tfm);
+      |                             ^~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/crypto/hash.h:168:28: note: in definition of macro ‘SHASH_DESC_ON_STACK’
+  168 |         struct shash_desc *shash = (struct shash_desc *)__##shash##_desc
+      |                            ^~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_SHASH_DESC_ON_STACK.c:5:29: warning: unused variable ‘tfm’ [-Wunused-variable]
+    5 |         struct crypto_shash tfm;
+      |                             ^~~

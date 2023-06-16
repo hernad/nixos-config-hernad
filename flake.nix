@@ -24,6 +24,9 @@
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
 
+
+
+
     # TODO: Add any other flake you might need
     # hardware.url = "github:nixos/nixos-hardware";
 
@@ -36,9 +39,10 @@
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
-        "aarch64-linux"
         "x86_64-linux"
       ];
+
+      
 
       mkNixosSystem = modules: nixpkgs.lib.nixosSystem {
         inherit modules;

@@ -1,0 +1,6 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_pointer_backing_dev_info.c: In function ‘test’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_pointer_backing_dev_info.c:6:10: error: ‘struct request_queue’ has no member named ‘backing_dev_info’
+    6 |         q.backing_dev_info = NULL;
+      |          ^

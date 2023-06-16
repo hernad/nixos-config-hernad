@@ -1,0 +1,1 @@
+savedcmd_/home/hernad/nix/kernel/build-drbd/drbd/drbd.ko := ld -r -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --build-id=none  -T scripts/module.lds -o /home/hernad/nix/kernel/build-drbd/drbd/drbd.ko /home/hernad/nix/kernel/build-drbd/drbd/drbd.o /home/hernad/nix/kernel/build-drbd/drbd/drbd.mod.o;  true

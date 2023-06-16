@@ -1,0 +1,7 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_set_op_attrs.c: In function ‘test’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bio_set_op_attrs.c:10:9: error: implicit declaration of function ‘bio_set_op_attrs’ [-Werror=implicit-function-declaration]
+   10 |         bio_set_op_attrs(bio, 0, 0);
+      |         ^~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors

@@ -1,0 +1,9 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdi_congested_fn.c:5:34: error: parameter 1 (‘bdi’) has incomplete type
+    5 | void foo(struct backing_dev_info bdi)
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_bdi_congested_fn.c:5:6: error: function declaration isn’t a prototype [-Werror=strict-prototypes]
+    5 | void foo(struct backing_dev_info bdi)
+      |      ^~~
+cc1: some warnings being treated as errors

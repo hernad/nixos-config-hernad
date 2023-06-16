@@ -1,0 +1,5 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_hd_struct.c:5:18: error: storage size of ‘hd’ isn’t known
+    5 | struct hd_struct hd;
+      |                  ^~

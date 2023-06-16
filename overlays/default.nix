@@ -11,8 +11,32 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-  };
 
+    # ovo ne radi - ne postoji linuxPackages.drbd
+    #nixpkgs.config.packageOverrides = pkgs: rec {
+    #     linuxPackages.drbd = pkgs.linuxPackages.drbd.overrideDerivation (attrs: {
+    #        name = "drbd9"; #-${config.boot.kernelPackages.kernel.version}";
+    #        src = nixpkgs.fetchurl {
+    #          url = "https://pkg.linbit.com//downloads/drbd/9/drbd-9.2.4.tar.gz";
+    #          sha256 = "sha256-lpBU3nqJvD8FKn12jXxwRHY0m7/Cn/kULaWgS0YHkmU=";
+    #        };
+    #     });
+    };
+
+
+    # https://www.reddit.com/r/NixOS/comments/428xja/help_overriding_a_kernel_module/
+
+      #nixpkgs.config.packageOverrides = pkgs: rec {
+      #    linuxPackages.e1000e = pkgs.linuxPackages.e1000e.overrideDerivation (attrs: {
+      #    name = "e1000e-3.3.1-${config.boot.kernelPackages.kernel.version}";
+      #
+      #    src = fetchurl {
+      #    url = "mirror://sourceforge/e1000/e1000e-3.3.1.tar.gz";
+      #    sha256 = "07hg6xxqgqshnys1qs9wbl9qr7d4ixdkd1y1fj27cg6bn8s2n797";
+      #};
+  
+      
+      
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
   unstable-packages = final: _prev: {

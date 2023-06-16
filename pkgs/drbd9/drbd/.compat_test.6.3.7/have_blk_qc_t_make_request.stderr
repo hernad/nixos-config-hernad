@@ -1,0 +1,46 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+In file included from <command-line>:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c:23:55: error: ‘make_request_fn’ undeclared (first use in this function)
+   23 |         BUILD_BUG_ON(!(__same_type(drbd_make_request, make_request_fn)));
+      |                                                       ^~~~~~~~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/compiler_types.h:377:23: note: in definition of macro ‘__compiletime_assert’
+  377 |                 if (!(condition))                                       \
+      |                       ^~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/compiler_types.h:397:9: note: in expansion of macro ‘_compiletime_assert’
+  397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/build_bug.h:50:9: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |         ^~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c:23:9: note: in expansion of macro ‘BUILD_BUG_ON’
+   23 |         BUILD_BUG_ON(!(__same_type(drbd_make_request, make_request_fn)));
+      |         ^~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c:23:24: note: in expansion of macro ‘__same_type’
+   23 |         BUILD_BUG_ON(!(__same_type(drbd_make_request, make_request_fn)));
+      |                        ^~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c:23:55: note: each undeclared identifier is reported only once for each function it appears in
+   23 |         BUILD_BUG_ON(!(__same_type(drbd_make_request, make_request_fn)));
+      |                                                       ^~~~~~~~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/compiler_types.h:377:23: note: in definition of macro ‘__compiletime_assert’
+  377 |                 if (!(condition))                                       \
+      |                       ^~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/compiler_types.h:397:9: note: in expansion of macro ‘_compiletime_assert’
+  397 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |         ^~~~~~~~~~~~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+/nix/store/ydgbh9sb06qr316g0j8flz83jvm2y80l-linux-6.3.7-dev/lib/modules/6.3.7/source/include/linux/build_bug.h:50:9: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+   50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |         ^~~~~~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c:23:9: note: in expansion of macro ‘BUILD_BUG_ON’
+   23 |         BUILD_BUG_ON(!(__same_type(drbd_make_request, make_request_fn)));
+      |         ^~~~~~~~~~~~
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_qc_t_make_request.c:23:24: note: in expansion of macro ‘__same_type’
+   23 |         BUILD_BUG_ON(!(__same_type(drbd_make_request, make_request_fn)));
+      |                        ^~~~~~~~~~~

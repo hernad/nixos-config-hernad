@@ -1,0 +1,8 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_update_readahead.c: In function ‘foo’:
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_blk_queue_update_readahead.c:7:9: error: implicit declaration of function ‘blk_queue_update_readahead’; did you mean ‘blk_queue_update_dma_pad’? [-Werror=implicit-function-declaration]
+    7 |         blk_queue_update_readahead(q);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+      |         blk_queue_update_dma_pad
+cc1: some warnings being treated as errors

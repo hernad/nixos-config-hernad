@@ -1,0 +1,5 @@
+<command-line>: warning: "KBUILD_MODNAME" redefined
+<command-line>: note: this is the location of the previous definition
+/home/hernad/nix/kernel/build-drbd/drbd/drbd-kernel-compat/tests/have_req_hardbarrier.c:3:13: error: ‘REQ_HARDBARRIER’ undeclared here (not in a function)
+    3 | int dummy = REQ_HARDBARRIER;
+      |             ^~~~~~~~~~~~~~~
