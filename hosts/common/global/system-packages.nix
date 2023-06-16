@@ -16,6 +16,7 @@ in
     #khelloworld
   ] ++ (
     if config.virtualisation.libvirtd.enable then [
+        drbd9
         installer-iso  # build iso, result =>  /nix/store 
     ] else [
 

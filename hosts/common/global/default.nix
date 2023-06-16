@@ -21,6 +21,17 @@
     ./system-packages.nix 
   ] ++ (builtins.attrValues outputs.nixosModules);
  
+  #nix.settings.trusted-users = [
+  #  "hernad"
+  #  "root"
+  #];
+
+  #nix.settings.sandbox = "relaxed";
+  nix.extraOptions = ''
+    trusted-users = root hernad
+    sandbox = relaxed 
+  '';
+
   # Turn on this option if you want to enable all the firmware with a license allowing redistribution.
   hardware.enableRedistributableFirmware = true;
 

@@ -119,7 +119,7 @@
     libvirtUsers = [ "hernad" ];
   };
 
-  services.drbd = import ../hped800g3/drbd.nix;
+  services.drbd9 = import ../hped800g3/drbd9.nix;
   
   testConfig.enable = true;
 

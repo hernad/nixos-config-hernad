@@ -25,63 +25,7 @@ in
 
   test-txt = import ./test-txt.nix { inherit pkgs; };
    
-  drbd9 = import ./drbd9.nix { inherit pkgs; };
-  #drbd = pkgs.callPackage ./drbd9.nix { };
+  drbd9 = import ./drbd9 { inherit pkgs; };
+
   
-  # Kernel derivation
-  #kernelDrv = buildLib.buildKernel {
-  #    inherit
-  #      (kernelArgs)
-  #      src
-  #      modDirVersion
-  #      version
-  #      enableRust
-  #      enableGdb
-  #      kernelPatches
-  #      ;
-  #
-  #    inherit configfile nixpkgs;
-  #};
-
-  #linuxDev = pkgs.linuxPackagesFor kernelDrv;
-  #kernel = linuxDev.kernel;
-
-  #khelloworld = (pkgs.callPackage ./c-module.nix {}) {
-  #    name = "khelloworld";
-  #    src = ./khelloworld;
-  #};
-  
-  #khelloworld = pkgs.callPackage ./c-module.nix {
-  #  name = "khelloworld";
-  #  src = ./khelloworld;
-  #};
-      
-
-
-  #khelloworld = self.buildCModule {
-  #    
-  #};
-
-  #ifd3f-infra-scripts = pkgs.callPackage ./../../scripts { };
-
-  # https://ianthehenry.com/posts/how-to-learn-nix/builders/
-  # There’s another function called linkFarm, undocumented in the manual, which operates like symlinkJoin, but provides a different output structure.
-  #* linkFarm is instead used to create a simple derivation with symlinks to
-  #* other derivations.  A derivation created with linkFarm is often used in CI
-  #* as a easy way to build multiple derivations at once.
-
-
-  #internal-libvirt-images = pkgs.linkFarm "internal-libvirt-images" [{
-  #  name = "centos-8.qcow2";
-  #  path = iso-images.centos-8-cloud-qcow2;
-  #}];
-
-  #win10hotplug = pkgs.callPackage ./win10hotplug { };
-
-  #push-vault-secrets = with pkgs;
-  #  writeScriptBin "push-vault-secrets" ''
-  #    set -o xtrace
-  #    ${vault-push-approles self}/bin/vault-push-approles &&
-  #      ${vault-push-approle-envs self}/bin/vault-push-approle-envs
-  #  '';
 }
