@@ -23,6 +23,18 @@
   #    };
   #});
 
+  boot.kernelPatches = [ {
+        name = "drbd 8.4 off";
+        patch = [
+          ./LRU_cache.diff
+        ];
+        extraConfig = ''
+          BLK_DEV_DRBD n
+          BLK_DEV_NULL_BLK m
+        '';
+  }];
+
+
  
   environment.systemPackages = with pkgs; [
     #drbd9

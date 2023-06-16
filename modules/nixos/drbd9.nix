@@ -34,12 +34,15 @@ in
   };
 
 
+
+
   ###### implementation
 
   config = mkIf cfg.enable {
 
-    #environment.systemPackages = [ drbd9-utils ];
-    #services.udev.packages = [ drbd9-utils ];
+    environment.systemPackages = [ drbd9-utils ];
+    services.udev.packages = [ drbd9-utils ];
+
 
     boot.kernelModules = [ "drbd" ];
 

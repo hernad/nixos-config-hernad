@@ -54,6 +54,12 @@ stdenv.mkDerivation rec {
   #'';
 
   # https://nixos.wiki/wiki/Linux_kernel
+
+  # https://blog.thalheim.io/2022/12/17/hacking-on-kernel-modules-in-nixos/
+
+  # https://github.com/Mic92/uptime_hack/
+
+
   hardeningDisable = [ "pic" "format" ];
   makeFlags = [
     "KERNEL=${kernel.dev}"

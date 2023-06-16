@@ -2,7 +2,10 @@
 { inputs, self, nixos-generators, nixpkgs, ... }:
 {
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs { inherit self nixpkgs nixos-generators; pkgs = final; };
+  additions = final: _prev: import ../pkgs { 
+    inherit self nixpkgs nixos-generators; 
+    pkgs = final; 
+  };
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
@@ -12,15 +15,7 @@
     # ...
     # });
 
-    # ovo ne radi - ne postoji linuxPackages.drbd
-    #nixpkgs.config.packageOverrides = pkgs: rec {
-    #     linuxPackages.drbd = pkgs.linuxPackages.drbd.overrideDerivation (attrs: {
-    #        name = "drbd9"; #-${config.boot.kernelPackages.kernel.version}";
-    #        src = nixpkgs.fetchurl {
-    #          url = "https://pkg.linbit.com//downloads/drbd/9/drbd-9.2.4.tar.gz";
-    #          sha256 = "sha256-lpBU3nqJvD8FKn12jXxwRHY0m7/Cn/kULaWgS0YHkmU=";
-    #        };
-    #     });
+    
     };
 
 
