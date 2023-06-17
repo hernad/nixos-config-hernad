@@ -1,12 +1,19 @@
 # Support for DRBD v9, the Distributed Replicated Block Device.
 
-{ config, lib, pkgs, ... }:
+{ config, 
+  lib, 
+  pkgs,
+  ... 
+}:
 
 with lib;
 
 let 
   cfg = config.services.drbd9; 
-  drbd9-utils = pkgs.callPackage ../../pkgs/drbd9-utils {};
+  kernel_version = pkgs.linuxPackages.kernel.modDirVersion;
+
+  #drbd9-utils = pkgs.callPackage ../../pkgs/drbd9-utils {};
+  #drbd9 = pkgs.callPackage ../../pkgs/drbd9 {};
 in
 {
 
@@ -40,28 +47,42 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ drbd9-utils ];
-    services.udev.packages = [ drbd9-utils ];
+    environment.systemPackages = [ pkgs.drbd9-utils ];
+    services.udev.packages = [ pkgs.drbd9-utils ];
 
 
-    boot.kernelModules = [ "drbd" ];
+    #boot.kernelModules = [ "drbd" ];
 
-    boot.extraModprobeConfig =
-      ''
-        options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
-      '';
+    #boot.extraModprobeConfig =
+    #  ''ExecStart = "${drbd9-utils}/bin/drbdadm up all";
+    #    options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
+    #  '';
 
     environment.etc."drbd.conf" =
       { source = pkgs.writeText "drbd.conf" cfg.config; };
 
-    systemd.services.drbd9 = {
-      after = [ "systemd-udev.settle.service" "network.target" ];
-      wants = [ "systemd-udev.settle.service" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${drbd9-utils}/bin/drbdadm up all";
-        ExecStop = "${drbd9-utils}/bin/drbdadm down all";
-      };
-    };
+    #systemd.services.drbd9 = {
+    #  after = [ "systemd-udev.settle.service" "network.target" ];
+    #  wants = [ "systemd-udev.settle.service" ];
+    #  wantedBy = [ "multi-user.target" ];
+    #  path = [
+    #        pkgs.kmod
+    #        pkgs.drbd9-utils
+    #  ];
+    #  serviceConfig = {
+    #    ExecStartPre = [
+    #         "${pkgs.kmod}/bin/modprobe lru_cache"
+    #         "${pkgs.kmod}/bin/modprobe libcrc32c"
+    #         "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko"
+    #         "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
+    #    ];
+    #    ExecStart = "-${pkgs.drbd9-utils}/bin/drbdadm up all";
+    #    ExecStop = "-${pkgs.drbd9-utils}/bin/drbdadm down all";
+    #    ExecStopPost =  [
+    #        "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
+    #        "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko"
+    #    ];
+    #  };
+    #};
   };
 }
