@@ -6,6 +6,9 @@ in
 
   environment.systemPackages = with pkgs; [ 
     htop
+    iotop
+    nmon
+    jnettop
     tmux
     vim
     fio

@@ -71,14 +71,14 @@ in
         ExecStartPre = [
              "${pkgs.kmod}/bin/modprobe lru_cache"
              "${pkgs.kmod}/bin/modprobe libcrc32c"
-             "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko"
-             "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
+             "-${pkgs.kmod}/bin/insmod  ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko usermode_helper=${pkgs.drbd9-utils}/bin/drbdadm"
+             "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
         ];
         ExecStart = "-${pkgs.drbd9-utils}/bin/drbdadm up all";
         ExecStop = "-${pkgs.drbd9-utils}/bin/drbdadm down all";
         ExecStopPost =  [
-            "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
-            "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko"
+            "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
+            "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9}/lib/modules/${kernel_version}/updates/drbd.ko"
         ];
       };
     };

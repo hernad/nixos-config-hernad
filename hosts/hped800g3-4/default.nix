@@ -16,12 +16,18 @@
     #head -c4 /dev/urandom | od -A none -t x4
     hostId = "f6174120";
 
-
-
     extraHosts =
     ''
     10.0.99.3 hped800g3-3
     '';
+
+    interfaces = {
+        "enp1s0" = {
+           macAddress = "24:1c:04:f3:73:47";
+           mtu = 9000;
+        };
+        lan10.mtu = 9000;
+    };
 
     defaultGateway = "192.168.168.251";
 
@@ -44,10 +50,7 @@
       };
     };
 
-    interfaces = {
-        lan10.mtu = 9000;
-    };
-
+    
     #interfaces."enp1s0" = {
     #   macAddress = "24:1c:04:f3:73:47";
     #   mtu = 9000;

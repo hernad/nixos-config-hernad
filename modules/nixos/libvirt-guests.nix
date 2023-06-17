@@ -43,6 +43,7 @@ in {
 
 
     config = (mkIf cfg.enable {
+        # nameValuePair :: String -> Any -> AttrSet
         systemd.services = mapAttrs' (name: value: nameValuePair "libvirtd-guest-${name}" {
         after = [ "libvirtd.service" ];
         requires = [ "libvirtd.service" ];
@@ -265,7 +266,7 @@ in {
                 fi
             done
             '';
-        }) cfg.guests;
+        }) (filterAttrs (n: v: v.enable ) cfg.guests);
     });
 
 }
