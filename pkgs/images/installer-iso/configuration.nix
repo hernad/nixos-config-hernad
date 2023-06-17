@@ -16,6 +16,9 @@ with lib; {
   in
   [ 
     htop
+    iotop
+    nmon
+    jnettop
     tmux
     vim
     fio

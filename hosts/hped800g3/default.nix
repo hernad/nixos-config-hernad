@@ -35,6 +35,8 @@
   }];
 
 
+  drbd9.enable = true;
+
  
   environment.systemPackages = with pkgs; [
     #drbd9

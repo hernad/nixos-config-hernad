@@ -119,6 +119,7 @@
     libvirtUsers = [ "hernad" ];
   };
 
+
   services.drbd9 = import ../hped800g3/drbd9.nix;
   
   testConfig.enable = true;
@@ -127,6 +128,7 @@
     enable = true;
     guests = {
       guest31 = {
+        enable = true;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
         currentMemory = "4194304"; #4GB
@@ -190,6 +192,8 @@
       };
 
       node1 = {
+        
+        enable = false;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
         currentMemory = "4194304"; #4GB
