@@ -44,12 +44,13 @@ in
     services.udev.packages = [ drbd9-utils ];
 
 
-    boot.kernelModules = [ "drbd" ];
+    #boot.kernelModules = [ "drbd" ];
 
-    boot.extraModprobeConfig =
-      ''
-        options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
-      '';
+    # modprobe config drdb za usermode drbdadm app
+    #boot.extraModprobeConfig =
+    #  ''
+    #    options drbd usermode_helper=/run/current-system/sw/bin/drbdadm
+    #  '';
 
     environment.etc."drbd.conf" =
       { source = pkgs.writeText "drbd.conf" cfg.config; };
@@ -59,8 +60,11 @@ in
       wants = [ "systemd-udev.settle.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${drbd9-utils}/bin/drbdadm up all";
-        ExecStop = "${drbd9-utils}/bin/drbdadm down all";
+        ExecStartPre = [
+          "-${drbd9}/"
+        ];
+        ExecStart = "-${drbd9-utils}/bin/drbdadm up all";
+        ExecStop = "-${drbd9-utils}/bin/drbdadm down all";
       };
     };
   };
