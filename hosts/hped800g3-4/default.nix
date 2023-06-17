@@ -116,6 +116,7 @@
     enable = true;
     guests = {
       guest1 = {
+        enable = false;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = false;
         currentMemory = "4194304"; #4GB
@@ -187,6 +188,7 @@
       
 
       node2 = {
+        enable = false;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
         currentMemory = "4194304"; #4GB
@@ -249,6 +251,7 @@
       };
 
       node3 = {
+        enable = false;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
         currentMemory = "4194304"; #4GB

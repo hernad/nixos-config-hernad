@@ -70,6 +70,15 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
   ];
 
+  installPhase = ''
+    install -m 755   -d $out/lib/modules/${kernel.modDirVersion}/extra/
+    install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
+  '';
+
+  # [root@hped800g3-3:~]# ls -ld /nix/store/*drbd*/lib/modules/*/extra/
+  # dr-xr-xr-x 2 root root 4096 Jan  1  1970 /nix/store/igm6lr813xzkr321i24wfn9c0bm59z4b-drbd9-9.2.4/lib/modules/6.1.31/extra/
+  # drbd.ko  drbd_transport_rdma.ko  drbd_transport_tcp.ko
+
   
   # Initially, nix-shell was designed to enter a package’s build environment for debugging purpose.
   # However, nix-shell can also be used to enter an custom environment defined
@@ -85,8 +94,8 @@ stdenv.mkDerivation rec {
     description = "A kernel module to create drbd v9 block device";
     homepage = "https://github.com/LINBIT/drbd";
     license = licenses.gpl2;
-    #maintainers = [ maintainers.makefu ];
-    platforms = platforms.linux;
+    maintainers = [ "hernad@bring.out.ba" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
 

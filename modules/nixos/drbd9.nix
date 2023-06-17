@@ -9,33 +9,46 @@
 with lib;
 
 let 
-  cfg = config.services.drbd9; 
+  cfg = config.drbd9;
+  cfgService = config.services.drbd9;
   kernel_version = pkgs.linuxPackages.kernel.modDirVersion;
 
-  #drbd9-utils = pkgs.callPackage ../../pkgs/drbd9-utils {};
-  #drbd9 = pkgs.callPackage ../../pkgs/drbd9 {};
+  kpkgs = config.boot.kernelPackages;
+  #modulePackages = map (m: kpkgs.${m}) modules;
+  modulePackages = [ pkgs.drbd9 ];
+
+  modules = [ "drbd" "drbd_transport_tcp" "drbd_tranport_rma" ];
+  kernelModuleConfig = mkIf cfg.enable {
+       boot.extraModulePackages = modulePackages;
+       boot.kernelModules = modules;
+       boot.extraModprobeConfig =
+       ''
+        options drbd usermode_helper=${pkgs.drbd9-utils}/bin/drbdadm
+       '';
+       services.udev.packages = modulePackages;
+  };
+
 in
 {
 
-  ###### interface
-
   options = {
 
-    services.drbd9.enable = mkOption {
-      default = false;
-      type = types.bool;
-      description = lib.mdDoc ''
-        Whether to enable support for DRBD, the Distributed Replicated
-        Block Device.
-      '';
+    drbd9.enable = mkOption {
+        default = false;
+        defaultText = literalExpression "enable drbd9";
+        example = true;
+        description = lib.mdDoc "Whether to make the drbd9 out-of-tree kernel modules available";
+        type = types.bool;
     };
 
-    services.drbd9.config = mkOption {
-      default = "";
-      type = types.lines;
-      description = lib.mdDoc ''
-        Contents of the {file}`drbd.conf` configuration file.
-      '';
+    services.drbd9 = {
+      config = mkOption {
+         default = "";
+         type = types.lines;
+         description = lib.mdDoc ''
+           Contents of the {file}`drbd.conf` configuration file.
+         '';
+      };
     };
 
   };
@@ -43,11 +56,14 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkMerge [
+    
+    kernelModuleConfig
+
+    (mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.drbd9-utils ];
     services.udev.packages = [ pkgs.drbd9-utils ];
-
 
     #boot.kernelModules = [ "drbd" ];
 
@@ -57,7 +73,7 @@ in
     #  '';
 
     environment.etc."drbd.conf" =
-      { source = pkgs.writeText "drbd.conf" cfg.config; };
+      { source = pkgs.writeText "drbd.conf" cfgService.config; };
 
     systemd.services.drbd9 = {
       after = [ "systemd-udev.settle.service" "network.target" ];
@@ -68,19 +84,11 @@ in
             pkgs.drbd9-utils
       ];
       serviceConfig = {
-        ExecStartPre = [
-             "${pkgs.kmod}/bin/modprobe lru_cache"
-             "${pkgs.kmod}/bin/modprobe libcrc32c"
-             "-${pkgs.kmod}/bin/insmod  ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko usermode_helper=${pkgs.drbd9-utils}/bin/drbdadm"
-             "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
-        ];
-        ExecStart = "-${pkgs.drbd9-utils}/bin/drbdadm up all";
-        ExecStop = "-${pkgs.drbd9-utils}/bin/drbdadm down all";
-        ExecStopPost =  [
-            "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
-            "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9}/lib/modules/${kernel_version}/updates/drbd.ko"
-        ];
+        Type = "forking";
+        ExecStart = "${pkgs.drbd9-utils}/bin/drbdadm up all";
+        ExecStop = "${pkgs.drbd9-utils}/bin/drbdadm down all";
+        RemainAfterExit = true;
       };
     };
-  };
+  }) ];
 }
