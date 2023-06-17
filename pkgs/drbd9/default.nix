@@ -29,37 +29,7 @@ stdenv.mkDerivation rec {
 
   src = ./drbd;
 
-  #configurePhase = ''
-  #  cmake .
-  #'';
-
-  #buildPhase = ''
-  #  make
-  #'';
-
-  # /home/hernad/nix/nixpkgs/pkgs/applications/virtualization/virtualbox/guest-additions/default.nix
-
-   # https://discourse.nixos.org/t/load-automatically-kernel-module-and-deal-with-parameters/9200/2
-
-   # /home/hernad/nix/nixpkgs/pkgs/os-specific/linux/new-lg4ff/default.nix
-
-  #installPhase = ''
-  #  
-  #  #mkdir -p $out/lib/modules/${KERNEL_VERSION}/extra/drbd9
-  #  mkdir -p $out/
-  #  xz drbd.ko
-  #  mv drbd.ko.xz $out
-  #  #/lib/modules/${KERNEL_VERSION}/extra/drbd9/
-  #
-  #'';
-
-  # https://nixos.wiki/wiki/Linux_kernel
-
-  # https://blog.thalheim.io/2022/12/17/hacking-on-kernel-modules-in-nixos/
-
-  # https://github.com/Mic92/uptime_hack/
-
-
+ 
   hardeningDisable = [ "pic" "format" ];
   makeFlags = [
     "KERNEL=${kernel.dev}"
@@ -75,11 +45,6 @@ stdenv.mkDerivation rec {
     install -m 644 *.ko $out/lib/modules/${kernel.modDirVersion}/extra/
   '';
 
-  # [root@hped800g3-3:~]# ls -ld /nix/store/*drbd*/lib/modules/*/extra/
-  # dr-xr-xr-x 2 root root 4096 Jan  1  1970 /nix/store/igm6lr813xzkr321i24wfn9c0bm59z4b-drbd9-9.2.4/lib/modules/6.1.31/extra/
-  # drbd.ko  drbd_transport_rdma.ko  drbd_transport_tcp.ko
-
-  
   # Initially, nix-shell was designed to enter a package’s build environment for debugging purpose.
   # However, nix-shell can also be used to enter an custom environment defined
   # by the mkShell function.
@@ -123,3 +88,25 @@ stdenv.mkDerivation rec {
 # systemctl stop sys-devices-virtual-block-drbd1.device
 # rmmod drbd
 
+# [root@hped800g3-3:~]# modinfo drbd
+# filename:       /run/booted-system/kernel-modules/lib/modules/6.1.31/extra/drbd.ko
+# alias:          block-major-147-*
+# license:        GPL
+# version:        9.2.4
+# description:    drbd - Distributed Replicated Block Device v9.2.4
+# author:         Philipp Reisner <phil@linbit.com>, Lars Ellenberg <lars@linbit.com>
+# srcversion:     B45FF4CEF8E390239ACCE74
+# depends:        lru_cache,dax,libcrc32c
+# retpoline:      Y
+# name:           drbd
+# vermagic:       6.1.31 SMP preempt mod_unload 
+# parm:           enable_faults:int
+# parm:           fault_rate:int
+# parm:           fault_count:int
+# parm:           fault_devs:int
+# parm:           disable_sendpage:bool
+# parm:           allow_oos:DONT USE! (bool)
+# parm:           minor_count:Approximate number of drbd devices (1U-255U) (uint)
+# parm:           usermode_helper:string
+# parm:           protocol_version_min:drbd_protocol_version
+# parm:           strict_names:restrict resource and connection names to ascii alnum and a subset of punct (drbd_strict_names)
