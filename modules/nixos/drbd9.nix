@@ -9,13 +9,6 @@
 with lib;
 
 let 
-<<<<<<< HEAD
-  cfg = config.services.drbd9; 
-  kernel_version = pkgs.linuxPackages.kernel.modDirVersion;
-
-  #drbd9-utils = pkgs.callPackage ../../pkgs/drbd9-utils {};
-  #drbd9 = pkgs.callPackage ../../pkgs/drbd9 {};
-=======
   cfg = config.drbd9;
   cfgService = config.services.drbd9;
   kernel_version = pkgs.linuxPackages.kernel.modDirVersion;
@@ -35,7 +28,6 @@ let
        services.udev.packages = modulePackages;
   };
 
->>>>>>> cache
 in
 {
 
@@ -68,12 +60,7 @@ in
     
     kernelModuleConfig
 
-<<<<<<< HEAD
-    environment.systemPackages = [ pkgs.drbd9-utils ];
-    services.udev.packages = [ pkgs.drbd9-utils ];
-=======
     (mkIf cfg.enable {
->>>>>>> cache
 
     environment.systemPackages = [ pkgs.drbd9-utils ];
     services.udev.packages = [ pkgs.drbd9-utils ];
@@ -88,32 +75,6 @@ in
     environment.etc."drbd.conf" =
       { source = pkgs.writeText "drbd.conf" cfgService.config; };
 
-<<<<<<< HEAD
-    #systemd.services.drbd9 = {
-    #  after = [ "systemd-udev.settle.service" "network.target" ];
-    #  wants = [ "systemd-udev.settle.service" ];
-    #  wantedBy = [ "multi-user.target" ];
-    #  path = [
-    #        pkgs.kmod
-    #        pkgs.drbd9-utils
-    #  ];
-    #  serviceConfig = {
-    #    ExecStartPre = [
-    #         "${pkgs.kmod}/bin/modprobe lru_cache"
-    #         "${pkgs.kmod}/bin/modprobe libcrc32c"
-    #         "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko"
-    #         "-${pkgs.kmod}/bin/insmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
-    #    ];
-    #    ExecStart = "-${pkgs.drbd9-utils}/bin/drbdadm up all";
-    #    ExecStop = "-${pkgs.drbd9-utils}/bin/drbdadm down all";
-    #    ExecStopPost =  [
-    #        "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd_transport_tcp.ko"
-    #        "-${pkgs.kmod}/bin/rmmod ${pkgs.drbd9.out}/lib/modules/${kernel_version}/updates/drbd.ko"
-    #    ];
-    #  };
-    #};
-  };
-=======
     systemd.services.drbd9 = {
       after = [ "systemd-udev.settle.service" "network.target" ];
       wants = [ "systemd-udev.settle.service" ];
@@ -130,5 +91,4 @@ in
       };
     };
   }) ];
->>>>>>> cache
 }

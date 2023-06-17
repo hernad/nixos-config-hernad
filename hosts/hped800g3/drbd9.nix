@@ -15,10 +15,6 @@
         
         # https://serverfault.com/questions/740311/drbd-terrible-sync-performance-on-10gige
         net {
-<<<<<<< HEAD
-            cram-hmac-alg sha1;
-            shared-secret "hped800g334";
-=======
           # max-epoch-size          20000;
           max-buffers             36k;
           sndbuf-size            1024k ;
@@ -30,36 +26,12 @@
           #sha1, md5, and crc32c
           verify-alg sha1;
 
->>>>>>> cache
         }
 
         volume 0 {
             device  minor 1;
             disk    /dev/nvme0n1;
             meta-disk internal;
-<<<<<<< HEAD
-        }
-
-        #disk {
-        #    resync-rate 1000M;
-        #}
-        on "hped800g3-3" {
-            node-id 0;
-            address 10.0.99.3:7789;
-        }
-        on "hped800g3-4" {
-            node-id 1;
-            address 10.0.99.4:7789;
-        }
-
-        connection {
-	      host "hped800g3-3"  port 7789;
-	      host "hped800g3-4"  port 7789;
-	      net {
-			protocol C;
-          }  
-	    }
-=======
         }
 
         #c-max-rate
@@ -104,7 +76,6 @@
         #       protocol C;
         #    }
         #}
->>>>>>> cache
 
       }
 
