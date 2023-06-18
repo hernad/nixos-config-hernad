@@ -28,5 +28,5 @@ in
   drbd9 = import ./drbd9 { inherit pkgs; };
   drbd9-utils = import ./drbd9-utils { inherit pkgs; };
 
-  
+  pdagent = imort ./pdagent { inherit pkgs; };
 }
