@@ -1,6 +1,7 @@
 {
   pkgs
 }:
+
 pkgs.buildGoModule rec {
   pname = "nomad-driver-nix2";
   version = "0.1.0";
