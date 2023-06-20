@@ -359,36 +359,83 @@ in
       extraSettingsPlugins = [
         pkgs.nomad-driver-nix2
       ];
+
       extraPackages = [
+        pkgs.glibc
+        pkgs.zstd
         pkgs.nix
         pkgs.git
       ];
-      settings.plugin = [
+
+      settings =
+        (if cfg.isRaftServer
+        then {
+            server = { enabled = true; }
+              // (if cfg.bootstrap then { bootstrap_expect = 3; } else {});
+        } else {}) //
         {
-          "nix2-driver" = [
-            {
-              config = [
-                {
-                  default_nixpkgs = "github:nixos/nixpkgs/nixos-23.05";
-                }
-              ];
-            }
-          ];
-        }
-      ];
-    };
-}
+            region = cfg.clusterName;
+            datacenter = cfg.siteName;
+            advertise = {
+              rpc = "${clusterAddress}";
+              http = "${clusterAddress}";
+              serf = "${clusterAddress}";
+            };
+            consul = {
+              address = "localhost:8501";
+              ca_file = "/var/lib/nomad/pki/consul.crt";
+              cert_file = "/var/lib/nomad/pki/consul-client.crt";
+              key_file = "/var/lib/nomad/pki/consul-client.key";
+              ssl = true;
+              checks_use_advertise = true;
+            };
+            client = {
+              enabled = true;
+              network_interface = "wg0";
+              meta = node_meta;
+            };
+            telemetry = {
+              publish_allocation_metrics = true;
+              publish_node_metrics = true;
+              prometheus_metrics = true;
+            };
+            tls = {
+              http = true;
+              rpc = true;
+              ca_file = "/var/lib/nomad/pki/nomad-ca.crt";
+              cert_file = "/var/lib/nomad/pki/nomad.crt";
+              key_file = "/var/lib/nomad/pki/nomad.key";
+              verify_server_hostname = true;
+              verify_https_client = true;
+            };
+            plugin = {
+                docker = [
+                  {
+                    config = [
+                      {
+                        volumes.enabled = true;
+                        allow_privileged = true;
+                      }
+                    ];
+                  }
+                ];
 
-
-
-
+                "nix2-driver" = [
+                  {
+                    config = [
+                      {
+                        default_nixpkgs = "github:nixos/nixpkgs/nixos-23.05";
+                      }
+                    ];
+                  }
+                ];
+            };
+        };
+    };  
+  
 
     systemd.services.nomad.after = [ "wg-quick-wg0.service" ];
-    services.nomad.package = pkgs.nomad_1_4;
-    services.nomad.extraPackages = [
-      pkgs.glibc
-      pkgs.zstd
-    ];
+    
     
     # https://search.nixos.org/options?channel=23.05&show=services.nomad.settings&from=0&size=50&sort=relevance&type=packages&query=nomad
     #{
@@ -402,62 +449,7 @@ in
     #  };
     #}
 
-    services.nomad.settings =
-      (if cfg.isRaftServer
-      then {
-          server = { enabled = true; }
-            // (if cfg.bootstrap then { bootstrap_expect = 3; } else {});
-      } else {}) //
-    {
-      region = cfg.clusterName;
-      datacenter = cfg.siteName;
-      advertise = {
-        rpc = "${clusterAddress}";
-        http = "${clusterAddress}";
-        serf = "${clusterAddress}";
-      };
-      consul = {
-        address = "localhost:8501";
-        ca_file = "/var/lib/nomad/pki/consul.crt";
-        cert_file = "/var/lib/nomad/pki/consul-client.crt";
-        key_file = "/var/lib/nomad/pki/consul-client.key";
-        ssl = true;
-        checks_use_advertise = true;
-      };
-      client = {
-        enabled = true;
-        network_interface = "wg0";
-        meta = node_meta;
-      };
-      telemetry = {
-        publish_allocation_metrics = true;
-        publish_node_metrics = true;
-        prometheus_metrics = true;
-      };
-      tls = {
-        http = true;
-        rpc = true;
-        ca_file = "/var/lib/nomad/pki/nomad-ca.crt";
-        cert_file = "/var/lib/nomad/pki/nomad.crt";
-        key_file = "/var/lib/nomad/pki/nomad.key";
-        verify_server_hostname = true;
-        verify_https_client = true;
-      };
-      plugin = [
-        {
-          docker = [
-            {
-              config = [
-                {
-                  volumes.enabled = true;
-                  allow_privileged = true;
-                }
-              ];
-            }
-          ];
-        }
-      ];
-    };
+    
 #
     # ---- Firewall config ----
 
