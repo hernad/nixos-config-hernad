@@ -8,18 +8,20 @@ buildGoModule {
 
     # https://github.com/PagerDuty/go-pdagent.git
     src = fetchFromGitHub {
-      # ...
         owner = "PagerDuty";
-          repo = "go-pdagent";
-          rev = "3a8c0f2";
-          sha256 = "0rs9bxxrw4wscf4a8yl776a8g880m5gcm75q06yx2cn3lw2b7v22";
-    } + "/";
-    
+        repo = "go-pdagent";
+        rev = "3a8c0f2";
+        sha256 = "sha256-SKfB3SWptR6PqvVREvaw7IasHM0ZzlT8Z/hh1lrpYr0=";
+    };
+
+    # https://kalbas.it/2019/03/17/announcing-the-new-golang-infrastructure-buildgomodule/
+    vendorSha256 = "sha256-hPT/LVFF4i9gU1HvdvGsWqKa4YYlKG/HK5zHFj6683Q=";
+
      meta =  {
         maintainers = ["hernad@bring.out.ba"];
-     }
+     };
 
-};
+}
 
 
 

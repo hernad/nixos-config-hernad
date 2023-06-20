@@ -350,7 +350,39 @@ in
       verify_server_hostname = true;
     };
 
-    services.nomad.enable = true;
+
+    ## ---- Nix Nomad jobs using nomad-driver-nix2 ----
+    services.nomad = {
+      enable = true;
+      dropPrivileges = false;
+      # example: [ "<pluginDir>" pkgs.nomad-driver-nix pkgs.nomad-driver-podman  ]
+      extraSettingsPlugins = [
+        pkgs.nomad-driver-nix2
+      ];
+      extraPackages = [
+        pkgs.nix
+        pkgs.git
+      ];
+      settings.plugin = [
+        {
+          "nix2-driver" = [
+            {
+              config = [
+                {
+                  default_nixpkgs = "github:nixos/nixpkgs/nixos-23.05";
+                }
+              ];
+            }
+          ];
+        }
+      ];
+    };
+}
+
+
+
+
+
     systemd.services.nomad.after = [ "wg-quick-wg0.service" ];
     services.nomad.package = pkgs.nomad_1_4;
     services.nomad.extraPackages = [

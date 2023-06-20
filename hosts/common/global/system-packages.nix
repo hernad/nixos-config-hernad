@@ -16,6 +16,7 @@ in
     traceroute
     speedtest-cli
     hernad-util-scripts
+    pdagent
     #khelloworld
   ] ++ (
     if config.virtualisation.libvirtd.enable then [
