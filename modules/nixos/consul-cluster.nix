@@ -408,29 +408,19 @@ in
               verify_server_hostname = true;
               verify_https_client = true;
             };
-            plugin = {
-                docker = [
-                  {
-                    config = [
-                      {
-                        volumes.enabled = true;
-                        allow_privileged = true;
-                      }
-                    ];
-                  }
-                ];
+            plugin.docker.config = {
+                volumes.enabled = true;
+                allow_privileged = true;
+            };
+              
+            # http://localhost:4646/ui/allocations/836b8de4-1baf-6aa7-1d20-0cf43bbd4bd6/firewall-open  
+            # Jun 21, '23 10:13:59 +0200	Driver	Building Nix packages and preparing NixOS state (using nixpkgs from flake: github:nixos/nixpkgs/nixos-23.05)
 
-                "nix2-driver" = [
-                  {
-                    config = [
-                      {
-                        default_nixpkgs = "github:nixos/nixpkgs/nixos-23.05";
-                      }
-                    ];
-                  }
-                ];
+            plugin.nix2.config = {
+                default_nixpkgs = "github:nixos/nixpkgs/nixos-23.05";
             };
         };
+        
     };  
   
 
