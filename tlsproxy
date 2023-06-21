@@ -9,8 +9,9 @@ ORG=bring-out
 cd $(dirname $0)
 
 CLUSTER="$1"
-if [ ! -d "cluster/$CLUSTER" ]; then
+if [ -z "$CLUSTER" ] || [ ! -d "cluster/$CLUSTER" ]; then
 	echo "Usage: $0 <cluster name>"
+	echo "example: $0 staging"
 	echo "The cluster name must be the name of a subdirectory of cluster/"
 	exit 1
 fi
