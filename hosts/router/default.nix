@@ -15,10 +15,12 @@ in {
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
     pciutils 
     tcpdump
+    iptables
   ];
 
   # router
@@ -99,11 +101,17 @@ in {
       ruleset = ''
         table ip filter {
           chain input {
+            #iifname { "enp2s0", "lan", "wg0" } accept comment "Allow local and wg network to access the router"
+            #iifname "enp1s0" udp dport 5000 counter accept comment "Allow UDP 5000 for Wireguard"
+
             type filter hook input priority 0; policy drop;
             iifname { "${lanInterface}", "${lan10Interface}" } accept comment "Allow local network to access the router"
             iifname { "${wanInterface}" } ct state { established, related } accept comment "Allow established traffic"
             iifname { "${wanInterface}" } icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname { "${wanInterface}" } counter drop comment "Drop all other unsolicited traffic from wan"
+            #iifname {"${lanInterface}", "${lan10Interface} } ip saddr { 10.13.93.11 } udp dport { mdns, llmnr } counter accept comment "multicast for media devices, printers"
+
+          
           }
           chain forward {
             type filter hook forward priority filter; policy drop;
@@ -113,6 +121,17 @@ in {
             iifname { "${lanInterface}" } oifname { "${lan10Interface}" } accept comment "Allow lan -> lan10"
             iifname { "${lan10Interface}" } oifname { "${lanInterface}" } ct state established, related accept comment "Allow established lan10 back to lan"
             
+            #iifname { "lan", "wg0" } ip daddr 192.168.1.0/24 counter accept comment "Allow trusted LAN/WG to Mgmt (default)"
+            #iifname { "lan", "hazmat", "wg0" } oifname { "iot" } counter accept comment "Allow trusted LAN to IoT"
+            #iifname { "iot" } oifname { "lan", "hazmat", "wg0" } ct state { established, related } counter accept comment "Allow established back to LANs"
+
+            #iifname { "lan", "wg0" } ip daddr 192.168.1.0/24 counter accept comment "Allow trusted LAN/WG to Mgmt (default)"
+            #ip saddr 192.168.1.0/24 oifname { "lan", "wg0" } ct state { established, related } counter accept comment "Allow established back to LAN/WG"
+
+            #iifname { "lan", "wg0" } oifname { "lan", "wg0" } counter accept comment "Allow lan/Wireguard bi-directionaly"
+ 
+            #ip saddr 10.13.93.50 ip daddr 10.13.84.20 tcp dport 22 counter accept comment "allow ssh from home assistant to agent for backup"
+
           }
         }
 
@@ -182,7 +201,27 @@ in {
         valid-lifetime = 4000;
     };
   };
-   
+
+
+  services.miniupnpd = {
+    enable = true;
+    externalInterface = "${wanInterface}"; # WAN
+    internalIPs = [ 
+      "${lanInterface}"
+      "${lan10Interface}"
+    ]; # LAN
+  };
+
+  services.avahi = {
+    enable = true;
+    nssmdns = true;
+    reflector = true;
+    interfaces = [
+      "${lanInterface}"
+      "${lan10Interface}"
+    ];
+  };
+
   testConfig.enable = false;
 
   system.stateVersion = "23.05";
