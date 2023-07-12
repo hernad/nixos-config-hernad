@@ -93,6 +93,10 @@
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
       nixosConfigurations = {
+        hped800g3-1 = mkNixosSystem [
+           ./hosts/hped800g3-1
+        ];
+
         hped800g3-4 = mkNixosSystem [
             ./hosts/hped800g3-4
         ];
