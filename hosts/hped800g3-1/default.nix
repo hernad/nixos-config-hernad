@@ -94,7 +94,7 @@
       mtu = 9000;
       ipv4 = {
         addresses = [{
-          address = "10.0.99.1";
+          address = "10.0.99.2";
           prefixLength = 24;
         }];
       };

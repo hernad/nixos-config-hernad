@@ -6,7 +6,8 @@
 # https://nixos.org/manual/nixos/stable/index.html#sec-installation
 
 
-DISK=vda
+#DISK=vda
+DISK=sda
 LABEL=nixos
 LABEL_BOOT=boot
 

@@ -4,10 +4,13 @@
 # ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
 
 
-DISK=vda
+#DISK=vda
+DISK=sda
+
 # size in GB
 BOOT_SIZE=1 
 SWAP_SIZE=4
+
 
 parted /dev/$DISK -- print | grep -q "^ 1" && echo vec postoji particija 1 na /dev/$DISK && exit 1
 
