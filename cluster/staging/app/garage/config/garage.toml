@@ -14,7 +14,7 @@ rpc_secret = "{{ key "secrets/garage/rpc_secret" | trimSpace }}"
 
 [consul_discovery]
 consul_http_addr = "https://consul.service.staging.consul:8501"
-service_name = "garage-prod-discovery"
+service_name = "garage-staging-discovery"
 ca_cert = "/etc/garage/consul-ca.crt"
 client_cert = "/etc/garage/consul-client.crt"
 client_key = "/etc/garage/consul-client.key"

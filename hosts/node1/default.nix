@@ -41,7 +41,7 @@ in {
     defaultGateway = "192.168.168.251";
 
     # test phase
-    #firewall.enable = false;
+    firewall.enable = false;
 
     firewall.allowedTCPPorts = [ 5201 ];
 

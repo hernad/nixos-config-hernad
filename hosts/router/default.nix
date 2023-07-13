@@ -3,8 +3,10 @@
 let
     lan10DnsServers = "192.168.168.10, 192.168.169.10";
     lanInterface = "enp2s0";
-    wanInterface = "enp1s0";
     lan10Interface = "enp4s0";
+
+    wanInterface = "enp1s0";
+    
 in {
   imports = [
     ./hardware-configuration.nix
@@ -100,21 +102,53 @@ in {
       enable = true;
       ruleset = ''
         table ip filter {
+          
+          # https://github.com/miniupnp/miniupnp/blob/master/miniupnpd/netfilter_nft/README.md
+          # miniupnpd
+
+          # allow multicast
+          # https://gist.github.com/juliojsb/00e3bb086fd4e0472dbe
+
+          chain miniupnpd {
+          }
+
           chain input {
+            type filter hook input priority 0; 
+            policy drop;
+
+            udp dport mdns accept comment "allow mDNS"
+            udp dport 1900 accept comment "allo IGP"
+
             #iifname { "enp2s0", "lan", "wg0" } accept comment "Allow local and wg network to access the router"
             #iifname "enp1s0" udp dport 5000 counter accept comment "Allow UDP 5000 for Wireguard"
 
-            type filter hook input priority 0; policy drop;
+            
             iifname { "${lanInterface}", "${lan10Interface}" } accept comment "Allow local network to access the router"
             iifname { "${wanInterface}" } ct state { established, related } accept comment "Allow established traffic"
-            iifname { "${wanInterface}" } icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+            iifname { "${wanInterface}" } icmp type { echo-request, destination-unreachable, time-exceeded, 156 } counter accept comment "Allow select ICMP"
             iifname { "${wanInterface}" } counter drop comment "Drop all other unsolicited traffic from wan"
             #iifname {"${lanInterface}", "${lan10Interface} } ip saddr { 10.13.93.11 } udp dport { mdns, llmnr } counter accept comment "multicast for media devices, printers"
-
+            
+            pkttype {broadcast, multicast} accept
           
+            # https://github.com/miniupnp/miniupnp/issues/397
+            #ip protocol icmp counter packets 3 bytes 156 accept
+		        ip protocol igmp counter packets 0 bytes 0 accept comment "accept IGMP"
+
+            counter comment "total unfiltered input packets"
+            log            # simple detail goes into the log
+            log flags all  # extra details go into the log
+            log flags all prefix "GOTCHA!: " # parseable keyword
+            log flags all counter  # redundant but example
+
           }
           chain forward {
-            type filter hook forward priority filter; policy drop;
+            type filter hook forward priority filter; 
+            policy drop;
+
+            # miniupnpd
+            jump miniupnpd
+
             iifname { "${lanInterface}", "${lan10Interface}"} oifname { "${wanInterface}" } accept comment "Allow trusted LAN to WAN"
             iifname { "${wanInterface}" } oifname { "${lanInterface}", "${lan10Interface}" } ct state established, related accept comment "Allow established back to LANs"
             
@@ -125,21 +159,56 @@ in {
             #iifname { "lan", "hazmat", "wg0" } oifname { "iot" } counter accept comment "Allow trusted LAN to IoT"
             #iifname { "iot" } oifname { "lan", "hazmat", "wg0" } ct state { established, related } counter accept comment "Allow established back to LANs"
 
-            #iifname { "lan", "wg0" } ip daddr 192.168.1.0/24 counter accept comment "Allow trusted LAN/WG to Mgmt (default)"
+            #iifname { "lan", "wg0" } ip daddr 192.168.1.0/24 counter accept comment "Allow trusted LAN/WG to  Mgmt (default)"
             #ip saddr 192.168.1.0/24 oifname { "lan", "wg0" } ct state { established, related } counter accept comment "Allow established back to LAN/WG"
 
             #iifname { "lan", "wg0" } oifname { "lan", "wg0" } counter accept comment "Allow lan/Wireguard bi-directionaly"
  
             #ip saddr 10.13.93.50 ip daddr 10.13.84.20 tcp dport 22 counter accept comment "allow ssh from home assistant to agent for backup"
 
+            pkttype {broadcast, multicast} accept
+
           }
+
+          chain output {
+             type filter hook output priority 0 ;
+             pkttype {broadcast, multicast} accept
+          }
+
+
         }
 
         table ip nat {
+
+          chain prerouting {
+             type nat hook prerouting priority -100;
+             policy accept;
+
+             # miniupnpd
+             jump prerouting_miniupnpd
+
+             # Add other rules here
+          }
           chain postrouting {
-            type nat hook postrouting priority 100; policy accept;
+            type nat hook postrouting priority 100;
+            policy accept;
+
+            # miniupnpd
+            jump postrouting_miniupnpd
+
             oifname "${wanInterface}" masquerade
-          } 
+          }
+
+          chain prerouting_miniupnpd {
+          }
+
+          chain postrouting_miniupnpd {
+          }
+
+          #chain postrouting {
+          #  type nat hook postrouting priority 100; policy accept;
+          #  oifname "${wanInterface}" masquerade
+          #} 
         }
 
         table ip6 filter {
@@ -205,11 +274,17 @@ in {
 
   services.miniupnpd = {
     enable = true;
+    natpmp = true;
     externalInterface = "${wanInterface}"; # WAN
     internalIPs = [ 
-      "${lanInterface}"
+      #"${lanInterface}"
       "${lan10Interface}"
     ]; # LAN
+
+    appendConfig = ''
+      ext_ip=77.78.203.115
+    '';
+
   };
 
   services.avahi = {

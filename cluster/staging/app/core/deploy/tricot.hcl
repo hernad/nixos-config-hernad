@@ -70,7 +70,7 @@ job "core-tricot" {
 TRICOT_NODE_NAME={{ env "attr.unique.hostname" }}
 TRICOT_LETSENCRYPT_EMAIL=prod-sysadmin@bring-out.me
 TRICOT_ENABLE_COMPRESSION=true
-TRICOT_CONSUL_HOST=https://consul.service.prod.consul:8501
+TRICOT_CONSUL_HOST=https://consul.service.staging.consul:8501
 TRICOT_CONSUL_TLS_SKIP_VERIFY=true
 TRICOT_CONSUL_CLIENT_CERT=/etc/tricot/consul-client.crt
 TRICOT_CONSUL_CLIENT_KEY=/etc/tricot/consul-client.key

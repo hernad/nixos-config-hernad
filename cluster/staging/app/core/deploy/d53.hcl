@@ -47,7 +47,7 @@ job "core-d53" {
 
       template {
         data = <<EOH
-D53_CONSUL_HOST=https://localhost:8501
+D53_CONSUL_HOST=https://consul.service.staging.consul:8501
 D53_CONSUL_CA_CERT=/etc/d53/consul-ca.crt
 D53_CONSUL_CLIENT_CERT=/etc/d53/consul-client.crt
 D53_CONSUL_CLIENT_KEY=/etc/d53/consul-client.key

@@ -49,7 +49,7 @@ job "core-diplonat" {
 DIPLONAT_REFRESH_TIME=60
 DIPLONAT_EXPIRATION_TIME=300
 DIPLONAT_CONSUL_NODE_NAME={{ env "attr.unique.hostname" }}
-DIPLONAT_CONSUL_URL=https://consul.service.prod.consul:8501
+DIPLONAT_CONSUL_URL=https://consul.service.staging.consul:8501
 DIPLONAT_CONSUL_TLS_SKIP_VERIFY=true
 DIPLONAT_CONSUL_CLIENT_CERT=/etc/diplonat/consul-client.crt
 DIPLONAT_CONSUL_CLIENT_KEY=/etc/diplonat/consul-client.key

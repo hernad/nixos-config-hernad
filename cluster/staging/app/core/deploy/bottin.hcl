@@ -68,7 +68,7 @@ job "core-bottin" {
 
       template {
         data = <<EOH
-CONSUL_HTTP_ADDR=https://consul.service.prod.consul:8501
+CONSUL_HTTP_ADDR=https://consul.service.staging.consul:8501
 CONSUL_HTTP_SSL=true
 CONSUL_CACERT=/etc/bottin/consul.crt
 CONSUL_CLIENT_CERT=/etc/bottin/consul-client.crt

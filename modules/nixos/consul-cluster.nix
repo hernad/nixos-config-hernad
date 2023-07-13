@@ -353,7 +353,11 @@ in
 
     ## ---- Nix Nomad jobs using nomad-driver-nix2 ----
     services.nomad = {
+
       enable = true;
+      enableDocker = true;
+
+      # Whether the nomad agent should be run as a non-root nomad user.
       dropPrivileges = false;
       # example: [ "<pluginDir>" pkgs.nomad-driver-nix pkgs.nomad-driver-podman  ]
       extraSettingsPlugins = [
