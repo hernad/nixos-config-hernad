@@ -32,6 +32,6 @@ in
 
   nomad-driver-nix2 = import ./nomad-driver-nix2  { inherit pkgs; };
 
-  minupnpd-nft = import ./miniupnpd-nft { inherit pkgs; };
+  miniupnpd-nft = import ./miniupnpd-nft { inherit pkgs lib; };
 
 }

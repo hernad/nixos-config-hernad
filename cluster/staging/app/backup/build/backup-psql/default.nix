@@ -28,6 +28,7 @@ in
       chmod +x backup-psql
     '';
 
+
     installPhase = ''
       mkdir -p $out/{bin,lib}
       cp *.py $out/lib/backup-psql.py

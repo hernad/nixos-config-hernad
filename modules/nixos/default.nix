@@ -8,4 +8,5 @@
   libvirtGuests = import ./libvirt-guests.nix;
   consulCluster = import ./consul-cluster.nix;
   drbd9 = import ./drbd9.nix;
+  miniupnpd-nft = import ./miniupnpd-nft.nix;
 }
