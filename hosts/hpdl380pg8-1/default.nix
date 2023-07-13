@@ -28,17 +28,18 @@
       };
     };
 
-    interfaces = {
-        lan10.mtu = 9000;
+
+    interfaces."enp4s0" = {
+       mtu = 9000;
+    };
+    
+    interfaces."lan10" = {
+        mtu = 9000;
     };
 
 
     # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
 
-    #interfaces."enp4s0" = {
-       #macAddress = "24:1c:04:f3:73:47";
-    #   mtu = 9000;
-    #};
 
     bridges = {
        "br0" = {
@@ -111,6 +112,7 @@
     enable = true;
     guests = {
       router = {
+        enable = true;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
         currentMemory = "4194304"; #4GB

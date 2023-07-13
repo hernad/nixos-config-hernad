@@ -89,6 +89,8 @@ job "nix2-hello-service" {
           "#python3",
           "#bash",
           "#coreutils",
+          "#iputils",
+          "#dnsutils",
           "#curl",
           "#nix",
           "#git",

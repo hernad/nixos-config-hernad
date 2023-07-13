@@ -1,5 +1,5 @@
 job "core-diplonat" {
-  datacenters = ["sa1", "bespin"]
+  datacenters = ["sa1"]
   type = "system"
   priority = 90
 
