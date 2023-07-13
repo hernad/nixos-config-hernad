@@ -114,8 +114,6 @@ in {
 
           # iptables-legacy -t nat -L -n -v
 
-          chain MINIUPNPD {
-          }
 
           chain input {
             type filter hook input priority 0; 
@@ -151,9 +149,6 @@ in {
             type filter hook forward priority filter; 
             policy drop;
 
-            # miniupnpd
-            jump MINIUPNPD
-
             iifname { "${lanInterface}", "${lan10Interface}"} oifname { "${wanInterface}" } accept comment "Allow trusted LAN to WAN"
             iifname { "${wanInterface}" } oifname { "${lanInterface}", "${lan10Interface}" } ct state established, related accept comment "Allow established back to LANs"
             
@@ -175,45 +170,43 @@ in {
 
           }
 
-          #chain output {
-          #   type filter hook output priority 0 ;
-          #   pkttype {broadcast, multicast} accept
-          #}
-
-
         }
 
-        table ip nat {
+        table inet filter {
+          chain forward {
+            type filter hook forward priority filter; policy drop;
+            jump miniupnpd
+          }
+
+          chain miniupnpd {
+            #iif "enp1s0" th dport 22 @nh,128,32 0xa00630a @nh,72,8 0x6 accept
+          }
 
           chain prerouting {
-             type nat hook prerouting priority -100;
-             policy accept;
-
-             # miniupnpd
-             jump prerouting_miniupnpd
-
-             # Add other rules here
+            type nat hook prerouting priority dstnat; policy accept;
+            jump prerouting_miniupnpd
           }
+
           chain postrouting {
-            type nat hook postrouting priority 100;
-            policy accept;
-
-            # miniupnpd
+            type nat hook postrouting priority srcnat; policy accept;
             jump postrouting_miniupnpd
-
-            oifname "${wanInterface}" masquerade
           }
 
           chain prerouting_miniupnpd {
+            #iif "enp1s0" @nh,72,8 0x6 th dport 2222 dnat ip to 10.0.99.10:22
           }
 
           chain postrouting_miniupnpd {
           }
+        }
 
-          #chain postrouting {
-          #  type nat hook postrouting priority 100; policy accept;
-          #  oifname "${wanInterface}" masquerade
-          #} 
+        table ip nat {
+
+          chain postrouting {
+            type nat hook postrouting priority 100;
+            oifname "${wanInterface}" masquerade
+          }
+
         }
 
         table ip6 filter {
