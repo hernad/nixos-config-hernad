@@ -31,4 +31,7 @@ in
   pdagent = import ./pdagent { inherit pkgs; };
 
   nomad-driver-nix2 = import ./nomad-driver-nix2  { inherit pkgs; };
+
+  minupnpd-nft = import ./miniupnpd-nft { inherit pkgs; };
+
 }

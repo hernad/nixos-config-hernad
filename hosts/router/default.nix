@@ -97,6 +97,7 @@ in {
       };
     };
 
+
     nftables = 
     {
       enable = true;
@@ -109,7 +110,11 @@ in {
           # allow multicast
           # https://gist.github.com/juliojsb/00e3bb086fd4e0472dbe
 
-          chain miniupnpd {
+          # https://github.com/miniupnp/miniupnp/issues/590
+
+          # iptables-legacy -t nat -L -n -v
+
+          chain MINIUPNPD {
           }
 
           chain input {
@@ -147,7 +152,7 @@ in {
             policy drop;
 
             # miniupnpd
-            jump miniupnpd
+            jump MINIUPNPD
 
             iifname { "${lanInterface}", "${lan10Interface}"} oifname { "${wanInterface}" } accept comment "Allow trusted LAN to WAN"
             iifname { "${wanInterface}" } oifname { "${lanInterface}", "${lan10Interface}" } ct state established, related accept comment "Allow established back to LANs"
@@ -170,10 +175,10 @@ in {
 
           }
 
-          chain output {
-             type filter hook output priority 0 ;
-             pkttype {broadcast, multicast} accept
-          }
+          #chain output {
+          #   type filter hook output priority 0 ;
+          #   pkttype {broadcast, multicast} accept
+          #}
 
 
         }
@@ -271,14 +276,16 @@ in {
     };
   };
 
+  # https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/tools/networking/miniupnpd/default.nix#L42
 
-  services.miniupnpd = {
+  services.miniupnpd-nft = {
     enable = true;
     natpmp = true;
     externalInterface = "${wanInterface}"; # WAN
     internalIPs = [ 
       #"${lanInterface}"
-      "${lan10Interface}"
+      #"${lan10Interface}"
+      "10.0.99.254"
     ]; # LAN
 
     appendConfig = ''

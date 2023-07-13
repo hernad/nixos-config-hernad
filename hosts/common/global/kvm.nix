@@ -4,9 +4,11 @@
     inputs.home-manager.nixosModules.home-manager
     ./init.nix
     ./sops.nix
+    
     #./acme.nix
     #./auto-upgrade.nix
     #./system-packages.nix
+
     ./fish.nix
     ./locale.nix
     ./openssh.nix
@@ -27,6 +29,8 @@
   environment.enableAllTerminfo = true;
 
   hardware.enableRedistributableFirmware = true;
+  
+
   #networking.domain = "m7.rs";
 
   # Increase open file limit for sudoers

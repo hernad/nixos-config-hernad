@@ -41,9 +41,38 @@ in {
     defaultGateway = "192.168.168.251";
 
     # test phase
-    firewall.enable = false;
-
+    #firewall.enable = false;
     firewall.allowedTCPPorts = [ 5201 ];
+    # https://unix.stackexchange.com/questions/19060/fedora-firewall-with-upnp
+    # https://gist.github.com/mvadu/44c55b05d4614cf07d9833e0b44bf27a
+
+    firewall.allowedUDPPortRanges = [
+      { from = 1024; to = 65535; } 
+    ];
+
+    #[root@node1:~]# ip route add default via 192.168.168.106
+    #[root@node1:~]# nix-shell -p miniupnpc 
+    #
+    #[nix-shell:~]# upnpc -l
+    #upnpc : miniupnpc library test client, version .
+    # (c) 2005-2022 Thomas Bernard.
+    #Go to http://miniupnp.free.fr/ or https://miniupnp.tuxfamily.org/
+    #for more information.
+    #List of UPNP devices found on the network :
+    # desc: http://192.168.168.106:34093/rootDesc.xml
+    # st: urn:schemas-upnp-org:device:InternetGatewayDevice:1
+    #
+    #Found valid IGD : http://192.168.168.106:34093/ctl/IPConn
+    #Local LAN ip address : 192.168.168.134
+    #Connection Type : IP_Routed
+    #Status : Connected, uptime=776s, LastConnectionError : ERROR_NONE
+    #  Time started : Thu Jul 13 15:05:12 2023
+    #MaxBitRateDown : 4200000 bps (4.2 Mbps)   MaxBitRateUp 4200000 bps (4.2 Mbps)
+    #ExternalIPAddress = 77.78.203.115
+    # i protocol exPort->inAddr:inPort description remoteHost leaseTime
+    #GetGenericPortMappingEntry() returned 713 (SpecifiedArrayIndexInvalid)
+
+
 
     nameservers = [ 
         "192.168.168.10" 
