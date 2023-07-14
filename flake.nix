@@ -109,6 +109,9 @@
         router = mkNixosSystem [
             ./hosts/router
         ];
+        router2 = mkNixosSystem [
+            ./hosts/router2
+        ];
         guest31 = mkNixosSystem [
             ./hosts/guest31
         ];
