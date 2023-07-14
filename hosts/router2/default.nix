@@ -268,8 +268,8 @@ in {
             
             # snat ne radi iako promijeni source paket
             # kada se forwarduje unutar lan ili lan10 mora biti paket iz te mreze
-            ip saddr { 10.100.0.1, 192.168.168.0/24 } oifname "${lanInterface}" snat to 192.168.168.106
-            ip saddr { 10.100.0.1, 10.0.99.0/24 } oifname "${lan10Interface}" snat to 10.0.99.254
+            ip saddr { 10.101.0.1, 192.168.168.0/24 } oifname "${lanInterface}" snat to 192.168.168.106
+            ip saddr { 10.101.0.1, 10.0.99.0/24 } oifname "${lan10Interface}" snat to 10.0.99.254
 
             # mora da se napravi masquerading ili snat kada sa ovih interfejsa dajemo odgovor wireguard-u
             #oifname { "${lanInterface}", "${lan10Interface}" } masquerade
@@ -382,7 +382,7 @@ in {
   # https://github.com/NixOS/nixpkgs/blob/nixos-23.05/pkgs/tools/networking/miniupnpd/default.nix#L42
 
   services.miniupnpd-nft = {
-    enable = true;
+    enable = false;
     natpmp = true;
     #externalInterface = "${wanInterface}"; # WAN
     externalInterface = "${wgInterface}"; # WAN

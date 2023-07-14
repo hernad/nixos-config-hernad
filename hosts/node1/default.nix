@@ -37,8 +37,8 @@ in {
 
   networking = {
     hostName = "node1";
-    # telemach T1 router
-    defaultGateway = "192.168.168.251";
+    # telemach T1 router - router
+    defaultGateway = "10.0.99.254";
 
     # test phase
     #firewall.enable = false;
@@ -73,13 +73,12 @@ in {
     #GetGenericPortMappingEntry() returned 713 (SpecifiedArrayIndexInvalid)
 
 
-
     nameservers = [ 
         "192.168.168.10" 
         "192.168.169.10"
     ];
     #dhcpd.enable = false;
-    useDHCP = true;
+    useDHCP = false;
 
     # https://dev.jmgilman.com/networking/concepts/switching/spanning_tree/
 
