@@ -116,9 +116,9 @@ iommu_check
 # Install nixos at kvm guest on host 192.168.168.101
 
 <pre>
-   export HOST_IP=192.168.168.134
-   ssh -T root@$HOST_IP < scripts/partition_uefi.sh
-   ssh -T root@$HOST_IP < scripts/format_mount_uefi.sh
+   export HOST_IP=192.168.168.134 DISK=sda # default DISK vda
+   ssh -T root@$HOST_IP DISK=$DISK 'bash -s' < scripts/partition_uefi.sh
+   ssh -T root@$HOST_IP DISK=$DISK 'bash -s' < scripts/format_mount_uefi.sh
    ssh -T root@$HOST_IP < scripts/nixos_install_uefi.sh
 </pre>
 

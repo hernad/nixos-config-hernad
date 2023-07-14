@@ -3,9 +3,14 @@
 # example:
 # ssh -T root@192.168.168.101 < scripts/partition_uefi.sh
 
+#export DISK=sda
+if [ -z "$DISK" ]; then
+  echo "DISK envar nije definisano"
+  DISK=vda
+fi
 
-#DISK=vda
-DISK=sda
+echo == DISK=$DISK ==
+
 
 # size in GB
 BOOT_SIZE=1 

@@ -5,9 +5,14 @@
 
 # https://nixos.org/manual/nixos/stable/index.html#sec-installation
 
+#export DISK=sda
 
-#DISK=vda
-DISK=sda
+if [ -z "$DISK" ]; then
+  DISK=vda
+fi
+
+echo === DISK=$DISK ==
+
 LABEL=nixos
 LABEL_BOOT=boot
 

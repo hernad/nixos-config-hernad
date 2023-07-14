@@ -111,8 +111,8 @@
   libvirtGuests = {
     enable = true;
     guests = {
-      router = import ./kvm_router.nix;
-      router2 = import ./kvm_router2.nix;
+      router = import ./kvm_guest_router.nix;
+      router2 = import ./kvm_guest_router2.nix;
     };
   };
 
