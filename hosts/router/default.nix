@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }: 
 
 let
-    lan10DnsServers = "192.168.168.10, 192.168.169.10";
+    #lan10DnsServers = "192.168.168.10, 192.168.169.10";
     lanInterface = "enp2s0";
     lan10Interface = "enp4s0";
 
@@ -41,7 +41,7 @@ in {
 
     nameservers = [ 
         "192.168.168.10" 
-        "192.168.169.10"
+        #"192.168.169.10"
     ];
     
     useDHCP = false;

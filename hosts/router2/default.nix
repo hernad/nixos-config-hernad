@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }: 
 
 let
-    lan10DnsServers = "192.168.168.10, 192.168.169.10";
+    #lan10DnsServers = "192.168.168.10, 192.168.169.10";
     lanInterface = "enp2s0";
     lan10Interface = "enp4s0";
 
@@ -41,7 +41,7 @@ in {
 
     nameservers = [ 
         "192.168.168.10" 
-        "192.168.169.10"
+        #"192.168.169.10"
     ];
     
     useDHCP = false;
@@ -134,18 +134,7 @@ in {
     {
       enable = true;
       ruleset = ''
-        table ip filter {
-          
-          # https://github.com/miniupnp/miniupnp/blob/master/miniupnpd/netfilter_nft/README.md
-          # miniupnpd
-
-          # allow multicast
-          # https://gist.github.com/juliojsb/00e3bb086fd4e0472dbe
-
-          # https://github.com/miniupnp/miniupnp/issues/590
-
-          # iptables-legacy -t nat -L -n -v
-
+        table inet filter {
 
           chain input {
             type filter hook input priority 0; 
@@ -154,8 +143,8 @@ in {
             iifname { "${lanInterface}", "${lan10Interface}" } udp dport mdns accept comment "allow mDNS"
             iifname { "${lanInterface}", "${lan10Interface}" } udp dport 1900 accept comment "allo IGP"
 
-            #iifname { "enp2s0", "lan", "wg0" } accept comment "Allow local and wg network to access the router"
-            #iifname "enp1s0" udp dport 5000 counter accept comment "Allow UDP 5000 for Wireguard"
+            ##iifname { "enp2s0", "lan", "wg0" } accept comment "Allow local and wg network to access the router"
+            ##iifname "enp1s0" udp dport 5000 counter accept comment "Allow UDP 5000 for Wireguard"
 
             iifname { "${lanInterface}", "${lan10Interface}", "${wgInterface}" } accept comment "Allow local network to access the router"
             
@@ -179,10 +168,14 @@ in {
             log flags all counter  # redundant but example
 
           }
+          
           chain forward {
-            type filter hook forward priority filter; 
+            type filter hook forward priority 0;
             policy drop;
 
+            jump miniupnpd
+
+            
             iifname { "${lanInterface}", "${lan10Interface}", "${wgInterface}"} oifname { "${wanInterface}" } accept comment "Allow trusted LAN to WAN"
             iifname { "${wanInterface}", "${wgInterface}" } oifname { "${lanInterface}", "${lan10Interface}", "${wgInterface}" } ct state established, related accept comment "Allow established back to LANs"
             
@@ -197,51 +190,7 @@ in {
             
             iifname { "${wgInterface}" } oifname { "${lanInterface}" } accept comment "Allow wireguard -> lan"
             iifname { "${lanInterface}" } oifname { "${wgInterface}" } ct state established, related accept comment "Allow established lan to wireguard"
-            
-
-            #iifname { "lan", "wg0" } ip daddr 192.168.1.0/24 counter accept comment "Allow trusted LAN/WG to Mgmt (default)"
-            #iifname { "lan", "hazmat", "wg0" } oifname { "iot" } counter accept comment "Allow trusted LAN to IoT"
-            #iifname { "iot" } oifname { "lan", "hazmat", "wg0" } ct state { established, related } counter accept comment "Allow established back to LANs"
-
-            #iifname { "lan", "wg0" } ip daddr 192.168.1.0/24 counter accept comment "Allow trusted LAN/WG to  Mgmt (default)"
-            #ip saddr 192.168.1.0/24 oifname { "lan", "wg0" } ct state { established, related } counter accept comment "Allow established back to LAN/WG"
-
-            #iifname { "lan", "wg0" } oifname { "lan", "wg0" } counter accept comment "Allow lan/Wireguard bi-directionaly"
- 
-            #ip saddr 10.13.93.50 ip daddr 10.13.84.20 tcp dport 22 counter accept comment "allow ssh from home assistant to agent for backup"
-
-            pkttype {broadcast, multicast} accept
-
-          }
-
-        }
-
-        # IPv4-Packet --> table "ip"  --> table "inet" --> further checks
-
-        table inet filter {
-          #chain input {
-          #   # https://tldp.org/HOWTO/Linux+IPv6-HOWTO/ch18s05.html
-          #   type filter hook input priority 0;
-		      #   ct state established,related counter packets 307 bytes 31974 accept
-		      #   counter packets 6 bytes 528 mark 0x00000100 accept
-		      #   tcp dport ssh ct state new tcp flags & (syn | ack) == syn log prefix "inet/input/accept: " meta mark set 0x00000100 counter packets 3 bytes 200 accept
-		      #   log prefix "inet/input/reject: " counter packets 0 bytes 0 reject
-          #}
-
-          chain forward {
-            #type filter hook forward priority filter; policy drop;
-            type filter hook forward priority 0;
-            policy drop;
-
-            jump miniupnpd
-
-            iifname { "${lanInterface}" } oifname { "${wgInterface}" } accept comment "Allow lan -> wireguard"
-            iifname { "${wgInterface}" } oifname { "${lanInterface}" } ct state established, related accept comment "Allow established wireguard back to lan"
-            
-            iifname { "${lan10Interface}" } oifname { "${wgInterface}" } accept comment "Allow lan10 -> wireguard"
-            iifname { "${wgInterface}" } oifname { "${lan10Interface}" } ct state established, related accept comment "Allow established wireguard back to lan10"
-            
-            
+              
           }
 
           chain miniupnpd {
@@ -254,26 +203,18 @@ in {
 
             #type nat hook prerouting priority dstnat; policy accept;
             jump prerouting_miniupnpd
-
           }
 
           chain postrouting {
-            #type nat hook postrouting priority srcnat; policy accept;
             type nat hook postrouting priority 100;
             policy accept;
-
             jump postrouting_miniupnpd
-
-            # 10.100.0.1 - ora1 public internet vps
             
-            # snat ne radi iako promijeni source paket
-            # kada se forwarduje unutar lan ili lan10 mora biti paket iz te mreze
-            ip saddr { 10.101.0.1, 192.168.168.0/24 } oifname "${lanInterface}" snat to 192.168.168.106
-            ip saddr { 10.101.0.1, 10.0.99.0/24 } oifname "${lan10Interface}" snat to 10.0.99.254
-
             # mora da se napravi masquerading ili snat kada sa ovih interfejsa dajemo odgovor wireguard-u
-            #oifname { "${lanInterface}", "${lan10Interface}" } masquerade
-     
+            oifname { "${lanInterface}", "${lan10Interface}" } masquerade
+
+            oifname "${wanInterface}" masquerade
+
           }
 
           chain prerouting_miniupnpd {
@@ -284,27 +225,7 @@ in {
           }
         }
 
-        table ip nat {
-
-          chain postrouting {
-            type nat hook postrouting priority 100;
-            oifname "${wanInterface}" masquerade
-
-            # masquerade wireguard - pravi probleme u samoj wireguard konekciji
-            # ne raditi oifname "${wgInterface}" masquerade
-
-          }
-
-        }
-
-        table ip6 filter {
-	        chain input {
-            type filter hook input priority 0; policy drop;
-          }
-          chain forward {
-            type filter hook forward priority 0; policy drop;
-          }
-        }
+        
       '';
     };
 

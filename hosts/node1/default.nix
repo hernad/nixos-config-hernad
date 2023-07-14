@@ -72,11 +72,12 @@ in {
     # i protocol exPort->inAddr:inPort description remoteHost leaseTime
     #GetGenericPortMappingEntry() returned 713 (SpecifiedArrayIndexInvalid)
 
+    # ovo ne pije vode - unbound preuzima u consul clusteru
+    #nameservers = [ 
+    #    "192.168.168.10" 
+    #    "192.168.169.10"
+    #];
 
-    nameservers = [ 
-        "192.168.168.10" 
-        "192.168.169.10"
-    ];
     #dhcpd.enable = false;
     useDHCP = false;
 
