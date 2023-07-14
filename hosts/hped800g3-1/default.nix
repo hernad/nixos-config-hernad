@@ -129,7 +129,7 @@
     enable = false;
     guests = {
       guest31 = {
-        enable = true;
+        enable = false;
         osInfo = "http://nixos.org/nixos/22.11";
         efi = true;
         currentMemory = "4194304"; #4GB
