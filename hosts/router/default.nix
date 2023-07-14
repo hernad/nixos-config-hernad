@@ -319,11 +319,7 @@ in {
 # [nix-shell:~]# nft add rule inet filter forward iifname "wgcgnat" icmp type { echo-request, destination-unreachable, time-exceeded, 156 } accept 
 
 # debug IGD
-# [node12]# upnpc -a 192.168.168.150 22 8123 TCP
-# upnpc : miniupnpc library test client, version .
-#  (c) 2005-2022 Thomas Bernard.
-# Go to http://miniupnp.free.fr/ or https://miniupnp.tuxfamily.org/
-# for more information.
+# [node1]# upnpc -a 192.168.168.150 22 8123 TCP
 # List of UPNP devices found on the network :
 #  desc: http://10.0.99.254:39065/rootDesc.xml
 #  st: urn:schemas-upnp-org:device:InternetGatewayDevice:1
